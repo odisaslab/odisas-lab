@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
 
-type Variant = "primary" | "dark" | "outline" | "ghost" | "outlineLight";
+type Variant = "primary" | "dark" | "outline" | "ghost" | "outlineLight" | "outlineOnPrimary";
 type Size = "md" | "lg";
 
 const base =
