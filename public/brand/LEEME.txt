@@ -1,0 +1,62 @@
+IMÁGENES DE MARCA
+=================
+
+Todos estos archivos se generan desde los originales con:
+
+    python3 scripts/preparar-logo.py
+
+Los originales que enviaste están en scripts/brand-source/. No los borres: son
+la fuente para regenerar los assets si cambia algo.
+
+
+LOGOTIPO
+--------
+  logo.png                   símbolo + ODISAS · para la cabecera (fondo claro)
+  logo-blanco.png            la misma versión para el pie oscuro
+  logo-completo.png          con la bajada MARKETING DIGITAL
+  logo-completo-blanco.png   igual, para fondo oscuro
+  simbolo.png                solo la flecha
+  simbolo-blanco.png         la flecha en blanco
+
+  La versión de la cabecera va SIN la bajada a propósito: a 28 px de alto,
+  "MARKETING DIGITAL" resulta ilegible. La versión completa se usa en la imagen
+  de compartición, donde hay sitio.
+
+  Declarados en data/site.ts, objeto `assets`.
+
+
+PENDIENTE: EL SVG
+-----------------
+Estos PNG salen de un JPG con fondo blanco, así que la transparencia se ha
+reconstruido por software. El resultado es limpio, pero un logotipo vectorial
+sería mejor: pesaría una décima parte y escalaría sin límite.
+
+Si tienes acceso al archivo original de diseño (.ai, .svg, .fig), pide el SVG a
+quien te hizo el logo y sustitúyelo. Después basta cambiar la ruta en
+data/site.ts.
+
+
+RETRATO
+-------
+  Ahora mismo no hay foto, por decisión propia. La página /sobre-odisas-lab
+  muestra en su lugar una tarjeta con el símbolo de la marca y la frase
+  "Marketing que mueve negocios". No se ve ningún hueco ni placeholder.
+
+  Si algún día quieres poner una foto:
+    1. Déjala en esta carpeta, por ejemplo retrato.jpg
+    2. En data/site.ts, escribe:  portrait: "/brand/retrato.jpg"
+
+  Se recorta automáticamente a proporción 4:5, así que conviene una foto
+  vertical con aire por arriba y a los lados. Mínimo recomendado: 800 x 1000.
+
+
+ICONOS Y FAVICON
+----------------
+  app/favicon.ico            16 / 32 / 48, cuadrado naranja con el símbolo
+  app/apple-icon.png         180 x 180
+  public/icon-192.png        manifest
+  public/icon-512.png        manifest
+
+  Se generan con el mismo script, a partir de simbolo.png. Siguen la variante
+  "FAVICON (ORANGE)" de tu manual de marca. Si prefieres la variante oscura,
+  cambia el color de fondo en la llamada a rounded_icon().

@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Odisas Lab · Preview de /servicios/renovacion-web</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #ff6b00; --primary-dark: #e05e00; --primary-soft: #fff3e9; --ink: #ba4e00;
+        --dark: #171717; --text: #222; --gray: #6b6b6b; --line: #e6e6e6;
+        --light: #f5f5f5; --radius: 14px; --pill: 999px;
+        --lift: 0 18px 40px -22px rgba(23,23,23,0.28);
+        --card: 0 1px 2px rgba(23,23,23,0.04);
+        --display: "Space Grotesk", system-ui, sans-serif; --sans: "Inter", system-ui, sans-serif;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: var(--sans); color: var(--text); background: #fff; line-height: 1.65; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+      h1, h2, h3 { font-family: var(--display); color: var(--dark); font-weight: 600; letter-spacing: -0.02em; text-wrap: balance; }
+      h1 { font-size: clamp(2.4rem, 5.2vw, 4.4rem); line-height: 1.03; }
+      h2 { font-size: clamp(2rem, 3.6vw, 3rem); line-height: 1.08; }
+      h3 { font-size: clamp(1.25rem, 1.7vw, 1.55rem); line-height: 1.2; }
+      a { color: inherit; text-decoration: none; }
+      ul, ol { list-style: none; }
+      :focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; border-radius: 4px; }
+      .wrap { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 1.25rem; }
+      @media (min-width: 768px) { .wrap { padding: 0 2rem; } }
+      .sec { padding: 5rem 0; }
+      @media (min-width: 768px) { .sec { padding: 7rem 0; } }
+      .sec--light { background: var(--light); }
+      .label { color: var(--ink); font-size: 0.875rem; font-weight: 500; margin-bottom: 1rem; }
+      .lead { font-size: clamp(1.05rem, 1.5vw, 1.25rem); color: var(--gray); line-height: 1.6; }
+      .muted { color: var(--gray); font-size: 0.95rem; }
+      .head { max-width: 48rem; }
+
+
+      /* Logotipo real */
+      .logo img { height: 28px; width: auto; display: block; }
+      footer.site .logo img, .logo--invert img { height: 30px; }
+
+      header.site { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.9); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+      .bar { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+      .logo { font-family: var(--display); font-size: 1.25rem; font-weight: 600; letter-spacing: -0.03em; display: inline-flex; align-items: baseline; gap: 0.35rem; }
+      .logo b { color: var(--primary); }
+      .logo i { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); display: inline-block; }
+      nav.main ul { display: none; gap: 2rem; }
+      .nav-cta { display: none; }
+      @media (min-width: 1024px) { nav.main ul { display: flex; } .nav-cta { display: inline-flex; } }
+      nav.main a { font-size: 0.95rem; }
+
+      .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; border-radius: var(--pill); font-weight: 500; font-size: 0.95rem; padding: 0.7rem 1.35rem; border: 1px solid transparent; cursor: pointer; font-family: var(--sans); transition: background-color .2s, color .2s, border-color .2s; }
+      .btn--lg { padding: 0.9rem 1.8rem; font-size: 1rem; }
+      .btn--primary { background: var(--primary); color: var(--dark); }
+      .btn--primary:hover { background: var(--primary-dark); }
+      .btn--dark { background: var(--dark); color: #fff; }
+      .btn--outline { border-color: rgba(23,23,23,0.15); color: var(--dark); background: transparent; }
+      .btn--outline:hover { background: var(--dark); color: #fff; border-color: var(--dark); }
+      .btn--light { border-color: rgba(255,255,255,0.4); color: #fff; }
+      .btn--onprimary { border-color: rgba(23,23,23,.7); color: var(--dark); }
+      .btn--onprimary:hover { background: var(--dark); color: #fff; border-color: var(--dark); }
+      .btn--light:hover { background: #fff; color: var(--dark); }
+      .btn .arrow { transition: transform .2s; }
+      .btn:hover .arrow { transform: translateX(4px); }
+      .actions { display: flex; flex-direction: column; gap: .75rem; margin-top: 2.5rem; }
+      @media (min-width: 640px) { .actions { flex-direction: row; } }
+
+      .crumbs { display: flex; flex-wrap: wrap; gap: .5rem; font-size: .875rem; color: var(--gray); margin-bottom: 2rem; }
+      .crumbs .now { color: var(--dark); }
+
+      .hero { position: relative; border-bottom: 1px solid var(--line); padding: 3.5rem 0 4rem; overflow: hidden; }
+      @media (min-width: 768px) { .hero { padding: 5rem 0; } }
+      .hero .halo { position: absolute; top: -10rem; right: -10%; width: 30rem; height: 30rem; border-radius: 50%; background: rgba(255,107,0,.1); filter: blur(60px); }
+      .hero-grid { display: grid; gap: 3rem; }
+      @media (min-width: 1024px) { .hero-grid { grid-template-columns: 1.3fr 1fr; gap: 4rem; } }
+      .ico-badge { width: 48px; height: 48px; border-radius: 50%; background: var(--primary-soft); color: var(--ink); display: inline-flex; align-items: center; justify-content: center; }
+      .signals { border: 1px solid var(--line); border-radius: var(--radius); background: #fff; padding: 1.75rem; box-shadow: var(--card); }
+      @media (min-width: 1024px) { .signals { margin-top: 4rem; } }
+      .signals h2 { font-family: var(--sans); font-size: .95rem; font-weight: 500; color: var(--gray); }
+      .signals ul { display: grid; gap: 1rem; margin-top: 1.5rem; }
+      .signals li { display: flex; gap: .75rem; font-size: .95rem; }
+      .signals svg { color: var(--primary); flex-shrink: 0; margin-top: .3rem; }
+
+      .grid3 { display: grid; gap: 1px; background: var(--line); border-radius: var(--radius); overflow: hidden; margin-top: 3.5rem; }
+      @media (min-width: 640px) { .grid3 { grid-template-columns: 1fr 1fr; } }
+      @media (min-width: 1024px) { .grid3 { grid-template-columns: repeat(3, 1fr); } }
+      .grid3 > div { background: #fff; padding: 1.75rem; }
+      .grid3 .rule { display: block; width: 2rem; height: 4px; border-radius: 999px; background: var(--primary); }
+      .grid3 h3 { margin-top: 1.5rem; }
+      .grid3 p { margin-top: .75rem; }
+
+      /* Comparador antes / después */
+      .ba { position: relative; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--light); margin-top: 3rem; }
+      .ba-stage { position: relative; width: 100%; aspect-ratio: 16/10; }
+      .ba-layer { position: absolute; inset: 0; }
+      .ba-clip { position: absolute; inset: 0; overflow: hidden; }
+      .ba-line { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--primary); z-index: 10; pointer-events: none; }
+      .ba-handle { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 44px; height: 44px; border-radius: 50%; background: var(--primary); color: #fff; display: inline-flex; align-items: center; justify-content: center; box-shadow: var(--lift); }
+      .ba-tag { position: absolute; top: 1rem; z-index: 10; border-radius: var(--pill); padding: .25rem .75rem; font-size: .75rem; font-weight: 500; color: #fff; }
+      .ba-tag.before { left: 1rem; background: rgba(23,23,23,.85); }
+      .ba-tag.after { right: 1rem; background: var(--primary); color: var(--dark); }
+      .ba input[type="range"] { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 20; appearance: none; background: transparent; cursor: ew-resize; margin: 0; }
+      .ba input[type="range"]::-webkit-slider-thumb { appearance: none; width: 44px; height: 40px; background: transparent; cursor: ew-resize; }
+      .ba input[type="range"]::-moz-range-thumb { width: 44px; height: 40px; background: transparent; border: 0; cursor: ew-resize; }
+      .ba-caption { margin-top: 1rem; font-size: .875rem; color: var(--gray); display: grid; gap: .25rem; }
+
+      /* Maqueta web antigua */
+      .old { height: 100%; background: #dcdcd6; padding: .75rem; font-family: "Times New Roman", serif; color: #1a1a5e; }
+      .old-inner { height: 100%; border: 2px solid #9a9a92; background: #f1f1e9; padding: .75rem; display: flex; flex-direction: column; gap: .5rem; }
+      .old-top { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #9a9a92; padding-bottom: .5rem; }
+      .old-top b { font-size: 13px; text-decoration: underline; }
+      .old-nav { display: flex; gap: .5rem; font-size: 8px; }
+      .old-nav span { text-decoration: underline; }
+      .old-banner { background: #1a1a5e; color: #f7d200; font-size: 9px; font-weight: bold; text-align: center; padding: .4rem; }
+      .old-body { display: flex; gap: .5rem; flex: 1; font-size: 7px; line-height: 1.35; }
+      .old-body p { margin-bottom: .25rem; }
+      .old-side { width: 38%; display: grid; gap: .25rem; align-content: start; }
+      .old-img { height: 56px; border: 1px solid #9a9a92; background: #c9c9c1; display: grid; place-items: center; font-size: 6px; }
+      .old-box { border: 1px solid #9a9a92; background: #e4e4dc; padding: .25rem; font-size: 6px; }
+      .old-counter { background: #f7d200; color: #1a1a5e; font-size: 6px; font-weight: bold; text-align: center; padding: .25rem; }
+      .old-foot { border-top: 1px solid #9a9a92; padding-top: .25rem; text-align: center; font-size: 6px; }
+
+      /* Maqueta web nueva */
+      .new { height: 100%; background: #fff; padding: .75rem; }
+      .new-inner { height: 100%; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; background: #fff; }
+      .new-top { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); padding: .55rem 1rem; }
+      .new-logo { font-family: var(--display); font-size: 11px; font-weight: 600; color: var(--dark); }
+      .new-nav { display: flex; align-items: center; gap: .75rem; font-size: 7px; color: var(--gray); }
+      .new-nav .cta { background: var(--primary); color: #fff; border-radius: 999px; padding: .25rem .5rem; font-weight: 500; }
+      .new-body { flex: 1; display: flex; gap: 1rem; padding: 1rem; }
+      .new-left { flex: 1.1; display: flex; flex-direction: column; justify-content: center; }
+      .new-left .rule { display: block; width: 24px; height: 4px; border-radius: 999px; background: var(--primary); margin-bottom: .5rem; }
+      .new-left h4 { font-family: var(--display); font-size: 15px; font-weight: 600; line-height: 1.15; color: var(--dark); }
+      .new-left p { font-size: 7px; color: var(--gray); line-height: 1.6; margin-top: .5rem; }
+      .new-chips { display: flex; gap: .35rem; margin-top: .75rem; }
+      .new-chips span:first-child { background: var(--primary); color: #fff; border-radius: 999px; padding: .25rem .6rem; font-size: 7px; font-weight: 500; }
+      .new-chips span:last-child { border: 1px solid var(--line); border-radius: 999px; padding: .25rem .6rem; font-size: 7px; color: var(--dark); }
+      .new-right { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: .5rem; }
+      .new-card { border: 1px solid var(--line); border-radius: 6px; padding: .5rem; box-shadow: var(--card); }
+      .new-card p { font-size: 6px; color: var(--gray); }
+      .new-card .v { font-family: var(--display); font-size: 13px; font-weight: 600; color: var(--dark); }
+      .new-bars { display: flex; align-items: flex-end; gap: .2rem; margin-top: .35rem; height: 24px; }
+      .new-bars span { flex: 1; background: var(--light); border-radius: 2px; }
+      .new-bars span.on { background: var(--primary); }
+      .new-speed { display: flex; align-items: center; gap: .35rem; background: var(--light); border-radius: 6px; padding: .35rem .5rem; font-size: 6px; color: var(--gray); }
+      .new-speed i { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); display: inline-block; }
+      .new-foot { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding: .4rem 1rem; font-size: 6px; color: var(--gray); }
+
+      .two { display: grid; gap: 3rem; }
+      @media (min-width: 1024px) { .two { grid-template-columns: 1fr 1.2fr; gap: 5rem; } }
+      .checks { display: grid; gap: 1rem; }
+      @media (min-width: 640px) { .checks { grid-template-columns: 1fr 1fr; } }
+      .checks li { display: flex; align-items: center; gap: .75rem; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; padding: 1rem; font-size: .95rem; font-weight: 500; color: var(--dark); }
+      .checks svg { color: var(--primary); flex-shrink: 0; }
+
+      .faq { display: grid; gap: 3rem; }
+      @media (min-width: 1024px) { .faq { grid-template-columns: .8fr 1.2fr; gap: 5rem; } }
+      details { border-top: 1px solid var(--line); }
+      details:last-of-type { border-bottom: 1px solid var(--line); }
+      summary { display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem; padding: 1.5rem 0; cursor: pointer; font-weight: 500; color: var(--dark); font-size: 1.05rem; list-style: none; }
+      summary::-webkit-details-marker { display: none; }
+      summary:hover { color: var(--ink); }
+      summary svg { flex-shrink: 0; color: var(--primary); margin-top: .3rem; transition: transform .3s; }
+      details[open] summary svg { transform: rotate(45deg); }
+      details p { color: var(--gray); padding-bottom: 1.75rem; max-width: 42rem; }
+
+      .rel { display: grid; gap: 1.25rem; margin-top: 2.5rem; }
+      @media (min-width: 640px) { .rel { grid-template-columns: 1fr 1fr; } }
+      @media (min-width: 1024px) { .rel { grid-template-columns: repeat(3, 1fr); } }
+      .rel a { border: 1px solid var(--line); border-radius: var(--radius); background: #fff; padding: 1.75rem; display: flex; flex-direction: column; transition: transform .3s, box-shadow .3s; }
+      .rel a:hover { transform: translateY(-4px); box-shadow: var(--lift); }
+      .rel svg { color: var(--primary); }
+      .rel h3 { font-size: 1.25rem; margin-top: 1.25rem; }
+      .rel p { margin-top: .5rem; }
+      .rel .more { margin-top: 1.5rem; font-size: .95rem; font-weight: 500; color: var(--dark); display: inline-flex; align-items: center; gap: .5rem; }
+      .rel a:hover .more { color: var(--ink); }
+      .rel a:hover .more .arrow { transform: translateX(4px); }
+
+      .cta-band { background: var(--dark); padding: 5rem 0; }
+      @media (min-width: 768px) { .cta-band { padding: 7rem 0; } }
+      .cta-box { background: var(--primary); border-radius: var(--radius); padding: 3.5rem 2rem; position: relative; overflow: hidden; }
+      @media (min-width: 768px) { .cta-box { padding: 5rem 3.5rem; } }
+      .cta-box .blob { position: absolute; top: -6rem; right: -6rem; width: 18rem; height: 18rem; border-radius: 50%; background: rgba(255,255,255,.1); }
+      .cta-box h2, .cta-box p { color: var(--dark); position: relative; }
+      .cta-box p { opacity: .8; margin-top: 1.25rem; }
+      .cta-box .actions { position: relative; }
+
+      .note { background: var(--primary-soft); border-bottom: 1px solid rgba(255,107,0,.2); color: #8a3b00; font-size: .8rem; padding: .6rem 0; text-align: center; }
+      @media (prefers-reduced-motion: reduce) { * { transition-duration: .001ms !important; } }
+    </style>
+  </head>
+  <body>
+    <div class="note">Preview de <code>/servicios/renovacion-web</code> · el comparador es funcional: arrástralo o usa las flechas</div>
+
+    <header class="site">
+      <div class="wrap bar">
+        <a class="logo" href="odisas-lab-preview.html" aria-label="Odisas, ir al inicio"><img src="data:image/png;base64,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" alt="Odisas · Marketing digital" /></a>
+        <nav class="main" aria-label="Navegación principal">
+          <ul>
+            <li><a href="#" style="color:var(--ink)">Servicios</a></li>
+            <li><a href="odisas-lab-preview.html#sobre">Sobre Odisas Lab</a></li>
+            <li><a href="odisas-lab-preview.html#proceso">Proceso</a></li>
+            <li><a href="odisas-lab-contacto-preview.html">Contacto</a></li>
+          </ul>
+        </nav>
+        <a class="btn btn--primary nav-cta" href="odisas-lab-contacto-preview.html">Hablemos <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="halo" aria-hidden="true"></div>
+        <div class="wrap">
+          <nav aria-label="Ruta de navegación">
+            <ol class="crumbs">
+              <li><a href="odisas-lab-preview.html">Inicio</a></li>
+              <li aria-hidden="true">/</li>
+              <li><a href="#">Servicios</a></li>
+              <li aria-hidden="true">/</li>
+              <li class="now" aria-current="page">Renovación web</li>
+            </ol>
+          </nav>
+
+          <div class="hero-grid">
+            <div>
+              <span class="ico-badge" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+              </span>
+              <h1 style="margin-top:1.75rem">De una web anticuada a una web que trabaja</h1>
+              <p class="lead" style="margin-top:1.75rem;max-width:42rem">
+                Una web desactualizada no es solo un problema estético. Transmite dejadez,
+                va lenta, se ve mal en el móvil y hace que gente que estaba a punto de
+                contactarte se vaya a otro sitio.
+              </p>
+              <p class="lead" style="margin-top:1rem;max-width:42rem">
+                La buena noticia es que casi nunca hay que empezar de cero. Normalmente hay
+                contenido, posicionamiento e histórico que se pueden aprovechar. Lo primero
+                es saber qué se conserva y qué se tira.
+              </p>
+              <div class="actions">
+                <a class="btn btn--primary btn--lg" href="odisas-lab-contacto-preview.html">Quiero hablar de Renovación web <span class="arrow" aria-hidden="true">→</span></a>
+                <a class="btn btn--outline btn--lg" href="odisas-lab-preview.html#proceso">Cómo trabajamos</a>
+              </div>
+            </div>
+
+            <div class="signals">
+              <h2>Esto es para ti si te suena alguna de estas</h2>
+              <ul id="signals"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec sec--light">
+        <div class="wrap">
+          <div class="head">
+            <p class="label">Qué hacemos</p>
+            <h2>Trabajo concreto, no una lista de palabras</h2>
+            <p class="lead" style="margin-top:1.5rem">¿Tu web parece de hace 10 años? Es hora de cambiarla.</p>
+          </div>
+          <div class="grid3" id="work"></div>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="wrap">
+          <div class="head">
+            <p class="label">Antes y después</p>
+            <h2>La diferencia se ve en cinco segundos</h2>
+            <p class="lead" style="margin-top:1.5rem">
+              Lo que cambia no es solo el aspecto: cambia la velocidad, la claridad del
+              mensaje y el número de personas que acaban contactando.
+            </p>
+          </div>
+
+          <figure class="ba" style="margin-top:3rem">
+            <div class="ba-stage">
+              <div class="ba-layer">
+                <div class="new">
+                  <div class="new-inner">
+                    <div class="new-top">
+                      <span class="new-logo">Mi Empresa</span>
+                      <span class="new-nav"><span>Servicios</span><span>Proyectos</span><span>Contacto</span><span class="cta">Hablemos</span></span>
+                    </div>
+                    <div class="new-body">
+                      <div class="new-left">
+                        <span class="rule"></span>
+                        <h4>Soluciones que hacen crecer tu negocio</h4>
+                        <p>Analizamos tu caso, diseñamos la estrategia y la ejecutamos. Con datos delante y sin promesas imposibles.</p>
+                        <div class="new-chips"><span>Empezar</span><span>Ver más</span></div>
+                      </div>
+                      <div class="new-right">
+                        <div class="new-card">
+                          <p>Contactos este mes</p>
+                          <p class="v">48</p>
+                          <div class="new-bars">
+                            <span style="height:30%"></span><span style="height:45%"></span><span style="height:38%"></span>
+                            <span style="height:60%"></span><span style="height:72%"></span><span class="on" style="height:95%"></span>
+                          </div>
+                        </div>
+                        <div class="new-speed"><i></i> Carga en 0,9 s</div>
+                      </div>
+                    </div>
+                    <div class="new-foot"><span>Diseño responsive</span><span>Accesible</span><span>Optimizado para SEO</span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ba-clip" id="clip">
+                <div class="old">
+                  <div class="old-inner">
+                    <div class="old-top">
+                      <b>MI EMPRESA S.L.</b>
+                      <span class="old-nav"><span>Inicio</span><span>Quienes somos</span><span>Servicios</span><span>Contacto</span></span>
+                    </div>
+                    <div class="old-banner">¡¡ BIENVENIDOS A NUESTRA WEB !!</div>
+                    <div class="old-body">
+                      <div style="flex:1">
+                        <p>Somos una empresa líder en el sector con más de 20 años de experiencia ofreciendo soluciones integrales a nuestros clientes.</p>
+                        <p>Nuestro equipo de profesionales altamente cualificados trabaja cada día para ofrecer el mejor servicio del mercado.</p>
+                        <p style="text-decoration:underline">Leer más...</p>
+                        <div class="old-box" style="margin-top:.5rem"><p style="font-weight:bold">NOVEDADES</p><p>Última actualización: 12/03/2014</p></div>
+                      </div>
+                      <div class="old-side">
+                        <div class="old-img">imagen1.jpg</div>
+                        <div class="old-box"><p style="font-weight:bold">CONTACTO</p><p>Tel: 91 000 00 00</p><p>Fax: 91 000 00 01</p></div>
+                        <div class="old-counter">VISITAS: 004821</div>
+                      </div>
+                    </div>
+                    <div class="old-foot">Optimizado para Internet Explorer · Resolución 1024x768</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ba-line" id="line" aria-hidden="true">
+                <span class="ba-handle">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 8l-4 4 4 4M16 8l4 4-4 4"/></svg>
+                </span>
+              </div>
+
+              <span class="ba-tag before">Antes</span>
+              <span class="ba-tag after">Después</span>
+
+              <label for="ba" class="sr-only" style="position:absolute;left:-9999px">Comparador entre una web anticuada y su versión renovada</label>
+              <input id="ba" type="range" min="0" max="100" value="50" />
+            </div>
+          </figure>
+          <figcaption class="ba-caption">
+            <span>Arrastra el control o usa las flechas del teclado para comparar.</span>
+            <span style="opacity:.8">Ilustración de ejemplo. Sustituir por capturas reales de webs renovadas cuando estén disponibles.</span>
+          </figcaption>
+        </div>
+      </section>
+
+      <section class="sec sec--light">
+        <div class="wrap two">
+          <div class="head">
+            <p class="label">Qué incluye</p>
+            <h2>Todo lo que entra en el servicio</h2>
+            <p class="lead" style="margin-top:1.5rem">Si algo de tu caso no está aquí, lo hablamos y lo ajustamos antes de presupuestar.</p>
+          </div>
+          <ul class="checks" id="includes"></ul>
+        </div>
+      </section>
+
+      <section class="sec">
+        <div class="wrap faq">
+          <div class="head">
+            <p class="label">Preguntas frecuentes</p>
+            <h2>Dudas habituales sobre Renovación web</h2>
+            <p class="lead" style="margin-top:1.5rem">Si tu duda no está aquí, escríbenos y te contestamos sin compromiso.</p>
+          </div>
+          <div id="faqs"></div>
+        </div>
+      </section>
+
+      <section class="sec sec--light">
+        <div class="wrap">
+          <h2>Suele combinarse con</h2>
+          <div class="rel" id="rel"></div>
+        </div>
+      </section>
+
+      <section class="cta-band">
+        <div class="wrap">
+          <div class="cta-box">
+            <div class="blob" aria-hidden="true"></div>
+            <h2>¿Hablamos de tu caso?</h2>
+            <p class="lead" style="color:var(--dark);opacity:.8">
+              Cuéntanos tu situación y te decimos si Renovación web es lo que necesitas
+              ahora o si hay algo más urgente que atender primero.
+            </p>
+            <div class="actions">
+              <a class="btn btn--dark btn--lg" href="odisas-lab-contacto-preview.html">Hablemos <span class="arrow" aria-hidden="true">→</span></a>
+              <a class="btn btn--onprimary btn--lg" href="#">Ver todos los servicios</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const check = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>';
+
+      const signals = [
+        "Tu web se hizo hace años y no la has vuelto a tocar",
+        "En el móvil hay que hacer zoom para leer o se descuadra",
+        "Tarda en cargar y lo notas tú mismo al abrirla",
+        "Te da reparo mandar el enlace a un cliente potencial",
+      ];
+      document.getElementById("signals").innerHTML = signals
+        .map((s) => `<li>${check}<span>${s}</span></li>`).join("");
+
+      const work = [
+        ["Análisis de la web actual", "Velocidad, errores técnicos, estructura, contenido, visibilidad en Google y comportamiento de las visitas. El diagnóstico antes del tratamiento."],
+        ["Plan de mejoras", "Qué se conserva, qué se rehace y en qué orden, priorizando lo que más afecta a que entren clientes."],
+        ["Rediseño", "Diseño actual, mensaje ordenado y navegación clara, respetando tu identidad si funciona o actualizándola si no."],
+        ["Migración sin perder SEO", "Redirecciones una a una, URLs controladas y seguimiento posterior en Search Console para no perder el posicionamiento que ya tenías."],
+        ["Velocidad y accesibilidad", "Optimización de imágenes, código y fuentes, contraste suficiente y navegación con teclado."],
+        ["Antes y después", "Documentamos el punto de partida y el resultado, para que se vea con claridad qué ha cambiado."],
+      ];
+      document.getElementById("work").innerHTML = work
+        .map(([t, d]) => `<div><span class="rule" aria-hidden="true"></span><h3>${t}</h3><p class="muted">${d}</p></div>`).join("");
+
+      const includes = ["Análisis de la web actual", "Detección de errores", "Rediseño completo", "Mejora de velocidad", "Migración sin perder SEO", "Antes y después"];
+      document.getElementById("includes").innerHTML = includes
+        .map((i) => `<li>${check}<span>${i}</span></li>`).join("");
+
+      const faqs = [
+        ["¿Voy a perder el posicionamiento que tengo en Google?", "No si la migración se hace bien. El riesgo real existe y por eso se planifican las redirecciones antes de publicar y se vigila Search Console las semanas siguientes. Es la parte del trabajo que más cuidado requiere."],
+        ["¿Es mejor renovar o hacer una web nueva?", "Lo decide el análisis. Si la base técnica es razonable, se mejora. Si arrastra problemas de fondo, rehacerla sale más rentable que ir parcheando. Te decimos cuál de los dos casos es el tuyo antes de presupuestar."],
+        ["¿Puedo mantener mi dominio y mi correo?", "Sí. El dominio y el correo son tuyos y se mantienen. Solo cambia a dónde apunta el dominio, y se hace de forma coordinada para que no haya cortes."],
+      ];
+      document.getElementById("faqs").innerHTML = faqs
+        .map(([q, a]) => `<details><summary>${q}<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>${a}</p></details>`).join("");
+
+      const related = [
+        ["Diseño web", "Diseñamos webs rápidas, claras y pensadas para convertir visitas en contactos o ventas.", '<rect x="2" y="4" width="14" height="11" rx="2"/><rect x="17" y="9" width="5" height="11" rx="1.5"/>'],
+        ["Análisis web + IA", "Combinamos análisis web e inteligencia artificial para detectar dónde pierdes clientes.", '<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/>'],
+        ["SEO", "Trabajamos tu posicionamiento para que aparezcas cuando alguien busca lo que ofreces.", '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>'],
+      ];
+      document.getElementById("rel").innerHTML = related
+        .map(([n, d, ic]) => `<a href="#"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">${ic}</svg><h3>${n}</h3><p class="muted">${d}</p><span class="more">Ver servicio <span class="arrow" aria-hidden="true">→</span></span></a>`).join("");
+
+      // Comparador
+      const range = document.getElementById("ba");
+      const clip = document.getElementById("clip");
+      const line = document.getElementById("line");
+      const sync = () => {
+        const value = Number(range.value);
+        clip.style.clipPath = `inset(0 ${100 - value}% 0 0)`;
+        line.style.left = value + "%";
+        range.setAttribute("aria-valuetext", value + "% visible del estado anterior");
+      };
+      range.addEventListener("input", sync);
+      sync();
+    </script>
+  </body>
+</html>

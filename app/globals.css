@@ -1,0 +1,248 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   ODISAS LAB · DESIGN SYSTEM
+   Fuente de verdad de color, tipografía y espaciado.
+   ========================================================================== */
+
+@theme {
+  /* Color */
+  --color-primary: #ff6b00;
+  --color-primary-dark: #e05e00;
+  /* Naranja oscurecido SOLO para texto: #FF6B00 no llega a 4.5:1 sobre blanco */
+  --color-primary-ink: #ba4e00;
+  --color-primary-soft: #fff3e9;
+  --color-dark: #171717;
+  --color-dark-soft: #232323;
+  --color-text: #222222;
+  --color-gray: #6b6b6b;
+  --color-line: #e6e6e6;
+  --color-light: #f5f5f5;
+  --color-white: #ffffff;
+
+  /* Tipografía */
+  --font-display: var(--font-space-grotesk), "Space Grotesk", system-ui, sans-serif;
+  --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
+
+  /* Escala tipográfica (fluida) */
+  --text-display: clamp(2.6rem, 6.2vw, 5rem);
+  --text-display--line-height: 1.02;
+  --text-h2: clamp(2rem, 3.8vw, 3.1rem);
+  --text-h2--line-height: 1.08;
+  --text-h3: clamp(1.3rem, 1.8vw, 1.6rem);
+  --text-h3--line-height: 1.2;
+  --text-lead: clamp(1.05rem, 1.5vw, 1.25rem);
+  --text-lead--line-height: 1.6;
+
+  /* Radios y sombras */
+  --radius-card: 14px;
+  --radius-pill: 999px;
+  --shadow-card: 0 1px 2px rgba(23, 23, 23, 0.04);
+  --shadow-lift: 0 18px 40px -22px rgba(23, 23, 23, 0.28);
+
+  /* Ritmo vertical */
+  --spacing-section: 7rem;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-white);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    color: var(--color-dark);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::selection {
+    background: var(--color-primary);
+    color: var(--color-white);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Contenedor único de la web */
+  .container-odisas {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-odisas {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Enlace con subrayado animado desde la izquierda */
+  .link-underline {
+    position: relative;
+    display: inline-block;
+  }
+
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 2px;
+    width: 100%;
+    background: var(--color-primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.28s ease;
+  }
+
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  /* Texto corrido para páginas legales y contenido largo */
+  .prose-odisas h2 {
+    font-size: 1.35rem;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .prose-odisas h2:first-child {
+    margin-top: 0;
+  }
+
+  .prose-odisas h3 {
+    font-size: 1.05rem;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .prose-odisas p,
+  .prose-odisas li {
+    color: var(--color-gray);
+  }
+
+  .prose-odisas p + p {
+    margin-top: 1rem;
+  }
+
+  .prose-odisas ul {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-left: 1.1rem;
+    list-style: disc;
+  }
+
+  .prose-odisas ul::marker,
+  .prose-odisas li::marker {
+    color: var(--color-primary);
+  }
+
+  .prose-odisas strong {
+    color: var(--color-dark);
+    font-weight: 500;
+  }
+
+  .prose-odisas a {
+    color: var(--color-dark);
+    text-decoration: underline;
+    text-decoration-color: var(--color-primary);
+    text-underline-offset: 3px;
+  }
+
+  .prose-odisas table {
+    width: 100%;
+    margin-top: 1.25rem;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+
+  .prose-odisas th,
+  .prose-odisas td {
+    border-bottom: 1px solid var(--color-line);
+    padding: 0.75rem 0.75rem 0.75rem 0;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .prose-odisas th {
+    color: var(--color-dark);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .prose-odisas td {
+    color: var(--color-gray);
+  }
+
+  /* Banda de confianza en movimiento continuo */
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: odisas-marquee 38s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
+  }
+
+  @keyframes odisas-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+/* Utilidad: máscara lateral para la banda de confianza */
+@utility mask-fade-x {
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
