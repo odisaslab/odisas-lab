@@ -49,54 +49,63 @@ export function Header() {
     pathname === href || (href !== "/" && pathname.startsWith(href));
 
   return (
-    <header
-      className={`sticky top-0 z-50 bg-white/90 backdrop-blur-md transition-shadow duration-300 ${
-        scrolled ? "border-b border-line shadow-[0_1px_0_rgba(23,23,23,0.04)]" : ""
-      }`}
-    >
-      <Container className="flex h-[72px] items-center justify-between gap-6">
-        <Logo />
+    <>
+      <header
+        className={`sticky top-0 z-50 bg-white/90 backdrop-blur-md transition-shadow duration-300 ${
+          scrolled ? "border-b border-line shadow-[0_1px_0_rgba(23,23,23,0.04)]" : ""
+        }`}
+      >
+        <Container className="flex h-[72px] items-center justify-between gap-6">
+          <Logo />
 
-        <nav aria-label="Navegación principal" className="hidden lg:block">
-          <ul className="flex items-center gap-8">
-            {mainNav.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  aria-current={isActive(item.href) ? "page" : undefined}
-                  className={`link-underline text-[0.95rem] transition-colors ${
-                    isActive(item.href) ? "text-primary-ink" : "text-text hover:text-dark"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+          <nav aria-label="Navegación principal" className="hidden lg:block">
+            <ul className="flex items-center gap-8">
+              {mainNav.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                    className={`link-underline text-[0.95rem] transition-colors ${
+                      isActive(item.href) ? "text-primary-ink" : "text-text hover:text-dark"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-        <div className="hidden lg:block">
-          <Button href="/contacto" withArrow>
-            Hablemos
-          </Button>
-        </div>
+          <div className="hidden lg:block">
+            <Button href="/contacto" withArrow>
+              Hablemos
+            </Button>
+          </div>
 
-        <button
-          type="button"
-          onClick={() => setOpen((value) => !value)}
-          aria-expanded={open}
-          aria-controls="menu-movil"
-          aria-label={open ? "Cerrar menú" : "Abrir menú"}
-          className="inline-flex size-11 items-center justify-center rounded-full border border-line text-dark lg:hidden"
-        >
-          {open ? (
-            <X aria-hidden="true" className="size-5" />
-          ) : (
-            <Menu aria-hidden="true" className="size-5" />
-          )}
-        </button>
-      </Container>
+          <button
+            type="button"
+            onClick={() => setOpen((value) => !value)}
+            aria-expanded={open}
+            aria-controls="menu-movil"
+            aria-label={open ? "Cerrar menú" : "Abrir menú"}
+            className="inline-flex size-11 items-center justify-center rounded-full border border-line text-dark lg:hidden"
+          >
+            {open ? (
+              <X aria-hidden="true" className="size-5" />
+            ) : (
+              <Menu aria-hidden="true" className="size-5" />
+            )}
+          </button>
+        </Container>
+      </header>
 
+      {/*
+        Fuera de <header>: ese elemento lleva backdrop-blur (backdrop-filter),
+        y filter/backdrop-filter convierte al elemento en containing block de
+        sus descendientes "fixed". Si este panel viviera dentro del header,
+        su top-[72px]/bottom-0 se calcularían contra los 72px del propio
+        header (no contra la pantalla) y la altura resultante sería 0.
+      */}
       <AnimatePresence>
         {open ? (
           <motion.div
@@ -137,6 +146,6 @@ export function Header() {
           </motion.div>
         ) : null}
       </AnimatePresence>
-    </header>
+    </>
   );
 }
