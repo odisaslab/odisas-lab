@@ -35,13 +35,20 @@ function buildEmail({ audit, perf, companyName, config }) {
 
   const subject = important
     ? `${company}: ${important} ${important === 1 ? 'punto importante' : 'puntos importantes'} a mejorar en vuestra web`
-    : `${company}: resultados del diagnóstico de vuestra web`;
+    : `${company}: así os están viendo Google y vuestros clientes ahora mismo`;
 
   const intro = score >= 80
     ? `La web está en buen estado general, pero hemos encontrado algunos detalles que, bien resueltos, pueden ayudaros a conseguir más contactos.`
     : score >= 50
       ? `La web cumple su función, pero hemos encontrado varios puntos que probablemente os están haciendo perder visibilidad en Google y contactos de clientes.`
       : `Hemos encontrado problemas importantes que conviene resolver cuanto antes, porque afectan a cómo os encuentra Google y a la confianza de quien entra en la web.`;
+
+  // El texto del CTA refleja la urgencia real según la nota, sin exagerarla
+  const ctaLabel = score >= 80
+    ? 'Agendar una llamada de 15 minutos'
+    : score >= 50
+      ? 'Agendar una llamada de 15 minutos para resolverlo'
+      : 'Agendar una llamada de 15 minutos cuanto antes';
 
   const meetingUrl = config.meetingUrl
     || `mailto:${config.replyTo}?subject=${encodeURIComponent(`Llamada sobre la web de ${company}`)}&body=${encodeURIComponent(`Hola, nos interesa una llamada para revisar el diagnóstico de ${host}.\n\nNos viene bien: \nTeléfono de contacto: `)}`;
@@ -100,6 +107,7 @@ function buildEmail({ audit, perf, companyName, config }) {
     </table>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:12px">${catRows}</table>
     ${perf ? '' : `<p style="margin:8px 0 0;font-size:12px;color:#8A8580">El rendimiento no se ha podido medir en este análisis y no se incluye en la nota.</p>`}
+    <p style="margin:14px 0 0;font-size:14px;line-height:1.5"><a href="${esc(meetingUrl)}" style="color:#DD3B04;font-weight:bold;text-decoration:none">→ ${esc(ctaLabel)}</a> <span style="color:#8A8580">— o sigue leyendo el detalle</span></p>
 
     <p style="margin:26px 0 12px;font-size:16px;font-weight:bold;color:#211F1F">Lo que más os está afectando</p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${issueRows}</table>
@@ -109,7 +117,7 @@ function buildEmail({ audit, perf, companyName, config }) {
     ${servicesHtml}
 
     <table role="presentation" cellpadding="0" cellspacing="0" style="margin:26px 0 10px"><tr><td style="background:#FF6807;border-radius:10px">
-      <a href="${esc(meetingUrl)}" style="display:inline-block;padding:14px 26px;font-size:15px;font-weight:bold;color:#211F1F;text-decoration:none">Agendar una llamada de 15 minutos</a>
+      <a href="${esc(meetingUrl)}" style="display:inline-block;padding:14px 26px;font-size:15px;font-weight:bold;color:#211F1F;text-decoration:none">${esc(ctaLabel)}</a>
     </td></tr></table>
     <p style="margin:0;font-size:14px;line-height:1.6;color:#4A4744">También podéis responder a este correo con el día y la hora que mejor os venga, o llamarnos al <a href="tel:${esc(config.phone.replace(/\s/g, ''))}" style="color:#DD3B04">${esc(config.phone)}</a>. Sin compromiso.</p>
 
@@ -129,11 +137,12 @@ function buildEmail({ audit, perf, companyName, config }) {
     intro, '',
     `NOTA GENERAL: ${score}/100 (${audit.counts.critical} críticos, ${audit.counts.high} altos, ${audit.counts.medium} medios, ${audit.counts.low} bajos)`,
     ...cats.map(c => `- ${c.label}: ${c.score}/100`), '',
+    `→ ${ctaLabel}: ${config.meetingUrl || `responded a este correo o llamadnos al ${config.phone}`}`, '',
     'LO QUE MÁS OS ESTÁ AFECTANDO',
     ...shown.flatMap(i => [`[${SEV[i.severity]}] ${i.title}`, i.impact ? `  Por qué importa: ${i.impact}` : '', `  Qué haríamos: ${i.recommendation}`, '']).filter((l, idx, arr) => l !== '' || arr[idx - 1] !== ''),
     audit.passed.length ? `LO QUE YA HACÉIS BIEN\n${audit.passed.slice(0, 4).map(p => `✓ ${p.title}`).join('\n')}\n` : '',
     services.length ? `Donde más margen de mejora tenéis es en: ${services.join(', ')}. Nos gustaría explicaros en una llamada breve qué haríamos primero en vuestro caso.` : 'Nos gustaría explicaros en una llamada breve cómo sacarle aún más partido a la web.', '',
-    `Agendar una llamada de 15 minutos: ${config.meetingUrl || `responded a este correo o llamadnos al ${config.phone}`}`, '',
+    `${ctaLabel}: ${config.meetingUrl || `responded a este correo o llamadnos al ${config.phone}`}`, '',
     `Un saludo,`, config.senderName, `${brand} · Marketing digital`, `${config.replyTo} · ${config.phone}`, '',
     `Este diagnóstico se ha elaborado por iniciativa de ${brand}, a partir de datos públicos de vuestra web, sin ningún compromiso por vuestra parte. Si preferís no recibir más comunicaciones como esta, respondednos indicándolo y no volveremos a escribiros.`,
   ].join('\n');
