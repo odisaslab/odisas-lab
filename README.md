@@ -25,6 +25,14 @@ diseño.
 Ábrela con doble clic en el navegador. **No es la fuente de verdad**: el código real es
 el de `app/` y `components/`.
 
+## Diagnóstico web gratuito (proyecto aparte)
+
+`odisas-audit/` es una landing independiente ("pega tu URL y recibe un mini-diagnóstico")
+con sus propias funciones serverless. No es parte de esta app Next.js: se despliega como
+**otro proyecto de Vercel**, importando este mismo repositorio con *Root Directory* =
+`odisas-audit`. Configuración, variables de entorno y despliegue están documentados en
+`odisas-audit/README.md`.
+
 ## Cómo está organizado
 
 ```
@@ -38,6 +46,7 @@ app/manifest.ts, favicon.ico, apple-icon.png, opengraph-image.png
 scripts/              preparación del logotipo, imágenes y auditoría de contraste
 scripts/brand-source/ originales del logotipo y la foto
 AUDITORIA.md          informe de la revisión previa a publicación
+odisas-audit/          landing de diagnóstico web gratuito, proyecto Vercel aparte (ver su README)
 public/brand/         tu logotipo y tu foto (ver LEEME.txt)
 components/cookies/  banner y panel de consentimiento
 components/analytics/ carga de GA4, GTM y Meta Pixel tras consentimiento

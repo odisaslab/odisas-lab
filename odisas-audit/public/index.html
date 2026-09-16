@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Odisas Lab · Diagnóstico web gratuito</title>
+<meta name="description" content="Introduce la dirección de tu web y Odisas Lab detecta sus errores y amenazas principales. Después te enviamos el informe completo.">
+<link rel="icon" type="image/png" href="/logo-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   COLORES CORPORATIVOS ODISAS LAB
+   Cambia solo estos valores para aplicar la paleta oficial.
+   ============================================================ */
+:root{
+  --brand:        #FF6807;  /* naranja Odisas Lab (del logo) */
+  --brand-light:  #FD8301;  /* naranja claro del degradado del logo */
+  --brand-deep:   #DD3B04;  /* variante oscura del principal */
+  --brand-soft:   #FFE6D6;  /* variante clara del principal */
+  --ink:          #211F1F;  /* texto y fondo oscuro */
+  --paper:        #F7F4F1;  /* fondo */
+  --alert:        #E5383B;  /* amenazas / errores */
+  --warn:         #F2C230;  /* advertencias */
+  --ok:           #17B287;  /* correcto */
+
+  --surface: #FFFFFF;
+  --muted: #5D6480;
+  --line: rgba(33,31,31,.10);
+  --grid: rgba(255,107,26,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#EEF1FA; --paper:#15110F; --surface:#221B17; --muted:#9AA3C2;
+    --line:rgba(238,241,250,.12); --grid:rgba(255,130,60,.07); --brand-soft:#4A2410;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#EEF1FA; --paper:#15110F; --surface:#221B17; --muted:#9AA3C2;
+  --line:rgba(238,241,250,.12); --grid:rgba(255,130,60,.07); --brand-soft:#4A2410;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  isolation:isolate;
+}
+/* papel milimetrado de laboratorio */
+.hero::before{
+  content:"";position:absolute;inset:0;z-index:-2;
+  background-image:
+    linear-gradient(var(--grid) 1px,transparent 1px),
+    linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:36px 36px;
+  mask-image:radial-gradient(ellipse 80% 70% at 60% 40%,#000 30%,transparent 80%);
+}
+
+/* ---------- nav ---------- */
+nav{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:28px clamp(20px,5vw,64px);
+  gap:16px;
+}
+.logo{display:flex;align-items:center;gap:12px;color:var(--ink);text-decoration:none}
+.logo img{height:38px;width:auto;display:block}
+.logo-text{font-family:"Montserrat",system-ui,sans-serif;font-weight:800;font-size:1.35rem;letter-spacing:.01em;line-height:1;display:flex;align-items:baseline}
+.logo-text small{font-weight:600;font-size:.62em;letter-spacing:.28em;margin-left:.55em;color:var(--muted)}
+.caret{display:inline-block;width:.8em;height:.72em;fill:var(--brand);margin:0 .02em;vertical-align:baseline}
+.contact{display:flex;gap:22px;font-size:.92rem;color:var(--muted)}
+.contact a{color:inherit;text-decoration:none}
+.contact a:hover{color:var(--brand)}
+
+/* ---------- contenido ---------- */
+.stage{
+  flex:1;
+  display:grid;
+  grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+  align-items:center;
+  gap:clamp(24px,4vw,64px);
+  padding:clamp(12px,3vw,40px) clamp(20px,5vw,64px) 0;
+  max-width:1320px;width:100%;margin:0 auto;
+}
+.status{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:7px 14px 7px 10px;border-radius:999px;
+  background:var(--surface);border:1px solid var(--line);
+  font-size:.88rem;color:var(--muted);margin-bottom:26px;
+}
+.status i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px color-mix(in srgb,var(--ok) 22%,transparent)}
+
+h1{
+  font-family:"Montserrat",system-ui,sans-serif;
+  font-weight:700;
+  font-size:clamp(2.2rem,4.8vw,4rem);
+  line-height:1.06;
+  letter-spacing:-.03em;
+  max-width:14ch;
+}
+.lead{
+  margin-top:22px;font-size:clamp(1.02rem,1.3vw,1.18rem);
+  line-height:1.55;color:var(--muted);max-width:46ch;
+}
+
+/* ---------- campo URL ---------- */
+form{margin-top:36px;max-width:600px}
+.field{
+  display:flex;align-items:center;gap:8px;
+  background:var(--surface);
+  border:1.5px solid var(--line);
+  border-radius:18px;padding:8px 8px 8px 20px;
+  box-shadow:0 18px 50px -24px color-mix(in srgb,var(--brand) 45%,transparent);
+  transition:border-color .2s, box-shadow .2s;
+}
+.field:focus-within{border-color:var(--brand);box-shadow:0 0 0 5px color-mix(in srgb,var(--brand) 18%,transparent),0 18px 50px -24px color-mix(in srgb,var(--brand) 45%,transparent)}
+.field.error{border-color:var(--alert)}
+.field svg{flex:none;color:var(--muted)}
+.field input{
+  flex:1;min-width:0;border:0;outline:0;background:transparent;
+  font:500 1.08rem "Instrument Sans",sans-serif;color:var(--ink);padding:14px 4px;
+}
+.field input::placeholder{color:var(--muted);opacity:.7}
+button{
+  flex:none;border:0;cursor:pointer;
+  background:var(--brand);color:#1A120D;
+  font:600 1rem "Instrument Sans",sans-serif;
+  padding:16px 26px;border-radius:12px;
+  transition:background .2s, transform .15s;
+}
+button:hover{background:var(--brand-deep);color:#fff}
+button:active{transform:scale(.98)}
+button:focus-visible,a:focus-visible{outline:3px solid var(--brand);outline-offset:3px}
+.hint{margin-top:12px;font-size:.9rem;color:var(--muted);min-height:1.3em}
+.hint.bad{color:var(--alert)}
+.hint.good{color:var(--ok)}
+
+.checks{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.chip{display:inline-flex;align-items:center;gap:8px;font-size:.9rem;padding:8px 13px;border-radius:10px;background:var(--surface);border:1px solid var(--line)}
+.chip b{width:9px;height:9px;border-radius:3px}
+
+/* ---------- escáner decorativo ---------- */
+.scope{position:relative;aspect-ratio:1;width:100%;max-width:500px;justify-self:center}
+.scope svg{width:100%;height:100%;overflow:visible}
+.ring{fill:none;stroke:var(--line);stroke-width:1}
+.ring.strong{stroke:color-mix(in srgb,var(--brand) 35%,transparent)}
+.sweep{transform-origin:250px 250px;animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.blip{transform-origin:center;animation:pulse 3s ease-in-out infinite}
+.blip:nth-of-type(2){animation-delay:1s}
+.blip:nth-of-type(3){animation-delay:2s}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+.tag{
+  position:absolute;display:flex;align-items:center;gap:10px;
+  background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:11px 15px;font-size:.9rem;font-weight:500;
+  box-shadow:0 14px 30px -18px rgba(33,31,31,.35);
+  white-space:nowrap;
+}
+.tag small{display:block;font-weight:400;color:var(--muted);font-size:.8rem}
+.tag .dot{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;font-weight:700;font-size:.9rem}
+.t1{top:10%;left:-4%}
+.t2{top:46%;right:-6%}
+.t3{bottom:10%;left:6%}
+
+/* ---------- nombre gigante ---------- */
+.wordmark{
+  font-family:"Montserrat",system-ui,sans-serif;font-weight:800;
+  font-size:clamp(3.6rem,14.5vw,15rem);
+  line-height:.8;letter-spacing:-.02em;
+  white-space:nowrap;text-align:center;
+  margin-top:clamp(28px,4vw,48px);
+  color:var(--ink);
+  transform:translateY(16%);
+  user-select:none;
+}
+.wordmark .caret{width:.82em;height:.72em}
+.wordmark .lab{color:transparent;-webkit-text-stroke:2px var(--brand);margin-left:.18em}
+
+/* ---------- entrada única ---------- */
+.reveal{opacity:0;transform:translateY(14px);animation:in .8s cubic-bezier(.2,.7,.2,1) forwards}
+.d1{animation-delay:.05s}.d2{animation-delay:.15s}.d3{animation-delay:.25s}.d4{animation-delay:.4s}
+@keyframes in{to{opacity:1;transform:none}}
+
+@media (prefers-reduced-motion:reduce){
+  .sweep,.blip{animation:none}
+  .reveal{animation:none;opacity:1;transform:none}
+}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  .stage{grid-template-columns:1fr;text-align:left}
+  .scope{max-width:340px;order:-1;margin-bottom:-10px}
+  .t2{right:-2%}
+  .contact .mail{display:none}
+}
+@media (max-width:520px){
+  .field{flex-wrap:wrap;padding:8px}
+  .field svg{margin-left:10px}
+  .field input{flex-basis:calc(100% - 40px)}
+  button{width:100%}
+  .scope{max-width:270px}
+  .tag{font-size:.8rem;padding:8px 11px}
+  .tag .dot{width:24px;height:24px}
+  .t1{left:-8%;top:4%}.t2{right:-10%;top:60%}.t3{left:-6%;bottom:2%}
+  .tag small{display:none}
+}
+
+/* ============================================================
+   RESULTADOS
+   ============================================================ */
+[hidden]{display:none!important}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.results{max-width:1180px;margin:0 auto;padding:clamp(40px,6vw,80px) clamp(20px,5vw,40px) 80px;scroll-margin-top:12px}
+.r-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:28px}
+.r-head h2{font-family:"Montserrat",system-ui,sans-serif;font-weight:700;font-size:clamp(1.5rem,2.6vw,2.1rem);letter-spacing:-.02em;line-height:1.15}
+.r-meta{color:var(--muted);font-size:.93rem;margin-top:6px;overflow-wrap:anywhere}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line);padding:12px 18px;border-radius:12px}
+.btn-ghost:hover{background:var(--surface);color:var(--ink);border-color:var(--brand)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:clamp(18px,2.4vw,28px)}
+.panel h3{font-family:"Montserrat",system-ui,sans-serif;font-size:1.12rem;font-weight:700;letter-spacing:-.01em}
+.panel .sub{color:var(--muted);font-size:.9rem;margin-top:4px}
+
+/* progreso */
+.progress{max-width:620px}
+.bar{height:8px;border-radius:99px;background:var(--brand-soft);overflow:hidden;margin:18px 0 20px}
+.bar i{display:block;height:100%;width:0;background:var(--brand);border-radius:inherit;transition:width .5s ease}
+.steps{list-style:none;display:grid;gap:12px}
+.steps li{display:flex;gap:12px;align-items:center;font-size:.96rem;color:var(--muted)}
+.steps li::before{content:"";width:18px;height:18px;border-radius:50%;border:2px solid var(--line);flex:none;box-sizing:border-box}
+.steps li.run{color:var(--ink)}
+.steps li.run::before{border-color:var(--brand);border-right-color:transparent;animation:spin .8s linear infinite}
+.steps li.done{color:var(--ink)}
+.steps li.done::before{background:var(--ok);border-color:var(--ok);box-shadow:inset 0 0 0 3px var(--surface)}
+.steps li.fail::before{background:var(--warn);border-color:var(--warn);box-shadow:inset 0 0 0 3px var(--surface)}
+
+/* error */
+.err{border-color:color-mix(in srgb,var(--alert) 40%,transparent);max-width:620px}
+.err h3{color:var(--alert)}
+
+/* resumen */
+.summary{display:grid;grid-template-columns:auto 1fr;gap:clamp(20px,4vw,48px);align-items:center}
+.ring-wrap{position:relative;width:180px;height:180px}
+.ring-wrap svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring-wrap .track{stroke:var(--brand-soft)}
+.ring-wrap .val{transition:stroke-dashoffset 1s ease}
+.ring-num{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring-num b{font-family:"Montserrat",system-ui,sans-serif;font-size:3rem;font-weight:800;letter-spacing:-.04em;line-height:1}
+.ring-num span{display:block;font-size:.8rem;color:var(--muted);margin-top:4px}
+.verdict{font-family:"Montserrat",system-ui,sans-serif;font-weight:700;font-size:1.4rem;letter-spacing:-.015em}
+.counts{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.count{display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;background:var(--paper);font-size:.9rem}
+.count b{font-size:1.05rem}
+.basis{font-size:.85rem;color:var(--muted);margin-top:14px;max-width:62ch;line-height:1.5}
+
+.sev{display:inline-flex;align-items:center;font-size:.74rem;font-weight:600;padding:3px 8px;border-radius:6px;white-space:nowrap}
+.sev.critical{background:color-mix(in srgb,var(--alert) 16%,transparent);color:var(--alert)}
+.sev.high{background:color-mix(in srgb,var(--brand) 16%,transparent);color:var(--brand-deep)}
+.sev.medium{background:color-mix(in srgb,var(--warn) 22%,transparent);color:#8a6400}
+.sev.low{background:color-mix(in srgb,var(--muted) 14%,transparent);color:var(--muted)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .sev.medium{color:var(--warn)}:root:not([data-theme="light"]) .sev.high{color:var(--brand-light)}}
+.dotc{width:10px;height:10px;border-radius:3px;display:inline-block}
+
+/* categorías */
+.cats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:16px}
+.cat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+.cat .name{font-size:.88rem;color:var(--muted);min-height:2.4em}
+.cat .num{font-family:"Montserrat",system-ui,sans-serif;font-weight:800;font-size:1.9rem;letter-spacing:-.03em;margin-top:6px}
+.cat .num small{font-size:.9rem;color:var(--muted);font-weight:600}
+.cat .mini{height:5px;border-radius:9px;background:var(--brand-soft);margin:10px 0 10px;overflow:hidden}
+.cat .mini i{display:block;height:100%;border-radius:inherit}
+.cat .stats{font-size:.8rem;color:var(--muted)}
+.cat .na{font-size:.85rem;color:var(--muted);margin-top:10px;line-height:1.4}
+
+/* hallazgos */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;align-items:start}
+.issues{list-style:none;margin-top:14px;display:grid;gap:10px}
+.issue{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--paper)}
+.issue-top{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.issue h4{font-size:.98rem;font-weight:600;line-height:1.35}
+.issue .ev{font-size:.85rem;color:var(--muted);margin-top:6px;word-break:break-word}
+.issue .fix{font-size:.88rem;margin-top:8px;line-height:1.45}
+.src{font-size:.72rem;color:var(--muted);border:1px solid var(--line);padding:2px 7px;border-radius:6px;margin-left:6px}
+.more{margin-top:12px;font-size:.9rem;color:var(--muted)}
+.empty{margin-top:14px;padding:14px;border-radius:12px;background:color-mix(in srgb,var(--ok) 12%,transparent);font-size:.92rem}
+
+.perf-table{width:100%;border-collapse:collapse;margin-top:14px;font-size:.9rem}
+.perf-table th,.perf-table td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line)}
+.perf-table th{font-weight:600;color:var(--muted);font-size:.8rem}
+.st{font-size:.76rem;font-weight:600;padding:3px 8px;border-radius:6px;white-space:nowrap}
+.st.good{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.st.needs-improvement{background:color-mix(in srgb,var(--warn) 22%,transparent);color:#8a6400}
+.st.poor{background:color-mix(in srgb,var(--alert) 16%,transparent);color:var(--alert)}
+.scroll-x{overflow-x:auto}
+
+.passed{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.passed span{font-size:.86rem;padding:7px 11px;border-radius:9px;background:color-mix(in srgb,var(--ok) 12%,transparent)}
+
+/* CTA informe completo */
+.cta{margin-top:16px;display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center;background:var(--ink);color:var(--paper);border:0}
+.cta h3{font-size:clamp(1.3rem,2.2vw,1.7rem);color:var(--paper)}
+.cta p{color:color-mix(in srgb,var(--paper) 72%,transparent);margin-top:10px;line-height:1.55;max-width:48ch}
+.lead-form{display:grid;gap:10px}
+.lead-form input{width:100%;border:1.5px solid color-mix(in srgb,var(--paper) 20%,transparent);background:color-mix(in srgb,var(--paper) 6%,transparent);color:var(--paper);border-radius:12px;padding:14px 16px;font:500 1rem "Instrument Sans",sans-serif;outline:0}
+.lead-form input::placeholder{color:color-mix(in srgb,var(--paper) 55%,transparent)}
+.lead-form input:focus{border-color:var(--brand)}
+.lead-form button{width:100%}
+.lf-label{font-size:.85rem;color:color-mix(in srgb,var(--paper) 72%,transparent);margin-top:4px}
+.lf-label span{opacity:.7}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:.84rem;line-height:1.45;color:color-mix(in srgb,var(--paper) 78%,transparent);cursor:pointer}
+.consent input{width:18px!important;height:18px;flex:none;margin-top:1px;padding:0!important;accent-color:var(--brand)}
+.lead-msg.ok{color:#6fe0bd}
+.lead-msg.bad{color:#ff9d8f}
+.lead-msg{font-size:.9rem;min-height:1.3em}
+.lead-msg a{color:var(--brand-light)}
+.scope-note{margin-top:22px;font-size:.84rem;color:var(--muted);line-height:1.5;max-width:80ch}
+
+@media (max-width:1000px){.cats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:820px){
+  .cols,.cta{grid-template-columns:1fr}
+  .summary{grid-template-columns:1fr;justify-items:start}
+}
+@media (max-width:520px){
+  .cats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ring-wrap{width:150px;height:150px}
+  .ring-num b{font-size:2.5rem}
+}
+</style>
+</head>
+<body>
+<main class="hero">
+  <nav class="reveal d1">
+    <a class="logo" href="#" aria-label="Odisas Lab inicio"><img src="/logo-icon.png" alt="" width="36" height="38"><span class="logo-text">ODIS<svg class="caret" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 100 L40 0 L60 0 L100 100 L79 100 L50 26 L21 100 Z"/></svg>S<small>LAB</small></span></a>
+    <div class="contact">
+      <a class="mail" href="mailto:Odisaslab@gmail.com">Odisaslab@gmail.com</a>
+      <a href="tel:+34616880063">616 88 00 63</a>
+    </div>
+  </nav>
+
+  <section class="stage">
+    <div>
+      <div class="status reveal d1"><i></i>Diagnóstico web gratuito</div>
+      <h1 class="reveal d2">¿Qué le está costando clientes a tu web?</h1>
+      <p class="lead reveal d3">Pega la dirección de tu página. Detectamos sus errores y amenazas principales en un resumen rápido, y después te enviamos el informe completo.</p>
+
+      <form id="audit" class="reveal d4" novalidate>
+        <label for="url" class="sr" style="position:absolute;left:-9999px">Dirección de tu web</label>
+        <div class="field" id="field">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+          <input id="url" name="url" type="text" inputmode="url" autocomplete="url" placeholder="tuweb.com" aria-describedby="hint">
+          <button type="submit">Analizar mi web</button>
+        </div>
+        <p class="hint" id="hint" aria-live="polite">Sin registro. Solo necesitas el enlace.</p>
+      </form>
+
+      <div class="checks reveal d4" aria-label="Qué revisamos">
+        <span class="chip"><b style="background:var(--alert)"></b>Errores técnicos</span>
+        <span class="chip"><b style="background:var(--warn)"></b>Amenazas de seguridad</span>
+        <span class="chip"><b style="background:var(--brand)"></b>SEO y velocidad</span>
+        <span class="chip"><b style="background:var(--ok)"></b>Móvil y conversión</span>
+      </div>
+    </div>
+
+    <div class="scope reveal d3" aria-hidden="true">
+      <svg viewBox="0 0 500 500">
+        <defs>
+          <radialGradient id="sw" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(250 250) scale(230)">
+            <stop offset="0" stop-color="var(--brand)" stop-opacity=".0"/>
+            <stop offset="1" stop-color="var(--brand)" stop-opacity=".32"/>
+          </radialGradient>
+        </defs>
+        <circle cx="250" cy="250" r="230" fill="var(--surface)" stroke="var(--line)"/>
+        <circle class="ring strong" cx="250" cy="250" r="230"/>
+        <circle class="ring" cx="250" cy="250" r="172"/>
+        <circle class="ring" cx="250" cy="250" r="114"/>
+        <circle class="ring" cx="250" cy="250" r="56"/>
+        <line class="ring" x1="20" y1="250" x2="480" y2="250"/>
+        <line class="ring" x1="250" y1="20" x2="250" y2="480"/>
+        <g class="sweep">
+          <path d="M250 250 L250 20 A230 230 0 0 1 412.6 87.4 Z" fill="url(#sw)"/>
+          <line x1="250" y1="250" x2="412.6" y2="87.4" stroke="var(--brand)" stroke-width="2"/>
+        </g>
+        <circle class="blip" cx="165" cy="140" r="8" fill="var(--alert)"/>
+        <circle class="blip" cx="360" cy="285" r="8" fill="var(--warn)"/>
+        <circle class="blip" cx="205" cy="360" r="8" fill="var(--ok)"/>
+        <circle cx="250" cy="250" r="44" fill="var(--surface)" stroke="var(--line)"/>
+        <image href="/logo-icon.png" x="226" y="225" width="48" height="50"/>
+      </svg>
+      <div class="tag t1"><span class="dot" style="background:var(--alert)">!</span><div>Errores<small>que frenan tu posicionamiento</small></div></div>
+      <div class="tag t2"><span class="dot" style="background:var(--warn)">⚠</span><div>Amenazas<small>visibles desde fuera</small></div></div>
+      <div class="tag t3"><span class="dot" style="background:var(--ok)">✓</span><div>Lo que ya funciona</div></div>
+    </div>
+  </section>
+
+  <div class="wordmark" aria-hidden="true">ODIS<svg class="caret" viewBox="0 0 100 100" aria-hidden="true"><path d="M0 100 L40 0 L60 0 L100 100 L79 100 L50 26 L21 100 Z"/></svg>S<span class="lab">LAB</span></div>
+</main>
+
+<section class="results" id="results" hidden aria-live="polite">
+  <div class="r-head">
+    <div>
+      <h2 id="r-title">Analizando tu web</h2>
+      <p class="r-meta" id="r-meta"></p>
+    </div>
+    <button type="button" class="btn-ghost" id="new-audit">Nueva auditoría</button>
+  </div>
+
+  <div class="panel progress" id="progress">
+    <h3>Análisis en curso</h3>
+    <p class="sub" id="progress-pct">0 %</p>
+    <div class="bar"><i id="bar"></i></div>
+    <ol class="steps">
+      <li id="s-connect">Conectando con la web y descargando la página</li>
+      <li id="s-checks">Revisando seguridad, SEO, móvil y conversión</li>
+      <li id="s-perf">Midiendo rendimiento con Google PageSpeed (puede tardar hasta 1 minuto)</li>
+    </ol>
+  </div>
+
+  <div class="panel err" id="error" hidden>
+    <h3 id="error-title">No se ha podido completar el análisis</h3>
+    <p class="sub" id="error-text"></p>
+  </div>
+
+  <div id="dashboard" hidden>
+    <div class="panel summary">
+      <div class="ring-wrap">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="track" cx="60" cy="60" r="52" fill="none" stroke-width="11"/>
+          <circle class="val" id="ring" cx="60" cy="60" r="52" fill="none" stroke-width="11" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+        </svg>
+        <div class="ring-num"><div><b id="score">–</b><span>de 100</span></div></div>
+      </div>
+      <div>
+        <p class="verdict" id="verdict"></p>
+        <div class="counts" id="counts"></div>
+        <p class="basis" id="basis"></p>
+      </div>
+    </div>
+
+    <div class="cats" id="cats"></div>
+
+    <div class="cols">
+      <div class="panel">
+        <h3>Amenazas detectadas</h3>
+        <p class="sub">Riesgos de seguridad visibles públicamente, sin pruebas intrusivas.</p>
+        <ul class="issues" id="threats"></ul>
+        <p class="more" id="threats-more"></p>
+      </div>
+      <div class="panel">
+        <h3>Errores principales</h3>
+        <p class="sub">Problemas de SEO, móvil y conversión ordenados por gravedad.</p>
+        <ul class="issues" id="errors"></ul>
+        <p class="more" id="errors-more"></p>
+      </div>
+    </div>
+
+    <div class="cols">
+      <div class="panel" id="perf-panel">
+        <h3>Rendimiento en móvil</h3>
+        <p class="sub" id="perf-sub">Midiendo con Google PageSpeed…</p>
+        <div class="scroll-x" id="perf-body"></div>
+      </div>
+      <div class="panel">
+        <h3>Lo que ya funciona</h3>
+        <p class="sub">Comprobaciones superadas.</p>
+        <div class="passed" id="passed"></div>
+      </div>
+    </div>
+
+    <div class="panel cta">
+      <div>
+        <h3>Recibe este diagnóstico en el correo de tu empresa</h3>
+        <p>Te lo enviamos con cada punto explicado: por qué importa y qué haríamos para resolverlo. Si quieres, lo vemos juntos en una llamada breve y sin compromiso.</p>
+      </div>
+      <form class="lead-form" id="lead-form" novalidate>
+        <label class="sr-only" for="lead-email">Email de la empresa</label>
+        <input id="lead-email" type="email" autocomplete="email" placeholder="correo@tuempresa.com" required>
+        <label class="lf-label" for="lead-company">Nombre de la empresa <span>(para dirigirnos a vosotros)</span></label>
+        <input id="lead-company" type="text" autocomplete="organization" maxlength="80">
+        <input type="text" name="website" id="lead-hp" tabindex="-1" autocomplete="off" class="sr-only" aria-hidden="true">
+        <label class="consent"><input type="checkbox" id="lead-consent"> <span>Acepto recibir el diagnóstico por email y que Odisas Lab me contacte sobre sus resultados.</span></label>
+        <button type="submit" id="lead-btn">Enviar diagnóstico</button>
+        <p class="lead-msg" id="lead-msg" role="status"></p>
+      </form>
+    </div>
+
+    <p class="scope-note" id="scope-note"></p>
+  </div>
+</section>
+
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const form=$('audit'), input=$('url'), field=$('field'), hint=$('hint');
+  const SEV_LABEL={critical:'Crítico',high:'Alto',medium:'Medio',low:'Bajo'};
+  const SRC_LABEL={medido:'Medido',detectado:'Detectado'};
+  const DEFAULT_HINT='Sin registro. Solo necesitas el enlace.';
+  let current=null, runId=0, perfCtrl=null;
+
+  function el(tag, cls, text){const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e;}
+  function normalize(v){
+    v=v.trim(); if(!v) return null;
+    if(!/^https?:\/\//i.test(v)) v='https://'+v;
+    try{const u=new URL(v); if(!/^[a-z0-9-]+(\.[a-z0-9-]+)+$/i.test(u.hostname)) return null; return u.href;}catch(e){return null}
+  }
+  function scoreColor(s){return s>=80?'var(--ok)':s>=50?'var(--warn)':'var(--alert)';}
+  function verdict(s){return s>=80?'Buen estado general, con mejoras puntuales':s>=50?'Tu web funciona, pero tiene problemas que te restan clientes':'Tu web tiene problemas importantes que conviene resolver pronto';}
+
+  async function post(path, body, signal){
+    const r=await fetch(path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body),signal});
+    let data=null; try{data=await r.json();}catch(e){}
+    return {ok:r.ok,status:r.status,data};
+  }
+
+  function setStep(id,state){const li=$(id); li.className=state;}
+  function setProgress(p){$('bar').style.width=p+'%'; $('progress-pct').textContent=p+' %';}
+
+  input.addEventListener('input',()=>{field.classList.remove('error'); hint.className='hint'; hint.textContent=DEFAULT_HINT;});
+
+  form.addEventListener('submit',e=>{
+    e.preventDefault();
+    const url=normalize(input.value);
+    if(!url){
+      field.classList.add('error'); hint.className='hint bad';
+      hint.textContent='URL no válida. Escribe una dirección como tuweb.com'; input.focus(); return;
+    }
+    start(url);
+  });
+
+  $('new-audit').addEventListener('click',()=>{
+    if(perfCtrl) perfCtrl.abort();
+    $('results').hidden=true; input.value=''; hint.className='hint'; hint.textContent=DEFAULT_HINT;
+    window.scrollTo({top:0,behavior:'smooth'}); setTimeout(()=>input.focus(),350);
+  });
+
+  async function start(url){
+    const id=++runId;
+    if(perfCtrl) perfCtrl.abort();
+    perfCtrl=new AbortController();
+    current={url,audit:null,perf:null};
+    const btn=form.querySelector('button'); btn.disabled=true; btn.textContent='Analizando…';
+    hint.className='hint'; hint.textContent='Analizando '+url.replace(/^https?:\/\//,'').replace(/\/$/,'')+'…';
+
+    $('results').hidden=false; $('progress').hidden=false; $('error').hidden=true; $('dashboard').hidden=true;
+    $('r-title').textContent='Analizando tu web'; $('r-meta').textContent=url;
+    ['s-connect','s-checks','s-perf'].forEach(s=>setStep(s,'')); setProgress(0);
+    $('lead-msg').textContent=''; $('lead-msg').className='lead-msg'; $('lead-form').hidden=false;
+    $('results').scrollIntoView({behavior:'smooth',block:'start'});
+
+    setStep('s-connect','run'); setStep('s-perf','run');
+    let done=0; const tick=()=>setProgress(Math.round(++done/3*100));
+
+    const perfPromise=post('/api/performance',{url},perfCtrl.signal)
+      .then(r=>r.data||{available:false,reason:'No se ha podido medir el rendimiento.'})
+      .catch(err=>err.name==='AbortError'?null:{available:false,reason:'No se ha podido conectar con el servicio de rendimiento.'});
+
+    let res;
+    try{ res=await post('/api/analyze',{url}); }
+    catch(e){ res={ok:false,data:{message:'No se ha podido completar el análisis'}}; }
+    if(id!==runId) return;
+    btn.disabled=false; btn.textContent='Analizar mi web';
+
+    if(!res.ok||!res.data||!res.data.categories){
+      perfCtrl.abort();
+      const msg=(res.data&&res.data.message)||'No se ha podido completar el análisis';
+      $('progress').hidden=true; $('error').hidden=false;
+      $('error-title').textContent=res.status===400?'URL no válida':(res.data&&res.data.error==='blocked')?'La web no permite realizar un análisis completo':'No se ha podido completar el análisis';
+      $('error-text').textContent=msg+' No mostramos resultados para no darte datos que no hemos podido comprobar.';
+      $('r-title').textContent='Análisis no completado';
+      hint.className='hint bad'; hint.textContent=msg;
+      return;
+    }
+    setStep('s-connect','done'); tick(); setStep('s-checks','done'); tick();
+    hint.className='hint good'; hint.textContent='Análisis listo. Tienes el resumen justo debajo.';
+    current.audit=res.data;
+    renderAudit(res.data);
+    $('progress').hidden=false;
+
+    const perf=await perfPromise;
+    if(id!==runId||!perf) return;
+    setStep('s-perf',perf.available?'done':'fail'); tick();
+    current.perf=perf;
+    renderPerf(perf);
+    renderScore();
+    setTimeout(()=>{ if(id===runId) $('progress').hidden=true; },900);
+  }
+
+  function issueItem(i){
+    const li=el('li','issue');
+    const top=el('div','issue-top');
+    const h=el('h4',null,i.title);
+    const badges=el('div'); badges.style.whiteSpace='nowrap';
+    badges.append(el('span','sev '+i.severity,SEV_LABEL[i.severity]));
+    top.append(h,badges);
+    const ev=el('p','ev'); ev.append(document.createTextNode(i.evidence)); ev.append(el('span','src',SRC_LABEL[i.source]||i.source));
+    li.append(top,ev,el('p','fix',i.recommendation));
+    return li;
+  }
+
+  function fillList(listId,moreId,items,max,emptyText){
+    const ul=$(listId); ul.replaceChildren();
+    if(!items.length){ul.append(el('li','empty',emptyText)); $(moreId).textContent=''; return;}
+    items.slice(0,max).forEach(i=>ul.append(issueItem(i)));
+    $(moreId).textContent=items.length>max?`+${items.length-max} más en el informe completo`:'';
+  }
+
+  function renderAudit(a){
+    const host=a.url.replace(/^https?:\/\//,'').replace(/\/$/,'');
+    const date=new Date(a.analyzedAt).toLocaleString('es-ES',{dateStyle:'long',timeStyle:'short'});
+    $('r-title').textContent='Diagnóstico de '+host;
+    $('r-meta').textContent=a.url+' · '+date;
+
+    const counts=$('counts'); counts.replaceChildren();
+    [['critical','Críticos','var(--alert)'],['high','Altos','var(--brand)'],['medium','Medios','var(--warn)'],['low','Bajos','var(--muted)']].forEach(([k,l,c])=>{
+      const d=el('span','count'); const dot=el('i','dotc'); dot.style.background=c;
+      d.append(dot,el('b',null,String(a.counts[k])),document.createTextNode(l)); counts.append(d);
+    });
+
+    fillList('threats','threats-more',a.issues.filter(i=>i.category==='security'),4,'No hemos detectado amenazas en los aspectos que se pueden revisar desde fuera.');
+    fillList('errors','errors-more',a.issues.filter(i=>i.category!=='security'),5,'No hemos detectado errores en las comprobaciones automáticas.');
+
+    const passed=$('passed'); passed.replaceChildren();
+    if(!a.passed.length) passed.append(el('span',null,'Ninguna comprobación superada'));
+    a.passed.slice(0,8).forEach(p=>passed.append(el('span',null,'✓ '+p.title)));
+
+    $('scope-note').textContent=a.scope+' Los datos marcados "Medido" proceden de la respuesta real del servidor; "Detectado" indica que se han encontrado en el código de la página.';
+    $('lead-company').value=a.siteName||'';
+    $('perf-sub').textContent='Midiendo con Google PageSpeed…'; $('perf-body').replaceChildren();
+    $('dashboard').hidden=false;
+    renderScore();
+  }
+
+  function catCard(label,score,stats,na){
+    const c=el('div','cat'); c.append(el('div','name',label));
+    if(score==null){
+      c.append(el('div','num','—'), el('p','na',na||'No disponible'));
+    }else{
+      const n=el('div','num',String(score)); n.append(el('small',null,' /100'));
+      const m=el('div','mini'); const i=el('i'); i.style.width=score+'%'; i.style.background=scoreColor(score); m.append(i);
+      c.append(n,m,el('div','stats',stats));
+    }
+    return c;
+  }
+
+  function renderScore(){
+    const a=current.audit; if(!a) return;
+    const perf=current.perf;
+    const cats=$('cats'); cats.replaceChildren();
+    const scores=a.categories.map(c=>c.score);
+    a.categories.forEach(c=>cats.append(catCard(c.label,c.score,`${c.errors} ${c.errors===1?'error':'errores'} · ${c.warnings} ${c.warnings===1?'aviso':'avisos'}`)));
+    if(perf&&perf.available){ scores.push(perf.score); cats.append(catCard('Rendimiento',perf.score,'Google Lighthouse (móvil)')); }
+    else cats.append(catCard('Rendimiento',null,null,perf?('No disponible: '+perf.reason):'Midiendo…'));
+
+    const score=Math.round(scores.reduce((s,v)=>s+v,0)/scores.length);
+    $('score').textContent=score;
+    const ring=$('ring'); ring.style.stroke=scoreColor(score);
+    requestAnimationFrame(()=>{ring.style.strokeDashoffset=326.7*(1-score/100);});
+    $('verdict').textContent=verdict(score);
+    const measured=scores.length;
+    $('basis').textContent=`Nota calculada como media de ${measured} categorías medidas. ${a.scoring}`+(perf&&!perf.available?' Rendimiento no se incluye porque no se ha podido medir.':'');
+  }
+
+  function renderPerf(p){
+    const body=$('perf-body'); body.replaceChildren();
+    if(!p.available){ $('perf-sub').textContent='No disponible: '+p.reason; return; }
+    $('perf-sub').textContent=`Puntuación ${p.score}/100 · ${p.source}`;
+    const t=el('table','perf-table');
+    const thead=el('thead'); const hr=el('tr'); ['Métrica','Valor','Estado','Referencia'].forEach(h=>hr.append(el('th',null,h))); thead.append(hr);
+    const tb=el('tbody');
+    const ST={'good':'Bueno','needs-improvement':'Mejorable','poor':'Malo'};
+    p.metrics.forEach(m=>{
+      const tr=el('tr'); tr.append(el('td',null,m.label));
+      if(m.value==null){ tr.append(el('td',null,'No disponible'),el('td'),el('td')); }
+      else{ tr.append(el('td',null,m.display||String(m.value))); const td=el('td'); td.append(el('span','st '+m.status,ST[m.status])); tr.append(td,el('td',null,m.threshold)); }
+      tb.append(tr);
+    });
+    t.append(thead,tb); body.append(t);
+  }
+
+  $('lead-form').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const msg=$('lead-msg'), btn=$('lead-btn');
+    const email=$('lead-email').value.trim();
+    msg.className='lead-msg';
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ msg.className='lead-msg bad'; msg.textContent='Escribe un email válido.'; $('lead-email').focus(); return; }
+    if(!$('lead-consent').checked){ msg.className='lead-msg bad'; msg.textContent='Marca la casilla para poder enviaros el diagnóstico.'; return; }
+    const a=current&&current.audit; if(!a) return;
+    if(!a.emailToken){ msg.className='lead-msg bad'; msg.textContent='El envío de emails no está configurado en el servidor.'; return; }
+    btn.disabled=true; btn.textContent='Enviando…'; msg.textContent='';
+    const payload={email,companyName:$('lead-company').value.trim(),consent:true,emailToken:a.emailToken,
+      perfToken:current.perf&&current.perf.perfToken||null,website:$('lead-hp').value};
+    let r; try{ r=await post('/api/send-report',payload); }catch(err){ r={ok:false,data:{message:'No se ha podido conectar con el servidor.'}}; }
+    btn.disabled=false; btn.textContent='Enviar diagnóstico';
+    if(r.ok){
+      msg.className='lead-msg ok';
+      msg.textContent='Enviado a '+email+'. Si no lo ves en unos minutos, revisa la carpeta de spam o promociones.';
+      $('lead-email').value=''; $('lead-consent').checked=false; return;
+    }
+    msg.className='lead-msg bad';
+    msg.textContent=(r.data&&r.data.message)||'No se ha podido enviar el email.';
+  });
+})();
+</script>
+</body>
+</html>

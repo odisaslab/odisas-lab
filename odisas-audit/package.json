@@ -1,0 +1,15 @@
+{
+  "name": "odisas-lab-analisis-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing de diagnóstico web gratuito de Odisas Lab",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "node dev-server.js"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.14"
+  }
+}
