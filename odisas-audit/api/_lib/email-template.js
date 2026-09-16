@@ -88,7 +88,7 @@ function buildEmail({ audit, perf, companyName, config }) {
   </td></tr>
   <tr><td style="padding:28px">
     <p style="margin:0 0 16px;font-size:16px;color:#211F1F">Hola, equipo de ${esc(company)}:</p>
-    <p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:#4A4744">Soy ${esc(config.senderName)}, de ${esc(brand)}. El ${esc(date)} solicitasteis desde nuestra web un diagnóstico de <b>${esc(host)}</b> y os resumo lo que hemos encontrado.</p>
+    <p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:#4A4744">Soy ${esc(config.senderName)}, de ${esc(brand)}. Nos hemos tomado la iniciativa de analizar vuestra web, <b>${esc(host)}</b>, el ${esc(date)}, porque creemos que os puede ser útil conocer de primera mano cómo os están viendo Google y vuestros clientes potenciales. Os resumo lo que hemos encontrado.</p>
     <p style="margin:0 0 22px;font-size:15px;line-height:1.6;color:#4A4744">${intro}</p>
 
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#211F1F;border-radius:14px">
@@ -117,7 +117,7 @@ function buildEmail({ audit, perf, companyName, config }) {
   </td></tr>
   <tr><td style="padding:18px 28px;background:#FBF9F7;font-size:11px;line-height:1.5;color:#8A8580">
     Diagnóstico automático de la página ${esc(audit.url)} realizado el ${esc(date)}. Revisa la página indicada, no el sitio completo, y no incluye pruebas intrusivas.
-    Recibes este correo porque se solicitó en la web de ${esc(brand)}. Si no fuiste tú, puedes ignorarlo y no volveremos a escribirte.
+    Este diagnóstico se ha elaborado por iniciativa de ${esc(brand)}, a partir de datos públicos de vuestra web, sin ningún compromiso por vuestra parte. Si preferís no recibir más comunicaciones como esta, respondednos indicándolo y no volveremos a escribiros.
   </td></tr>
 </table>
 </td></tr></table></body></html>`;
@@ -125,7 +125,7 @@ function buildEmail({ audit, perf, companyName, config }) {
   // ---------- versión texto ----------
   const text = [
     `Hola, equipo de ${company}:`, '',
-    `Soy ${config.senderName}, de ${brand}. El ${date} solicitasteis desde nuestra web un diagnóstico de ${host} y os resumo lo que hemos encontrado.`, '',
+    `Soy ${config.senderName}, de ${brand}. Nos hemos tomado la iniciativa de analizar vuestra web, ${host}, el ${date}, porque creemos que os puede ser útil conocer de primera mano cómo os están viendo Google y vuestros clientes potenciales. Os resumo lo que hemos encontrado.`, '',
     intro, '',
     `NOTA GENERAL: ${score}/100 (${audit.counts.critical} críticos, ${audit.counts.high} altos, ${audit.counts.medium} medios, ${audit.counts.low} bajos)`,
     ...cats.map(c => `- ${c.label}: ${c.score}/100`), '',
@@ -135,7 +135,7 @@ function buildEmail({ audit, perf, companyName, config }) {
     services.length ? `Donde más margen de mejora tenéis es en: ${services.join(', ')}. Nos gustaría explicaros en una llamada breve qué haríamos primero en vuestro caso.` : 'Nos gustaría explicaros en una llamada breve cómo sacarle aún más partido a la web.', '',
     `Agendar una llamada de 15 minutos: ${config.meetingUrl || `responded a este correo o llamadnos al ${config.phone}`}`, '',
     `Un saludo,`, config.senderName, `${brand} · Marketing digital`, `${config.replyTo} · ${config.phone}`, '',
-    `Recibes este correo porque se solicitó en la web de ${brand}. Si no fuiste tú, puedes ignorarlo.`,
+    `Este diagnóstico se ha elaborado por iniciativa de ${brand}, a partir de datos públicos de vuestra web, sin ningún compromiso por vuestra parte. Si preferís no recibir más comunicaciones como esta, respondednos indicándolo y no volveremos a escribiros.`,
   ].join('\n');
 
   return { subject, html, text, score };
