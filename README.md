@@ -33,6 +33,14 @@ con sus propias funciones serverless. No es parte de esta app Next.js: se despli
 `odisas-audit`. Configuración, variables de entorno y despliegue están documentados en
 `odisas-audit/README.md`.
 
+## Scraping con IA (herramienta aparte)
+
+`scrapegraph-ai/` tiene instalada [ScrapeGraphAI](https://github.com/ScrapeGraphAI/Scrapegraph-ai),
+una librería Python que usa un LLM para extraer información de páginas web a partir de
+instrucciones en lenguaje natural. Es Python, no Next.js, y no está conectada a ninguna
+parte de la web ni a `odisas-audit`: queda instalada y lista para usar cuando haga falta.
+Instalación, requisitos y ejemplo en `scrapegraph-ai/README.md`.
+
 ## Cómo está organizado
 
 ```
@@ -47,6 +55,7 @@ scripts/              preparación del logotipo, imágenes y auditoría de contr
 scripts/brand-source/ originales del logotipo y la foto
 AUDITORIA.md          informe de la revisión previa a publicación
 odisas-audit/          landing de diagnóstico web gratuito, proyecto Vercel aparte (ver su README)
+scrapegraph-ai/        scraping con IA (ScrapeGraphAI), herramienta Python aparte (ver su README)
 public/brand/         tu logotipo y tu foto (ver LEEME.txt)
 components/cookies/  banner y panel de consentimiento
 components/analytics/ carga de GA4, GTM y Meta Pixel tras consentimiento

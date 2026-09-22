@@ -1,0 +1,6 @@
+# La 2.2.4 exige Python >= 3.12 (ver README.md). Se deja fijada a propósito:
+# con Python 3.11 o anterior, `pip install scrapegraphai` sin pin cae en la
+# última versión compatible con esa versión (1.76.0), que tiene un import
+# roto (ChatOllama) y no arranca. Con este pin, pip falla alto y claro en
+# vez de instalar algo silenciosamente incompleto.
+scrapegraphai==2.2.4
