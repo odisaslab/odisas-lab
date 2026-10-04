@@ -1,9 +1,25 @@
+const DEFAULT_SITE_URL = "https://odisaslab.com";
+
+/**
+ * URL pública del sitio, siempre válida y sin barra final.
+ * Una variable vacía, sin "https://" o mal escrita no debe romper la compilación.
+ */
+function resolveSiteUrl(raw: string | undefined) {
+  const value = raw?.trim();
+  if (!value) return DEFAULT_SITE_URL;
+  try {
+    return new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`).origin;
+  } catch {
+    return DEFAULT_SITE_URL;
+  }
+}
+
 export const site = {
   name: "Odisas Lab",
   tagline: "Marketing que mueve negocios.",
   description:
     "Marketing, tecnología e IA para que tu negocio se vea, crezca y convierta. SEO, Google Ads, Meta Ads y diseño web orientados a conseguir clientes.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://odisaslab.com",
+  url: resolveSiteUrl(process.env.NEXT_PUBLIC_SITE_URL),
   locale: "es_ES",
   owner: "Equipo de Odisas Lab",
   foundingYear: 2026,
