@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { Check } from "lucide-react";
 import { CtaButton } from "@/components/home/CtaButton";
 import { Split } from "@/components/motion/Split";
+import { Tilt } from "@/components/motion/Tilt";
 import { diagnostic } from "@/data/home";
 import { gsap, MOTION_OK } from "@/lib/gsap";
 import { whenNear } from "@/lib/lazy";
@@ -64,16 +65,26 @@ export function Diagnostic() {
           <p className="t-lead muted mt-6 max-w-md" data-reveal>
             {diagnostic.body}
           </p>
-          <div className="mt-10" data-reveal>
-            <CtaButton variant="ink" need="No lo tengo claro" source="diagnostico">
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row" data-reveal>
+            <CtaButton variant="ink" to="analiza-tu-web" source="diagnostico-web" className="w-full sm:w-auto">
               {diagnostic.cta}
+            </CtaButton>
+            <CtaButton
+              variant="ghost-dark"
+              need="No lo tengo claro"
+              arrow="none"
+              source="diagnostico-negocio"
+              className="w-full sm:w-auto"
+            >
+              {diagnostic.ctaSecondary}
             </CtaButton>
           </div>
         </div>
 
+        <div data-reveal>
+        <Tilt max={4} className="rounded-[20px]">
         <div
           data-d-panel
-          data-reveal
           className="tone-dark overflow-hidden rounded-[20px] border border-ink shadow-[0_30px_80px_-30px_rgba(10,10,11,0.5)]"
         >
           <div className="flex items-center justify-between border-b border-hair px-5 py-3.5">
@@ -135,6 +146,8 @@ export function Diagnostic() {
             </ul>
             <p className="muted mt-5 text-[0.82rem]">{diagnostic.foundNote}</p>
           </div>
+        </div>
+        </Tilt>
         </div>
       </div>
     </section>

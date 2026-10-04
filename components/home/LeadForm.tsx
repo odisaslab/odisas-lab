@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { AlertCircle, ArrowLeft, ArrowRight, Check, Loader2, Mail, MessageCircle, Phone } from "lucide-react";
-import { NEED_EVENT } from "@/components/home/CtaButton";
+import { NEED_EVENT, PREFILL_EVENT } from "@/components/home/CtaButton";
 import { Split } from "@/components/motion/Split";
 import { form as copy } from "@/data/home";
 import { contact, telLink, whatsappLink } from "@/data/site";
@@ -57,8 +57,22 @@ export function LeadForm({ titleAs = "h2" }: { titleAs?: "h1" | "h2" }) {
         setErrors((previous) => ({ ...previous, need: undefined }));
       }
     };
+    // El diagnóstico rellena también el mensaje, para que el visitante solo tenga que revisarlo
+    const onPrefill = (event: Event) => {
+      const detail = (event as CustomEvent<{ need?: string; message?: string }>).detail ?? {};
+      setData((previous) => ({
+        ...previous,
+        need: detail.need && needOptions.includes(detail.need) ? detail.need : previous.need,
+        message: previous.message.trim() ? previous.message : (detail.message ?? previous.message),
+      }));
+      setStep(0);
+    };
     window.addEventListener(NEED_EVENT, onNeed);
-    return () => window.removeEventListener(NEED_EVENT, onNeed);
+    window.addEventListener(PREFILL_EVENT, onPrefill);
+    return () => {
+      window.removeEventListener(NEED_EVENT, onNeed);
+      window.removeEventListener(PREFILL_EVENT, onPrefill);
+    };
   }, []);
 
   // Al cambiar de paso, el foco va al título del paso (teclado y lector de pantalla)

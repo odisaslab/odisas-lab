@@ -30,6 +30,10 @@
   --color-mute: #a1a0a8;
   --color-mute-ink: #5a595f;
   --color-hair: rgba(255, 255, 255, 0.1);
+  /* Semánticos para los diagnósticos (AA sobre ink) */
+  --color-alert: #ff6b6b;
+  --color-warn: #f2c230;
+  --color-ok: #34d399;
   --color-hair-ink: rgba(10, 10, 11, 0.12);
 
   /* Tipografía */
@@ -273,6 +277,7 @@
   .tone-dark {
     background: var(--color-ink);
     color: var(--color-cream);
+    color-scheme: dark;
   }
   .tone-light {
     background: var(--color-cream);
@@ -354,6 +359,22 @@
     color: var(--color-mute-ink);
   }
   .tone-dark .accent {
+    color: var(--color-primary);
+  }
+  .tone-orange .muted {
+    color: rgba(10, 10, 11, 0.78);
+  }
+  .tone-orange .accent {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 0.07em;
+    text-underline-offset: 0.12em;
+  }
+  /* Panel oscuro dentro de una sección naranja */
+  .tone-orange .tone-dark .muted {
+    color: var(--color-mute);
+  }
+  .tone-orange .tone-dark .accent {
     color: var(--color-primary);
   }
   .tone-light .accent {
@@ -821,4 +842,152 @@ html.lenis body {
 .journey[data-mode="pin"] .journey-head .t-h2 {
   font-size: clamp(2rem, min(4.4vw, 7.5vh), 3.8rem);
   max-width: 24ch;
+}
+
+/* ── Diagnóstico: radar decorativo ── */
+.scope-sweep {
+  transform-origin: 250px 250px;
+  animation: spin 6s linear infinite;
+}
+.scope-blip {
+  animation: scope-pulse 3s ease-in-out infinite;
+}
+@keyframes scope-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ── Hero: póster 3D de la marca (se descarga solo donde no hay WebGL en vivo) ── */
+.hero-poster {
+  display: none;
+}
+@media (max-width: 1023px), (prefers-reduced-motion: reduce) {
+  .hero-poster {
+    display: block;
+    top: 6rem;
+    right: -14vw;
+    width: 72vw;
+    max-width: 38rem;
+    aspect-ratio: 1;
+    background: url("/brand/hero-mark.webp") center / contain no-repeat;
+    -webkit-mask-image: radial-gradient(closest-side, #000 58%, transparent 100%);
+    mask-image: radial-gradient(closest-side, #000 58%, transparent 100%);
+    mix-blend-mode: screen;
+    opacity: 0.5;
+    animation: poster-in 1.2s ease-out 0.15s both;
+  }
+}
+@keyframes poster-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-poster {
+    top: 3rem;
+    right: -4vw;
+    width: 52vw;
+    opacity: 0.5;
+  }
+}
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .hero-poster {
+    top: 7rem;
+    right: 1vw;
+    width: 34vw;
+    max-width: 34rem;
+    opacity: 0.95;
+  }
+}
+
+/* ── Foco de cursor en secciones oscuras ── */
+section.tone-dark[data-spot] {
+  position: relative;
+  isolation: isolate;
+}
+section.tone-dark[data-spot]::before,
+section.tone-dark[data-spot]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+section.tone-dark[data-spot]::before {
+  background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 107, 0, 0.11), transparent 65%);
+}
+/* Rejilla escondida que solo aparece bajo la luz */
+section.tone-dark[data-spot]::after {
+  background-image:
+    linear-gradient(to right, rgba(255, 140, 50, 0.3) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 140, 50, 0.3) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(240px circle at var(--mx, 50%) var(--my, 50%), #000, transparent 72%);
+}
+section.tone-dark[data-spot-on]::before,
+section.tone-dark[data-spot-on]::after {
+  opacity: 1;
+}
+
+/* ── Paneles con inclinación 3D ── */
+.tilt-scene {
+  perspective: 1100px;
+}
+.tilt {
+  position: relative;
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.tilt[data-tilting="true"] {
+  transition: transform 0.12s ease-out;
+}
+.tilt-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(420px circle at var(--gx, 50%) var(--gy, 50%), rgba(255, 255, 255, 0.1), transparent 55%);
+  transition: opacity 0.4s ease;
+}
+.tilt[data-tilting="true"] .tilt-glare {
+  opacity: 1;
+}
+
+/* ── Titular del hero: brillo que recorre las palabras en naranja ── */
+h1[data-hero-title] .accent {
+  background: linear-gradient(
+    100deg,
+    var(--color-primary) 0%,
+    var(--color-primary) 38%,
+    #ffc999 50%,
+    var(--color-primary) 62%,
+    var(--color-primary) 100%
+  );
+  background-size: 260% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: hero-shine 7s ease-in-out 2.6s infinite;
+}
+@keyframes hero-shine {
+  0%,
+  35% {
+    background-position: 100% 0;
+  }
+  70%,
+  100% {
+    background-position: 0% 0;
+  }
 }

@@ -34,6 +34,7 @@ export const telLink = contact.phone ? `tel:+${digits(contact.phone)}` : "";
 
 export const footerNav = {
   empresa: [
+    { label: "Analiza tu web gratis", href: "/analiza-tu-web" },
     { label: "Sobre Odisas Lab", href: "/sobre-odisas-lab" },
     { label: "Proceso", href: "/proceso" },
     { label: "Contacto", href: "/contacto" },

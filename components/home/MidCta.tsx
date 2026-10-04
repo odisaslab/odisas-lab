@@ -4,7 +4,9 @@ import { midCta } from "@/data/home";
 
 export function MidCta() {
   return (
-    <section aria-labelledby="analizamos-titulo" className="tone-orange relative overflow-hidden py-24 md:py-36">
+    <section aria-labelledby="analizamos-titulo" className="bg-ink">
+      {/* El naranja se abre como un iris sobre fondo oscuro: el CTA intermedio no puede pasar desapercibido */}
+      <div data-iris className="tone-orange relative overflow-hidden py-24 md:py-36">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-[0.12]"
@@ -24,6 +26,7 @@ export function MidCta() {
             {midCta.button}
           </CtaButton>
         </div>
+      </div>
       </div>
     </section>
   );

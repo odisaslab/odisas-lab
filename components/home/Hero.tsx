@@ -1,6 +1,9 @@
 import { Check, Globe, MousePointerClick, Search, TrendingUp, Users } from "lucide-react";
+import { AnchorLink } from "@/components/home/AnchorLink";
 import { CtaButton } from "@/components/home/CtaButton";
+import { HeroGL } from "@/components/home/HeroGL";
 import { hero, pipeline } from "@/data/home";
+import { ScanSearch } from "lucide-react";
 
 const icons = {
   seo: Search,
@@ -15,7 +18,7 @@ function HeroTitle() {
   const parts = hero.title.split("*");
   let index = 0;
   return (
-    <h1 className="t-h1 max-w-[16ch] md:max-w-[18ch] lg:max-w-[20ch]">
+    <h1 data-hero-title className="t-h1 max-w-[16ch] md:max-w-[18ch] lg:max-w-[13ch] xl:max-w-[13ch]">
       {parts.map((part, partIndex) =>
         part
           .split(/(\s+)/)
@@ -83,14 +86,30 @@ export function Hero() {
         style={{ background: "radial-gradient(closest-side, rgba(255,107,0,0.45), transparent)" }}
       />
 
+      {/* Póster de la marca en 3D: móvil, tablet y "reducir movimiento" (la imagen solo se descarga ahí) */}
+      {/* React 19 sube este preload al <head>: el póster empieza a bajar antes de que el CSS lo pida */}
+      <link rel="preload" as="image" href="/brand/hero-mark.webp" media="(max-width: 1023px)" fetchPriority="low" />
+      <div aria-hidden="true" className="hero-poster pointer-events-none absolute -z-10" />
+
+      {/* Escena 3D (solo escritorio con puntero fino): la marca y un campo de puntos que reacciona al cursor */}
+      <div
+        aria-hidden="true"
+        data-hero-gl
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[min(100%,56rem)]"
+        style={{ maskImage: "linear-gradient(to bottom, black 78%, transparent)" }}
+      >
+        <HeroGL />
+      </div>
+
       <div className="wrap">
+        <div data-hero-text>
         <p className="eyebrow rise accent mb-7" style={{ ["--d" as string]: 0.05 }}>
           {hero.eyebrow}
         </p>
 
         <HeroTitle />
 
-        <div className="mt-8 flex flex-col gap-8 lg:mt-10 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
+        <div className="mt-8 flex flex-col gap-8 lg:mt-10">
           <p className="t-lead muted max-w-xl rise" style={{ ["--d" as string]: 0.7 }}>
             {hero.subtitle}
           </p>
@@ -111,8 +130,20 @@ export function Hero() {
           </div>
         </div>
 
+        <p className="rise mt-7 text-[0.98rem]" style={{ ["--d" as string]: 0.95 }}>
+          <span className="muted">{hero.auditLink.lead} </span>
+          <AnchorLink
+            to="analiza-tu-web"
+            source="hero-auditoria"
+            className="link-underline inline-flex items-center gap-1.5 font-medium text-cream"
+          >
+            <ScanSearch aria-hidden="true" className="size-4 text-primary" />
+            {hero.auditLink.cta}
+          </AnchorLink>
+        </p>
+
         <ul
-          className="rise muted mt-8 flex flex-col gap-2 text-[0.92rem] sm:flex-row sm:flex-wrap sm:gap-x-7"
+          className="rise muted mt-6 flex flex-col gap-2 text-[0.92rem] sm:flex-row sm:flex-wrap sm:gap-x-7"
           style={{ ["--d" as string]: 1 }}
         >
           {hero.assurances.map((item) => (
@@ -122,9 +153,11 @@ export function Hero() {
             </li>
           ))}
         </ul>
+        </div>
 
         {/* Sistema: SEO → Tráfico → Web → Conversión → Clientes */}
         <div
+          data-hero-panel
           className="rise mt-14 rounded-[20px] border border-hair bg-ink-2/60 p-5 backdrop-blur-sm md:mt-20 md:p-8"
           style={{ ["--d" as string]: 1.1 }}
         >

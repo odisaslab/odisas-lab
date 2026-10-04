@@ -41,7 +41,51 @@ app/globals.css       tokens (ink / cream / orange), tipografía y animaciones C
 Reglas de contenido: nada inventado. Los resultados salen de `data/results.ts`; para añadir
 un caso real basta agregarlo a `cases` y aparece en la home.
 
-## Diagnóstico web gratuito (proyecto aparte)
+## Diagnóstico web gratuito (integrado en la web)
+
+El diagnóstico que antes vivía en `odisas-audit/` ya está **dentro** de esta app:
+
+- **En la home**: sección naranja `#analiza-tu-web` (`components/home/AuditSection.tsx`).
+- **Página propia**: `/analiza-tu-web` (SEO, FAQ y esquema `WebApplication`), enlazada desde la cabecera y el pie.
+- **Atajos**: el hero, el servicio "Análisis web", el diagnóstico y el CTA final llevan a la herramienta.
+
+Cómo funciona:
+
+```
+components/audit/AuditTool.tsx   interfaz: URL → progreso → panel de resultados → captación por email
+components/audit/AuditParts.tsx  piezas visuales (radar, anillo de nota, tarjetas, tabla de rendimiento)
+lib/audit/engine.ts              reglas de análisis (seguridad, SEO, móvil, conversión). Solo informa de lo medido
+lib/audit/safe-fetch.ts          descarga segura: bloquea IPs privadas (SSRF), limita tiempo, tamaño y redirecciones
+lib/audit/email.ts               plantilla del informe (voz de equipo)
+app/api/audit/analyze            análisis (10 por IP cada 10 min)
+app/api/audit/performance        rendimiento con Google PageSpeed Insights
+app/api/audit/report             envía el informe al cliente Y avisa al equipo con el lead
+data/audit.ts                    textos de /analiza-tu-web (mantenlos alineados con el motor)
+```
+
+Funciona sin configurar nada. Para que **no se pierda ningún contacto**, configura un canal de entrega
+(las variables están documentadas en `.env.example`): SMTP (Gmail con contraseña de aplicación) o Resend
+para enviar el informe, y/o `CONTACT_WEBHOOK_URL` para recibir el lead en tu CRM. Si el email automático no
+está disponible, el visitante ve igualmente una confirmación y el aviso llega al equipo; si no hay ningún
+canal, se le ofrece pedir el informe por WhatsApp con la web y la nota ya escritas.
+
+`odisas-audit/` (proyecto de Vercel aparte) queda como estaba: ya no hace falta para la web pública y
+puedes retirarlo cuando quieras. Si lo mantienes para enviar diagnósticos a posibles clientes, su correo
+sigue usando su propia plantilla.
+
+## Hero 3D y efectos de profundidad
+
+- `lib/hero-shader.ts`: un fragment shader (≈4 KB, sin Three.js) que dibuja la marca en 3D sobre un campo
+  de puntos que reacciona al cursor. `components/home/HeroGL.tsx` lo monta **solo** con pantalla ≥1024 px,
+  puntero fino, sin "reducir movimiento" y sin ahorro de datos; se carga tras el primer pintado, se pausa
+  fuera de pantalla y baja la resolución (o se apaga) si el equipo va justo.
+- En móvil, tablet y con "reducir movimiento" se usa `public/brand/hero-mark.webp` (15 KB), que se descarga
+  solo ahí. Si cambias la marca o el material: `node scripts/generar-poster-hero.mjs` (instrucciones en el archivo).
+- `components/motion/PointerEffects.tsx` (foco de cursor con rejilla escondida), `Tilt.tsx` (paneles que se
+  inclinan) y `data-iris` / `data-expand` en `ScrollEffects.tsx` (transiciones de máscara solo en los tres
+  momentos de conversión: diagnóstico, CTA intermedio y CTA final).
+
+## Diagnóstico web gratuito (proyecto aparte, ya integrado arriba)
 
 `odisas-audit/` es una landing independiente ("pega tu URL y recibe un mini-diagnóstico")
 con sus propias funciones serverless. No es parte de esta app Next.js: se despliega como

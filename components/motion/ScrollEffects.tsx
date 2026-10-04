@@ -11,13 +11,15 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
  *   data-counter="142"     cuenta hasta el valor (data-prefix / data-suffix)
  *   data-parallax="0.15"   desplazamiento suave respecto al scroll
  *   data-line="x|y"        línea que se dibuja
+ *   data-iris              el elemento se abre como un iris (círculo) a medida que su sección entra
+ *   data-expand            el elemento crece desde una tarjeta redondeada hasta ocupar todo el ancho
  *
  * Cada elemento se prepara solo cuando está a menos de una pantalla de entrar
  * (IntersectionObserver), no todos de golpe al cargar. Con movimiento reducido
  * no se hace nada: el contenido simplemente está visible.
  */
 const SELECTOR =
-  "[data-reveal],[data-reveal-stagger],[data-split],[data-counter],[data-parallax],[data-line]";
+  "[data-reveal],[data-reveal-stagger],[data-split],[data-counter],[data-parallax],[data-line],[data-iris],[data-expand]";
 
 export function ScrollEffects() {
   useEffect(() => {
@@ -87,6 +89,31 @@ export function ScrollEffects() {
               yPercent: amount,
               ease: "none",
               scrollTrigger: { trigger: el, start: "top bottom", end: "bottom top", scrub: true },
+            },
+          );
+        }
+
+        // Transiciones de máscara: solo en los momentos de conversión (diagnóstico, CTA intermedio y final)
+        if ("iris" in d) {
+          gsap.fromTo(
+            el,
+            { clipPath: "circle(0% at 50% 55%)" },
+            {
+              clipPath: "circle(150% at 50% 55%)",
+              ease: "none",
+              scrollTrigger: { trigger: el.parentElement ?? el, start: "top 92%", end: "top 18%", scrub: true },
+            },
+          );
+        }
+
+        if ("expand" in d) {
+          gsap.fromTo(
+            el,
+            { clipPath: "inset(12% 4% 0% 4% round 56px 56px 0px 0px)" },
+            {
+              clipPath: "inset(0% 0% 0% 0% round 0px 0px 0px 0px)",
+              ease: "none",
+              scrollTrigger: { trigger: el.parentElement ?? el, start: "top 96%", end: "top 38%", scrub: true },
             },
           );
         }

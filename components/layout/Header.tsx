@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ArrowRight, Menu, MessageCircle, X } from "lucide-react";
 import { Logo } from "@/components/layout/Logo";
-import { nav } from "@/data/home";
+import { auditNav, nav } from "@/data/home";
 import { whatsappLink } from "@/data/site";
 import { scrollToId, startScroll, stopScroll } from "@/lib/lenis";
 
@@ -35,7 +35,7 @@ export function Header() {
       return;
     }
     // Todas las secciones con id: las que no están en el menú limpian el enlace activo
-    const ids = ["problema", "que-hacemos", "servicios", "recorrido", "diagnostico", "ia", "resultados", "proceso", "sobre", "contacto", "faq"];
+    const ids = ["problema", "que-hacemos", "servicios", "recorrido", "diagnostico", "analiza-tu-web", "ia", "resultados", "proceso", "sobre", "contacto", "faq"];
     const inNav = new Set<string>(nav.map((item) => item.id));
     const observer = new IntersectionObserver(
       (entries) => {
@@ -84,6 +84,9 @@ export function Header() {
   };
 
   const hrefFor = (id: string) => (isHome ? `#${id}` : `/#${id}`);
+  // El diagnóstico tiene página propia: fuera de la home se enlaza directamente
+  const auditHref = isHome ? `#${auditNav.id}` : "/analiza-tu-web";
+  const auditActive = current === auditNav.id || pathname === "/analiza-tu-web";
 
   return (
     <>
@@ -99,7 +102,7 @@ export function Header() {
         >
           <Logo invert />
 
-          <nav aria-label="Navegación principal" className="hidden lg:block">
+          <nav aria-label="Navegación principal" className="hidden xl:block">
             <ul className="flex items-center gap-1">
               {nav.map((item) => {
                 const active = current === item.id;
@@ -129,6 +132,20 @@ export function Header() {
 
           <div className="flex items-center gap-2">
             <Link
+              href={auditHref}
+              onClick={isHome ? go(auditNav.id) : undefined}
+              aria-current={auditActive ? "location" : undefined}
+              className={`hidden items-center gap-2 rounded-full border px-4 py-2 text-[0.9rem] font-medium whitespace-nowrap transition-colors lg:inline-flex ${
+                auditActive ? "border-primary text-cream" : "border-hair text-cream hover:border-primary"
+              }`}
+            >
+              <span aria-hidden="true" className="live-dot size-1.5 rounded-full bg-primary" />
+              <span>{auditNav.label}</span>
+              <span className="mono rounded bg-primary/15 px-1.5 py-0.5 text-[0.62rem] tracking-wider text-primary uppercase">
+                Gratis
+              </span>
+            </Link>
+            <Link
               href={hrefFor("contacto")}
               onClick={go("contacto")}
               className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-primary px-4 py-2 font-[family-name:var(--font-display)] text-[0.9rem] font-semibold text-ink transition-colors hover:bg-[#ff8533] md:px-5"
@@ -143,7 +160,7 @@ export function Header() {
               aria-expanded={open}
               aria-controls="menu-movil"
               aria-label={open ? "Cerrar menú" : "Abrir menú"}
-              className="inline-flex size-10 items-center justify-center rounded-full border border-hair text-cream lg:hidden"
+              className="inline-flex size-10 items-center justify-center rounded-full border border-hair text-cream xl:hidden"
             >
               {open ? <X aria-hidden="true" className="size-5" /> : <Menu aria-hidden="true" className="size-5" />}
             </button>
@@ -155,7 +172,7 @@ export function Header() {
       {open ? (
         <div
           id="menu-movil"
-          className="rise fixed inset-0 z-[45] bg-ink pt-24 lg:hidden"
+          className="rise fixed inset-0 z-[45] bg-ink pt-24 xl:hidden"
           style={{ ["--d" as string]: 0 }}
         >
           <div className="wrap flex h-full flex-col justify-between pb-8">
@@ -182,6 +199,19 @@ export function Header() {
             </nav>
 
             <div className="flex flex-col gap-3">
+              <Link
+                href={auditHref}
+                onClick={isHome ? go(auditNav.id) : () => setOpen(false)}
+                className="btn btn-ghost-light w-full justify-between"
+              >
+                <span className="flex items-center gap-2">
+                  <span aria-hidden="true" className="live-dot size-1.5 rounded-full bg-primary" />
+                  {auditNav.label}
+                </span>
+                <span className="mono rounded bg-primary/15 px-2 py-0.5 text-[0.65rem] tracking-wider text-primary uppercase">
+                  Gratis
+                </span>
+              </Link>
               <Link
                 href={hrefFor("contacto")}
                 onClick={go("contacto")}

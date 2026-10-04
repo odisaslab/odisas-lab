@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Check } from "lucide-react";
 import { CtaButton } from "@/components/home/CtaButton";
 import { Split } from "@/components/motion/Split";
+import { Tilt } from "@/components/motion/Tilt";
 import { homeServices, whatWeDo } from "@/data/home";
 import { gsap, MOTION_OK, ScrollTrigger } from "@/lib/gsap";
 import { whenNear } from "@/lib/lazy";
@@ -158,18 +159,20 @@ export function Services() {
                       ))}
                     </ul>
                   </div>
-                  <div data-s-in className="rounded-2xl border border-hair bg-ink-2 p-6">
-                    <p className="mono muted mb-3 text-[0.7rem] tracking-[0.16em] uppercase">
-                      Lo que consigues
-                    </p>
-                    <p className="font-[family-name:var(--font-display)] text-xl leading-snug text-cream">
-                      {service.benefit}
-                    </p>
+                  <div data-s-in>
+                    <Tilt max={7} className="rounded-2xl border border-hair bg-ink-2 p-6">
+                      <p className="mono muted mb-3 text-[0.7rem] tracking-[0.16em] uppercase">
+                        Lo que consigues
+                      </p>
+                      <p className="font-[family-name:var(--font-display)] text-xl leading-snug text-cream">
+                        {service.benefit}
+                      </p>
+                    </Tilt>
                   </div>
                 </div>
 
                 <div data-s-in className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-                  <CtaButton need={service.need} source={`servicio-${service.id}`}>
+                  <CtaButton need={service.need} to={service.to} source={`servicio-${service.id}`}>
                     {service.cta}
                   </CtaButton>
                   <Link

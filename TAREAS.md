@@ -257,3 +257,14 @@ Mi recomendación de orden dentro de la Fase 2:
 - [ ] Rellenar `data/legal.ts` (titular, NIF, domicilio) para publicar las páginas legales
 - [ ] Configurar `CONTACT_WEBHOOK_URL` o Resend: sin canal, el formulario deriva al visitante a WhatsApp/email
 - [ ] Imagen Open Graph nueva (la actual es del diseño anterior)
+
+## v2.1 · Diagnóstico integrado + hero 3D (04/10/2026)
+
+- [x] Diagnóstico web gratuito dentro de la web: sección en la home + página `/analiza-tu-web` + enlaces en cabecera, hero, servicios y CTA final
+- [x] API portada a Next (`/api/audit/*`) con límites de uso y descarga segura; captación que avisa siempre al equipo
+- [x] SMTP (Gmail/otros) y Resend soportados también para el formulario de contacto
+- [x] Cabeceras de seguridad en `next.config.mjs` (el diagnóstico de la propia web las comprueba)
+- [x] Hero 3D con WebGL propio (marca en relieve + campo de puntos reactivo) y póster ligero para móvil
+- [x] Foco de cursor, paneles con inclinación 3D, brillo en el titular y transiciones de máscara en los CTAs
+- [ ] Configurar `PAGESPEED_API_KEY` (clave gratuita de Google) y un canal de email/webhook en Vercel
+- [ ] Decidir si se retira el proyecto aparte `odisas-audit/`

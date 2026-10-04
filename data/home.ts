@@ -15,6 +15,9 @@ export const nav = [
   { label: "FAQ", id: "faq" },
 ] as const;
 
+/** Acceso destacado al diagnóstico gratuito (junto al CTA de la cabecera) */
+export const auditNav = { label: "Analiza tu web", short: "Analizar web", id: "analiza-tu-web" } as const;
+
 export const hero = {
   eyebrow: "Marketing · Tecnología · IA",
   title: "Hacemos que tu negocio se *vea,* *crezca* y *convierta.*",
@@ -22,6 +25,7 @@ export const hero = {
     "Marketing, tecnología e inteligencia artificial para conseguir más visibilidad, más oportunidades y más clientes.",
   primary: "Quiero hacer crecer mi negocio",
   secondary: "Descubrir cómo trabajamos",
+  auditLink: { lead: "¿Quieres ver cómo está tu web ahora mismo?", cta: "Analízala gratis" },
   assurances: [
     "Hablas con quien hace el trabajo",
     "Presupuesto cerrado antes de empezar",
@@ -108,6 +112,8 @@ export interface HomeService {
   need: string;
   /** Página de detalle (existente en /servicios/[slug]) */
   slug: string;
+  /** Sección a la que lleva el CTA si no es el formulario de contacto */
+  to?: string;
 }
 
 export const homeServices: HomeService[] = [
@@ -203,8 +209,9 @@ export const homeServices: HomeService[] = [
       "Una revisión completa de tu web: conversión, SEO, velocidad, contenido y competencia, con un plan de mejoras priorizado.",
     does: ["Análisis de UX y conversión", "Revisión SEO y de velocidad", "Análisis de competencia", "Plan de mejoras ordenado por impacto"],
     benefit: "Claridad sobre dónde está el problema y qué arreglar primero.",
-    cta: "Quiero analizar mi web",
+    cta: "Analizar mi web gratis",
     need: "Mejorar mi web",
+    to: "analiza-tu-web",
     slug: "analisis-web-ia",
   },
 ];
@@ -235,7 +242,15 @@ export const diagnostic = {
     { area: "Publicidad", text: "Inversión sin conversión medida: no se sabe qué funciona." },
     { area: "Competencia", text: "Huecos que tu competencia no está cubriendo y tú sí puedes." },
   ],
-  cta: "Analizar mi negocio",
+  cta: "Analizar mi web gratis",
+  ctaSecondary: "Analizar mi negocio",
+};
+
+export const audit = {
+  eyebrow: "Diagnóstico gratuito",
+  title: "Pega tu web. *Te decimos* qué te está costando clientes.",
+  text: "Revisamos seguridad, SEO, móvil, conversión y velocidad en menos de un minuto. Sin registro y sin letra pequeña. Después, si quieres, te enviamos el informe con cada punto explicado.",
+  bullets: ["Sin registro", "Resultado en menos de 1 minuto", "Solo datos medidos, nunca inventados"],
 };
 
 export const ai = {

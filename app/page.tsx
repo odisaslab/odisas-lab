@@ -1,5 +1,6 @@
 import { About } from "@/components/home/About";
 import { AiSection } from "@/components/home/AiSection";
+import { AuditSection } from "@/components/home/AuditSection";
 import { Diagnostic } from "@/components/home/Diagnostic";
 import { Faq } from "@/components/home/Faq";
 import { FinalCta } from "@/components/home/FinalCta";
@@ -12,6 +13,7 @@ import { MidCta } from "@/components/home/MidCta";
 import { Problem } from "@/components/home/Problem";
 import { Results } from "@/components/home/Results";
 import { Services } from "@/components/home/Services";
+import { PointerEffects } from "@/components/motion/PointerEffects";
 import { ScrollEffects } from "@/components/motion/ScrollEffects";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { faqs } from "@/data/faq";
@@ -31,12 +33,14 @@ export default function HomePage() {
   return (
     <>
       <ScrollEffects />
+      <PointerEffects />
       <Hero />
       <Marquee />
       <Problem />
       <Services />
       <Journey />
       <Diagnostic />
+      <AuditSection />
       <AiSection />
       <Results />
       <Method />

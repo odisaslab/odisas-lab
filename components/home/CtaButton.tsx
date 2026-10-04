@@ -6,6 +6,8 @@ import { Magnetic } from "@/components/motion/Magnetic";
 import { scrollToId } from "@/lib/lenis";
 
 export const NEED_EVENT = "odisas:need";
+/** Preselecciona necesidad y mensaje en el formulario de contacto: detail { need?, message? } */
+export const PREFILL_EVENT = "odisas:prefill";
 
 type Variant = "primary" | "ink" | "ghost-light" | "ghost-dark";
 
@@ -42,7 +44,11 @@ export function CtaButton({
   };
 
   return (
-    <Magnetic className={className.includes("w-full") ? "w-full" : ""}>
+    <Magnetic
+      className={
+        className.includes("w-full") ? (className.includes("sm:w-auto") ? "w-full sm:w-auto" : "w-full") : ""
+      }
+    >
       <a
         href={`#${to}`}
         onClick={onClick}
