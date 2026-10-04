@@ -1,3 +1,5 @@
+import { cleanEnv } from "@/lib/clean-env";
+
 const DEFAULT_SITE_URL = "https://odisaslab.com";
 
 /**
@@ -5,7 +7,7 @@ const DEFAULT_SITE_URL = "https://odisaslab.com";
  * Una variable vacía, sin "https://" o mal escrita no debe romper la compilación.
  */
 function resolveSiteUrl(raw: string | undefined) {
-  const value = raw?.trim();
+  const value = cleanEnv(raw);
   if (!value) return DEFAULT_SITE_URL;
   try {
     return new URL(/^https?:\/\//i.test(value) ? value : `https://${value}`).origin;
@@ -31,13 +33,13 @@ export const site = {
  * falten las variables de entorno en el despliegue. Vacío = no se muestra.
  */
 export const contact = {
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "Odisaslab@gmail.com",
-  phone: process.env.NEXT_PUBLIC_PHONE ?? "+34616880063",
+  email: cleanEnv(process.env.NEXT_PUBLIC_CONTACT_EMAIL) ?? "Odisaslab@gmail.com",
+  phone: cleanEnv(process.env.NEXT_PUBLIC_PHONE) ?? "+34616880063",
   /** Cómo se escribe el teléfono en pantalla */
-  phoneDisplay: process.env.NEXT_PUBLIC_PHONE_DISPLAY ?? "616 88 00 63",
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP ?? "+34616880063",
-  instagram: process.env.NEXT_PUBLIC_INSTAGRAM ?? "",
-  linkedin: process.env.NEXT_PUBLIC_LINKEDIN ?? "",
+  phoneDisplay: cleanEnv(process.env.NEXT_PUBLIC_PHONE_DISPLAY) ?? "616 88 00 63",
+  whatsapp: cleanEnv(process.env.NEXT_PUBLIC_WHATSAPP) ?? "+34616880063",
+  instagram: cleanEnv(process.env.NEXT_PUBLIC_INSTAGRAM) ?? "",
+  linkedin: cleanEnv(process.env.NEXT_PUBLIC_LINKEDIN) ?? "",
 };
 
 const digits = (value: string) => value.replace(/\D/g, "");

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { normalizeUrl } from "@/lib/audit/safe-fetch";
 import { sign } from "@/lib/audit/token";
 import type { PerfMetric, PerfResult } from "@/lib/audit/types";
+import { serverEnv } from "@/lib/clean-env";
 import { clientIp, createLimiter } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
@@ -51,7 +52,8 @@ export async function POST(request: Request) {
   api.searchParams.set("url", url.href);
   api.searchParams.set("strategy", "mobile");
   api.searchParams.set("category", "performance");
-  if (process.env.PAGESPEED_API_KEY) api.searchParams.set("key", process.env.PAGESPEED_API_KEY);
+  const apiKey = serverEnv("PAGESPEED_API_KEY");
+  if (apiKey) api.searchParams.set("key", apiKey);
 
   try {
     const response = await fetch(api, { signal: AbortSignal.timeout(55000), cache: "no-store" });

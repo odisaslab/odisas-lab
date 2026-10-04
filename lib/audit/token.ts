@@ -3,13 +3,15 @@
  * generados por nuestro servidor (nadie puede inventar el contenido del correo).
  */
 import crypto from "node:crypto";
+import { serverEnv } from "@/lib/clean-env";
 
 function secret(): string {
-  if (process.env.AUDIT_SECRET) return process.env.AUDIT_SECRET;
+  const explicit = serverEnv("AUDIT_SECRET");
+  if (explicit) return explicit;
   // Sin AUDIT_SECRET se deriva una clave estable de otra credencial ya configurada
-  const seed = process.env.RESEND_API_KEY || process.env.SMTP_PASS || process.env.CONTACT_WEBHOOK_URL;
+  const seed = serverEnv("RESEND_API_KEY") || serverEnv("SMTP_PASS") || serverEnv("CONTACT_WEBHOOK_URL");
   if (seed) return crypto.createHash("sha256").update(`odisas-audit:${seed}`).digest("hex");
-  if (process.env.MAIL_DEV_OUTBOX) return "solo-para-desarrollo-local";
+  if (serverEnv("MAIL_DEV_OUTBOX")) return "solo-para-desarrollo-local";
   return "";
 }
 

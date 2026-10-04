@@ -3,6 +3,7 @@
  * Orden de canales: webhook (Zapier, Make, n8n, CRM) → email (SMTP o Resend).
  * Devuelve false si no hay ningún canal configurado, para no fingir un envío correcto.
  */
+import { serverEnv } from "@/lib/clean-env";
 import { contact } from "@/data/site";
 import { mailProvider, sendMail } from "@/lib/mail";
 
@@ -15,7 +16,7 @@ export interface TeamMessage {
 }
 
 export async function deliverToTeam({ subject, text, replyTo, payload }: TeamMessage): Promise<boolean> {
-  const webhook = process.env.CONTACT_WEBHOOK_URL;
+  const webhook = serverEnv("CONTACT_WEBHOOK_URL");
   if (webhook) {
     const response = await fetch(webhook, {
       method: "POST",
@@ -26,7 +27,7 @@ export async function deliverToTeam({ subject, text, replyTo, payload }: TeamMes
     return true;
   }
 
-  const to = process.env.CONTACT_TO_EMAIL || contact.email;
+  const to = serverEnv("CONTACT_TO_EMAIL") || contact.email;
   if (mailProvider() && to) {
     await sendMail({ to, subject, text, replyTo, fromName: "Web Odisas Lab" });
     return true;
