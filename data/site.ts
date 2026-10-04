@@ -2,7 +2,7 @@ export const site = {
   name: "Odisas Lab",
   tagline: "Marketing que mueve negocios.",
   description:
-    "Agencia de marketing digital. Estrategia, SEO, Google Ads, Meta Ads, diseño web e inteligencia artificial para conseguir más visibilidad y más clientes.",
+    "Marketing, tecnología e IA para que tu negocio se vea, crezca y convierta. SEO, Google Ads, Meta Ads y diseño web orientados a conseguir clientes.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://odisaslab.com",
   locale: "es_ES",
   owner: "Alejandro",
@@ -31,13 +31,6 @@ export const whatsappLink = contact.whatsapp
   : "";
 
 export const telLink = contact.phone ? `tel:+${digits(contact.phone)}` : "";
-
-export const mainNav = [
-  { label: "Servicios", href: "/servicios" },
-  { label: "Sobre Odisas Lab", href: "/sobre-odisas-lab" },
-  { label: "Proceso", href: "/proceso" },
-  { label: "Contacto", href: "/contacto" },
-] as const;
 
 export const footerNav = {
   empresa: [

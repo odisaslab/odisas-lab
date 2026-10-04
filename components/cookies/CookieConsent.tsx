@@ -2,9 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { Cookie, X } from "lucide-react";
-import { Button } from "@/components/ui/Button";
 import {
   acceptAll,
   customConsent,
@@ -87,148 +85,112 @@ export function CookieConsent() {
 
   if (!visible) return null;
 
+  const smallBtn = "min-h-11 px-4 py-2 text-[0.9rem]";
+
   return (
-    <AnimatePresence>
-      <motion.div
-        key="cookie-banner"
-        role="dialog"
-        aria-modal="false"
-        aria-labelledby="cookie-title"
-        aria-describedby="cookie-description"
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 24 }}
-        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-        className="fixed inset-x-0 bottom-0 z-[70] p-3 sm:p-5"
-      >
-        <div className="mx-auto max-w-4xl overflow-hidden rounded-[var(--radius-card)] border border-line bg-white shadow-[0_24px_60px_-24px_rgba(23,23,23,0.35)]">
-          <div className="p-5 sm:p-7">
-            <div className="flex items-start gap-4">
-              <span className="hidden size-10 shrink-0 items-center justify-center rounded-full bg-primary-soft sm:inline-flex">
-                <Cookie aria-hidden="true" className="size-5 text-primary" strokeWidth={1.75} />
-              </span>
-              <div className="min-w-0 flex-1">
-                <h2 id="cookie-title" className="text-[1.05rem] font-semibold text-dark">
-                  Cookies
-                </h2>
-                <p id="cookie-description" className="mt-2 text-[0.9rem] text-gray">
-                  Usamos cookies necesarias para que la web funcione. Con tu permiso,
-                  también de analítica y marketing para entender qué se visita y medir
-                  nuestros anuncios. Puedes rechazarlas y navegar con normalidad.{" "}
-                  <Link href="/politica-de-cookies" className="underline">
-                    Política de cookies
-                  </Link>
-                  .
-                </p>
-              </div>
-            </div>
-
-            {/* Panel de configuración por categorías */}
-            <AnimatePresence initial={false}>
-              {showPanel ? (
-                <motion.div
-                  key="cookie-panel"
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.22 }}
-                  className="overflow-hidden"
-                >
-                  <div className="mt-6 flex items-center justify-between border-t border-line pt-5">
-                    <h3 className="text-[0.9rem] font-medium text-dark">
-                      Configurar por categoría
-                    </h3>
-                    <button
-                      type="button"
-                      onClick={() => setShowPanel(false)}
-                      aria-label="Cerrar configuración"
-                      className="inline-flex size-8 items-center justify-center rounded-full text-gray transition-colors hover:text-dark"
-                    >
-                      <X aria-hidden="true" className="size-4" />
-                    </button>
-                  </div>
-
-                  <ul className="mt-4 flex flex-col gap-3">
-                    {categories.map((category) => {
-                      const checked =
-                        category.key === "necessary" ? true : choice[category.key];
-                      return (
-                        <li
-                          key={category.key}
-                          className="rounded-[10px] border border-line p-4"
-                        >
-                          <div className="flex items-start gap-3">
-                            <input
-                              id={`cookie-${category.key}`}
-                              type="checkbox"
-                              checked={checked}
-                              disabled={category.locked}
-                              onChange={(event) =>
-                                category.key !== "necessary" &&
-                                setChoice((previous) => ({
-                                  ...previous,
-                                  [category.key]: event.target.checked,
-                                }))
-                              }
-                              className="mt-1 size-4 shrink-0 accent-[var(--color-primary)] disabled:opacity-50"
-                            />
-                            <div>
-                              <label
-                                htmlFor={`cookie-${category.key}`}
-                                className="text-[0.95rem] font-medium text-dark"
-                              >
-                                {category.title}
-                                {category.locked ? (
-                                  <span className="ml-2 text-[0.75rem] font-normal text-gray">
-                                    siempre activas
-                                  </span>
-                                ) : null}
-                              </label>
-                              <p className="mt-1 text-[0.85rem] text-gray">
-                                {category.description}
-                              </p>
-                            </div>
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </motion.div>
-              ) : null}
-            </AnimatePresence>
-
-            <div className="mt-6 flex flex-col gap-2.5 sm:flex-row sm:items-center">
-              <Button onClick={() => decide(acceptAll())} className="sm:order-3">
-                Aceptar todas
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => decide(rejectAll())}
-                className="sm:order-2"
-              >
-                Rechazar todas
-              </Button>
-              {showPanel ? (
-                <Button
-                  variant="ghost"
-                  onClick={() => decide(customConsent(choice))}
-                  className="sm:order-1 sm:mr-auto"
-                >
-                  Guardar selección
-                </Button>
-              ) : (
-                <Button
-                  variant="ghost"
-                  onClick={() => setShowPanel(true)}
-                  className="sm:order-1 sm:mr-auto"
-                >
-                  Configurar
-                </Button>
-              )}
-            </div>
+    <div
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="cookie-title"
+      aria-describedby="cookie-description"
+      className="rise fixed inset-x-0 bottom-0 z-[70] p-3 sm:p-5"
+      style={{ ["--d" as string]: 0.4 }}
+    >
+      <div className="max-h-[85svh] w-full max-w-[28rem] overflow-y-auto rounded-2xl border border-hair bg-ink-2 p-5 text-cream shadow-[0_24px_60px_-20px_rgba(0,0,0,0.8)]">
+        <div className="flex items-start gap-3">
+          <Cookie aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-primary" strokeWidth={1.75} />
+          <div className="min-w-0 flex-1">
+            <h2 id="cookie-title" className="font-[family-name:var(--font-display)] text-[1.05rem] font-semibold">
+              Cookies
+            </h2>
+            <p id="cookie-description" className="mt-1.5 text-[0.85rem] leading-relaxed text-mute">
+              Usamos cookies necesarias para que la web funcione. Con tu permiso, también de analítica y marketing.
+              Puedes rechazarlas y navegar con normalidad.{" "}
+              <Link href="/politica-de-cookies" className="text-cream underline underline-offset-4">
+                Política de cookies
+              </Link>
+              .
+            </p>
           </div>
         </div>
-      </motion.div>
-    </AnimatePresence>
+
+        {showPanel ? (
+          <div>
+            <div className="mt-5 flex items-center justify-between border-t border-hair pt-4">
+              <h3 className="text-[0.9rem] font-medium">Configurar por categoría</h3>
+              <button
+                type="button"
+                onClick={() => setShowPanel(false)}
+                aria-label="Cerrar configuración"
+                className="inline-flex size-8 items-center justify-center rounded-full text-mute transition-colors hover:text-cream"
+              >
+                <X aria-hidden="true" className="size-4" />
+              </button>
+            </div>
+
+            <ul className="mt-3 flex flex-col gap-2.5">
+              {categories.map((category) => {
+                const checked = category.key === "necessary" ? true : choice[category.key];
+                return (
+                  <li key={category.key} className="rounded-[10px] border border-hair p-3.5">
+                    <div className="flex items-start gap-3">
+                      <input
+                        id={`cookie-${category.key}`}
+                        type="checkbox"
+                        checked={checked}
+                        disabled={category.locked}
+                        onChange={(event) =>
+                          category.key !== "necessary" &&
+                          setChoice((previous) => ({
+                            ...previous,
+                            [category.key]: event.target.checked,
+                          }))
+                        }
+                        className="mt-1 size-4 shrink-0 accent-[var(--color-primary)] disabled:opacity-50"
+                      />
+                      <div>
+                        <label htmlFor={`cookie-${category.key}`} className="text-[0.92rem] font-medium">
+                          {category.title}
+                          {category.locked ? (
+                            <span className="ml-2 text-[0.75rem] font-normal text-mute">siempre activas</span>
+                          ) : null}
+                        </label>
+                        <p className="mt-1 text-[0.82rem] text-mute">{category.description}</p>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ) : null}
+
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <button type="button" onClick={() => decide(acceptAll())} className={`btn btn-primary flex-1 ${smallBtn}`}>
+            Aceptar todas
+          </button>
+          <button type="button" onClick={() => decide(rejectAll())} className={`btn btn-ghost-light flex-1 ${smallBtn}`}>
+            Rechazar todas
+          </button>
+          {showPanel ? (
+            <button
+              type="button"
+              onClick={() => decide(customConsent(choice))}
+              className="min-h-11 w-full px-2 text-[0.9rem] text-cream underline underline-offset-4"
+            >
+              Guardar selección
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setShowPanel(true)}
+              className="min-h-11 w-full px-2 text-[0.9rem] text-mute underline underline-offset-4 hover:text-cream"
+            >
+              Configurar
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

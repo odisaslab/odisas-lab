@@ -5,6 +5,9 @@ import { Analytics } from "@/components/analytics/Analytics";
 import { CookieConsent } from "@/components/cookies/CookieConsent";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
+import { WhatsAppFloat } from "@/components/layout/WhatsAppFloat";
+import { Cursor } from "@/components/motion/Cursor";
+import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { JsonLd } from "@/components/ui/JsonLd";
 import { site } from "@/data/site";
 import { organizationSchema, websiteSchema } from "@/lib/seo";
@@ -25,7 +28,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} · Agencia de marketing digital`,
+    default: `${site.name} · Marketing, SEO y diseño web que trae clientes`,
     template: `%s · ${site.name}`,
   },
   description: site.description,
@@ -37,14 +40,14 @@ export const metadata: Metadata = {
     siteName: site.name,
     locale: site.locale,
     url: site.url,
-    title: `${site.name} · Agencia de marketing digital`,
+    title: `${site.name} · Marketing, SEO y diseño web que trae clientes`,
     description: site.description,
   },
   robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FF6B00",
+  themeColor: "#0A0A0B",
   colorScheme: "light",
 };
 
@@ -62,6 +65,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main id="contenido">{children}</main>
         <Footer />
+
+        <WhatsAppFloat />
+        <Cursor />
+        <SmoothScroll />
 
         <CookieConsent />
 

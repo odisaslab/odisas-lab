@@ -17,13 +17,29 @@ npm run typecheck   # TypeScript sin errores
 npm run build       # build de producción
 ```
 
-## Preview rápido sin instalar nada
+## Rediseño de la home (v2)
 
-La carpeta `preview/` tiene versiones estáticas de la home, `/contacto`,
-`/servicios/renovacion-web`, `/sobre-odisas-lab` y `/proceso`, solo para revisar el
-diseño.
-Ábrela con doble clic en el navegador. **No es la fuente de verdad**: el código real es
-el de `app/` y `components/`.
+La home es una sola página narrativa: **problema → servicios → recorrido → diagnóstico → IA →
+resultados → método → sobre → contacto → FAQ**. Cada sección responde a una pregunta del
+visitante y termina en un CTA que preselecciona la necesidad en el formulario.
+
+Movimiento: GSAP + ScrollTrigger + Lenis, solo en cliente y montados de forma perezosa
+(`lib/lazy.ts`, `components/motion/ScrollEffects.tsx`). Con `prefers-reduced-motion` no se
+oculta ni se fija nada: el contenido ya está en su estado final y Lenis no se inicia.
+El recorrido (`Journey`) se fija en escritorio y es una lista vertical en móvil.
+
+Dónde tocar cada cosa:
+
+```
+data/home.ts          todo el copy de la home (titulares, servicios, FAQ de la home usa data/faq.ts)
+data/results.ts       métricas y casos reales (ver el aviso de la cabecera del archivo)
+components/home/      una sección por archivo
+components/motion/    Lenis, efectos de scroll por atributos (data-reveal, data-split…), cursor, botón magnético
+app/globals.css       tokens (ink / cream / orange), tipografía y animaciones CSS del hero
+```
+
+Reglas de contenido: nada inventado. Los resultados salen de `data/results.ts`; para añadir
+un caso real basta agregarlo a `cases` y aparece en la home.
 
 ## Diagnóstico web gratuito (proyecto aparte)
 
