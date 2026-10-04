@@ -2,17 +2,17 @@ import type { FaqItem } from "@/types";
 
 export const faqs: FaqItem[] = [
   {
-    question: "¿Con qué tipo de empresas trabajáis?",
+    question: "¿Con qué empresas trabajáis?",
     answer:
       "Con pymes, negocios locales y profesionales que quieren tener una presencia digital seria. No hay un tamaño mínimo: lo que importa es que haya un negocio real detrás y ganas de mejorar.",
   },
   {
     question: "¿Cuánto cuesta un proyecto?",
     answer:
-      "Depende del alcance. Una landing page, una web corporativa completa o una estrategia con SEO y publicidad no son comparables. Analizamos tu caso y te enviamos un presupuesto cerrado antes de empezar, sin sorpresas.",
+      "Depende del alcance. Una landing page, una web corporativa completa o una estrategia con SEO y publicidad no son comparables. Analizamos tu caso y te enviamos un presupuesto cerrado antes de empezar, sin sorpresas. Si no encaja con tu presupuesto, te lo decimos y buscamos otra forma de empezar.",
   },
   {
-    question: "Ya tengo web, pero está anticuada. ¿La rehacéis o la arregláis?",
+    question: "Ya tengo web, ¿podéis mejorarla?",
     answer:
       "Primero la analizamos. Si la base es sólida, mejoramos diseño, velocidad y conversión. Si arrastra problemas de fondo, sale más rentable rehacerla y migrar el contenido sin perder el posicionamiento que ya tienes.",
   },
@@ -22,7 +22,7 @@ export const faqs: FaqItem[] = [
       "Funcionan mejor juntos. La publicidad trae visitas desde el primer día y el SEO construye visibilidad que no desaparece cuando dejas de pagar. La proporción depende de tu sector, tu margen y la prisa que tengas.",
   },
   {
-    question: "¿Cómo usáis la inteligencia artificial?",
+    question: "¿Cómo utilizáis la IA?",
     answer:
       "Para analizar datos, detectar patrones, acelerar producción de contenido y automatizar tareas repetitivas. La estrategia y las decisiones siguen siendo nuestras: la IA nos hace más rápidos, no nos sustituye.",
   },

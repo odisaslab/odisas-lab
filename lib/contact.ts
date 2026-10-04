@@ -1,9 +1,6 @@
-import { services } from "@/data/services";
+import { form } from "@/data/home";
 
-export const needOptions = [
-  ...services.map((service) => service.name),
-  "Otro",
-] as const;
+export const needOptions = form.needs.map((need) => need.value);
 
 export const budgetOptions = [
   "Todavía no lo sé",
@@ -83,3 +80,15 @@ export function validateContact(data: ContactPayload): ContactErrors {
 }
 
 export const hasErrors = (errors: ContactErrors) => Object.keys(errors).length > 0;
+
+/** Texto prefabricado para continuar la conversación por WhatsApp si el envío falla. */
+export function whatsappText(data: Pick<ContactPayload, "name" | "company" | "need" | "message">) {
+  return [
+    "Hola Odisas Lab, he visto vuestra web y quiero que analicéis mi negocio.",
+    data.name ? `Soy ${data.name}${data.company ? ` (${data.company})` : ""}.` : "",
+    data.need ? `Necesito: ${data.need}.` : "",
+    data.message ? `Mi situación: ${data.message}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
+}

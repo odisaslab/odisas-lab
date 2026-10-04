@@ -3,149 +3,238 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/Button";
-import { Container } from "@/components/ui/Container";
+import { ArrowRight, Menu, MessageCircle, X } from "lucide-react";
 import { Logo } from "@/components/layout/Logo";
-import { mainNav } from "@/data/site";
+import { auditNav, nav } from "@/data/home";
+import { whatsappLink } from "@/data/site";
+import { scrollToId, startScroll, stopScroll } from "@/lib/lenis";
 
+/**
+ * Navegación fija. En la home arranca transparente sobre el hero y, al hacer
+ * scroll, se condensa en una píldora flotante. En el resto de páginas
+ * es siempre la píldora, para que se lea sobre fondos claros.
+ */
 export function Header() {
-  const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const isHome = pathname === "/";
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [current, setCurrent] = useState<string>("");
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Cerrar el menú al cambiar de página
+  // Sección visible → enlace activo
+  useEffect(() => {
+    if (!isHome) {
+      setCurrent("");
+      return;
+    }
+    // Todas las secciones con id: las que no están en el menú limpian el enlace activo
+    const ids = ["problema", "que-hacemos", "servicios", "recorrido", "diagnostico", "analiza-tu-web", "ia", "resultados", "proceso", "sobre", "contacto", "faq"];
+    const inNav = new Set<string>(nav.map((item) => item.id));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setCurrent(inNav.has(entry.target.id) ? entry.target.id : "");
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    ids.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [isHome]);
+
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
 
-  // Bloquear el scroll del body mientras el menú está abierto
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
-
-  // Cerrar con Escape
+  // Menú móvil: bloquea el scroll (también el de Lenis) y se cierra con Escape
   useEffect(() => {
     if (!open) return;
+    document.body.style.overflow = "hidden";
+    stopScroll();
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpen(false);
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = "";
+      startScroll();
+      window.removeEventListener("keydown", onKey);
+    };
   }, [open]);
 
-  const isActive = (href: string) =>
-    pathname === href || (href !== "/" && pathname.startsWith(href));
+  const condensed = scrolled || !isHome || open;
+
+  const go = (id: string) => (event: React.MouseEvent) => {
+    setOpen(false);
+    if (isHome) {
+      // Dejar que el cierre del menú libere el scroll antes de desplazar
+      requestAnimationFrame(() => scrollToId(id));
+      event.preventDefault();
+    }
+  };
+
+  const hrefFor = (id: string) => (isHome ? `#${id}` : `/#${id}`);
+  // El diagnóstico tiene página propia: fuera de la home se enlaza directamente
+  const auditHref = isHome ? `#${auditNav.id}` : "/analiza-tu-web";
+  const auditActive = current === auditNav.id || pathname === "/analiza-tu-web";
 
   return (
     <>
-      <header
-        className={`sticky top-0 z-50 bg-white/90 backdrop-blur-md transition-shadow duration-300 ${
-          scrolled ? "border-b border-line shadow-[0_1px_0_rgba(23,23,23,0.04)]" : ""
-        }`}
-      >
-        <Container className="flex h-[72px] items-center justify-between gap-6">
-          <Logo />
+      {!isHome ? <div aria-hidden="true" className="h-[4.5rem]" /> : null}
 
-          <nav aria-label="Navegación principal" className="hidden lg:block">
-            <ul className="flex items-center gap-8">
-              {mainNav.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    aria-current={isActive(item.href) ? "page" : undefined}
-                    className={`link-underline text-[0.95rem] transition-colors ${
-                      isActive(item.href) ? "text-primary-ink" : "text-text hover:text-dark"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
+      <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 md:px-6">
+        <div
+          className={`mx-auto flex h-14 items-center justify-between gap-4 rounded-full border px-4 transition-all duration-500 ease-out md:h-16 md:px-6 ${
+            condensed
+              ? "max-w-[1040px] border-hair bg-ink/90 shadow-[0_10px_40px_-12px_rgba(0,0,0,0.6)] backdrop-blur-xl"
+              : "max-w-[1320px] border-transparent bg-transparent"
+          }`}
+        >
+          <Logo invert />
+
+          <nav aria-label="Navegación principal" className="hidden xl:block">
+            <ul className="flex items-center gap-1">
+              {nav.map((item) => {
+                const active = current === item.id;
+                return (
+                  <li key={item.id}>
+                    <Link
+                      href={hrefFor(item.id)}
+                      onClick={go(item.id)}
+                      aria-current={active ? "location" : undefined}
+                      className={`relative rounded-full px-4 py-2 text-[0.92rem] transition-colors ${
+                        active ? "text-cream" : "text-mute hover:text-cream"
+                      }`}
+                    >
+                      {item.label}
+                      <span
+                        aria-hidden="true"
+                        className={`absolute inset-x-4 -bottom-0.5 h-px origin-left bg-primary transition-transform duration-300 ${
+                          active ? "scale-x-100" : "scale-x-0"
+                        }`}
+                      />
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 
-          <div className="hidden lg:block">
-            <Button href="/contacto" withArrow>
+          <div className="flex items-center gap-2">
+            <Link
+              href={auditHref}
+              onClick={isHome ? go(auditNav.id) : undefined}
+              aria-current={auditActive ? "location" : undefined}
+              className={`hidden items-center gap-2 rounded-full border px-4 py-2 text-[0.9rem] font-medium whitespace-nowrap transition-colors lg:inline-flex ${
+                auditActive ? "border-primary text-cream" : "border-hair text-cream hover:border-primary"
+              }`}
+            >
+              <span aria-hidden="true" className="live-dot size-1.5 rounded-full bg-primary" />
+              <span>{auditNav.label}</span>
+              <span className="mono rounded bg-primary/15 px-1.5 py-0.5 text-[0.62rem] tracking-wider text-primary uppercase">
+                Gratis
+              </span>
+            </Link>
+            <Link
+              href={hrefFor("contacto")}
+              onClick={go("contacto")}
+              className="inline-flex min-h-10 items-center gap-1.5 rounded-full bg-primary px-4 py-2 font-[family-name:var(--font-display)] text-[0.9rem] font-semibold text-ink transition-colors hover:bg-[#ff8533] md:px-5"
+            >
               Hablemos
-            </Button>
-          </div>
+              <ArrowRight aria-hidden="true" className="size-4" />
+            </Link>
 
-          <button
-            type="button"
-            onClick={() => setOpen((value) => !value)}
-            aria-expanded={open}
-            aria-controls="menu-movil"
-            aria-label={open ? "Cerrar menú" : "Abrir menú"}
-            className="inline-flex size-11 items-center justify-center rounded-full border border-line text-dark lg:hidden"
-          >
-            {open ? (
-              <X aria-hidden="true" className="size-5" />
-            ) : (
-              <Menu aria-hidden="true" className="size-5" />
-            )}
-          </button>
-        </Container>
+            <button
+              type="button"
+              onClick={() => setOpen((value) => !value)}
+              aria-expanded={open}
+              aria-controls="menu-movil"
+              aria-label={open ? "Cerrar menú" : "Abrir menú"}
+              className="inline-flex size-10 items-center justify-center rounded-full border border-hair text-cream xl:hidden"
+            >
+              {open ? <X aria-hidden="true" className="size-5" /> : <Menu aria-hidden="true" className="size-5" />}
+            </button>
+          </div>
+        </div>
       </header>
 
-      {/*
-        Fuera de <header>: ese elemento lleva backdrop-blur (backdrop-filter),
-        y filter/backdrop-filter convierte al elemento en containing block de
-        sus descendientes "fixed". Si este panel viviera dentro del header,
-        su top-[72px]/bottom-0 se calcularían contra los 72px del propio
-        header (no contra la pantalla) y la altura resultante sería 0.
-      */}
-      <AnimatePresence>
-        {open ? (
-          <motion.div
-            id="menu-movil"
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-            className="fixed inset-x-0 top-[72px] bottom-0 z-40 bg-white lg:hidden"
-          >
-            <Container className="flex h-full flex-col justify-between py-10">
-              <nav aria-label="Navegación principal móvil">
-                <ul className="flex flex-col gap-1">
-                  {mainNav.map((item) => (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        onClick={() => setOpen(false)}
-                        aria-current={isActive(item.href) ? "page" : undefined}
-                        className="flex items-center justify-between border-b border-line py-4 font-[family-name:var(--font-display)] text-2xl font-medium text-dark"
-                      >
-                        {item.label}
-                        <span aria-hidden="true" className="text-primary">
-                          ·
+      {/* Fuera de <header>: backdrop-filter convertiría al header en el bloque contenedor del panel fixed */}
+      {open ? (
+        <div
+          id="menu-movil"
+          className="rise fixed inset-0 z-[45] bg-ink pt-24 xl:hidden"
+          style={{ ["--d" as string]: 0 }}
+        >
+          <div className="wrap flex h-full flex-col justify-between pb-8">
+            <nav aria-label="Navegación principal móvil">
+              <ul>
+                {nav.map((item, index) => (
+                  <li key={item.id} className="hair-t">
+                    <Link
+                      href={hrefFor(item.id)}
+                      onClick={go(item.id)}
+                      className="flex min-h-16 items-center justify-between py-3 font-[family-name:var(--font-display)] text-[1.9rem] font-medium tracking-tight text-cream"
+                    >
+                      <span>
+                        <span className="mono mr-4 text-[0.72rem] tracking-widest text-primary">
+                          0{index + 1}
                         </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
+                        {item.label}
+                      </span>
+                      <ArrowRight aria-hidden="true" className="size-5 text-mute" />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
 
-              <div className="pb-4">
-                <Button href="/contacto" size="lg" withArrow className="w-full">
-                  Hablemos
-                </Button>
-              </div>
-            </Container>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+            <div className="flex flex-col gap-3">
+              <Link
+                href={auditHref}
+                onClick={isHome ? go(auditNav.id) : () => setOpen(false)}
+                className="btn btn-ghost-light w-full justify-between"
+              >
+                <span className="flex items-center gap-2">
+                  <span aria-hidden="true" className="live-dot size-1.5 rounded-full bg-primary" />
+                  {auditNav.label}
+                </span>
+                <span className="mono rounded bg-primary/15 px-2 py-0.5 text-[0.65rem] tracking-wider text-primary uppercase">
+                  Gratis
+                </span>
+              </Link>
+              <Link
+                href={hrefFor("contacto")}
+                onClick={go("contacto")}
+                className="btn btn-primary w-full"
+              >
+                Quiero hacer crecer mi negocio
+                <ArrowRight aria-hidden="true" className="arrow size-[1.05em]" />
+              </Link>
+              {whatsappLink ? (
+                <a
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-ghost-light w-full"
+                >
+                  <MessageCircle aria-hidden="true" className="size-5" />
+                  WhatsApp
+                </a>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }

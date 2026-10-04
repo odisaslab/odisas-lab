@@ -19,7 +19,7 @@ export function Footer() {
   ].filter(Boolean) as { label: string; href: string }[];
 
   return (
-    <footer className="bg-dark text-white">
+    <footer className="bg-ink text-cream border-t border-hair">
       <Container className="py-16 md:py-20">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>

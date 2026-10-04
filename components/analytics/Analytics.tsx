@@ -2,11 +2,12 @@
 
 import Script from "next/script";
 import { useEffect, useState } from "react";
+import { cleanEnv } from "@/lib/clean-env";
 import { CONSENT_EVENT, readConsent, type Consent } from "@/lib/consent";
 
-const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
-const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
-const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+const GA_ID = cleanEnv(process.env.NEXT_PUBLIC_GA_ID);
+const GTM_ID = cleanEnv(process.env.NEXT_PUBLIC_GTM_ID);
+const PIXEL_ID = cleanEnv(process.env.NEXT_PUBLIC_META_PIXEL_ID);
 
 declare global {
   interface Window {

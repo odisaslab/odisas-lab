@@ -48,7 +48,6 @@ export function organizationSchema() {
     slogan: site.tagline,
     description: site.description,
     foundingDate: String(site.foundingYear),
-    founder: { "@type": "Person", name: site.owner },
     ...(contact.email ? { email: contact.email } : {}),
     ...(contact.phone ? { telephone: contact.phone } : {}),
     ...(sameAs.length > 0 ? { sameAs } : {}),

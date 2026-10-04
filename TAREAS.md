@@ -3,7 +3,7 @@
 Documento de control. Se actualiza al cerrar cada tarea.
 
 **Estado global:** Fase 1 y 2 completadas · Fase 3 casi cerrada (solo queda el blog y verificar el build)
-**Última actualización:** 10/09/2026
+**Última actualización:** 04/10/2026 · rediseño v2 de la home (ver README)
 
 ---
 
@@ -73,7 +73,7 @@ Lo imprescindible para que la web exista, se entienda y convierta.
 - [x] Página 404 propia
 
 ### Extra
-- [x] Previews estáticos en `preview/` (home, contacto, servicio, sobre y proceso) para revisar el diseño sin instalar dependencias
+- [x] ~~Previews estáticos en `preview/`~~ (eliminados en el rediseño v2: `npm run dev` es la fuente de verdad)
 - [x] README con arranque, estructura y reglas de contenido
 
 **Pendiente de tu parte para cerrar Fase 1 al 100%:** ejecutar `npm install`,
@@ -238,3 +238,33 @@ Mi recomendación de orden dentro de la Fase 2:
 5. ~~Favicon, iconos e imagen Open Graph~~ — hecho
 6. ~~Auditoría de accesibilidad y contraste~~ — hecho
 7. Queda: verificar el build en tu máquina y, si algún día escribes, el blog
+
+
+---
+
+## REDISEÑO v2 · Home orientada a captación (04/10/2026)
+
+- [x] Home narrativa de 14 secciones, cada una con un CTA contextual
+- [x] Hero con sistema animado SEO → Tráfico → Web → Conversión → Clientes (CSS puro)
+- [x] Servicios como recorrido con índice activo (8 servicios) y CTAs que preseleccionan el formulario
+- [x] Recorrido fijado con scroll (escritorio) / línea vertical (móvil)
+- [x] Diagnóstico tipo dashboard, sección de IA con flujo de datos, método con línea que avanza
+- [x] Formulario de 3 pasos, con aviso y salida por WhatsApp/email si el envío falla
+- [x] Cabecera que se condensa al hacer scroll, menú móvil, WhatsApp flotante
+- [x] `prefers-reduced-motion`, teclado, foco visible, un solo H1 por página
+- [x] GSAP + Lenis; se elimina framer-motion
+- [ ] **Confirmar** que +142 % / 7 meses siguen vigentes y, si es posible, añadir el caso a `data/results.ts`
+- [ ] Rellenar `data/legal.ts` (titular, NIF, domicilio) para publicar las páginas legales
+- [ ] Configurar `CONTACT_WEBHOOK_URL` o Resend: sin canal, el formulario deriva al visitante a WhatsApp/email
+- [ ] Imagen Open Graph nueva (la actual es del diseño anterior)
+
+## v2.1 · Diagnóstico integrado + hero 3D (04/10/2026)
+
+- [x] Diagnóstico web gratuito dentro de la web: sección en la home + página `/analiza-tu-web` + enlaces en cabecera, hero, servicios y CTA final
+- [x] API portada a Next (`/api/audit/*`) con límites de uso y descarga segura; captación que avisa siempre al equipo
+- [x] SMTP (Gmail/otros) y Resend soportados también para el formulario de contacto
+- [x] Cabeceras de seguridad en `next.config.mjs` (el diagnóstico de la propia web las comprueba)
+- [x] Hero 3D con WebGL propio (marca en relieve + campo de puntos reactivo) y póster ligero para móvil
+- [x] Foco de cursor, paneles con inclinación 3D, brillo en el titular y transiciones de máscara en los CTAs
+- [ ] Configurar `PAGESPEED_API_KEY` (clave gratuita de Google) y un canal de email/webhook en Vercel
+- [ ] Decidir si se retira el proyecto aparte `odisas-audit/`

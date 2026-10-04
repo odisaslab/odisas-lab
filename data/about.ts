@@ -1,7 +1,7 @@
 /**
  * Contenido de /sobre-odisas-lab.
  *
- * IMPORTANTE: aquí no hay datos inventados sobre Alejandro (años de experiencia,
+ * IMPORTANTE: aquí no hay datos inventados sobre el equipo (años de experiencia,
  * formación, clientes anteriores). Si quieres añadir trayectoria, escríbela tú
  * y la incorporamos: es la única parte de la web que no se puede redactar sin
  * información real.
@@ -10,8 +10,8 @@
 export const about = {
   intro: [
     "Odisas Lab nace con una idea sencilla: hacer marketing digital de una forma más clara, más estratégica y más cercana.",
-    "No es una gran agencia y no lo pretende. Detrás está Alejandro, que es quien analiza tu negocio, quien diseña la estrategia y quien la ejecuta. Hablas con la persona que hace el trabajo, no con un intermediario.",
-    "Eso tiene una consecuencia práctica: se trabaja con pocos proyectos a la vez y cada uno se atiende de verdad.",
+    "No es una gran agencia y no lo pretende. Somos un equipo pequeño: las personas que analizan tu negocio, diseñan la estrategia y la ejecutan son las mismas con las que hablas. Sin intermediarios.",
+    "Eso tiene una consecuencia práctica: trabajamos con pocos proyectos a la vez y cada uno se atiende de verdad.",
   ],
 
   /** Ventajas de trabajar con una estructura pequeña */

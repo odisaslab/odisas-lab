@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/servicios", priority: 0.9 },
     { path: "/sobre-odisas-lab", priority: 0.7 },
     { path: "/proceso", priority: 0.7 },
+    { path: "/analiza-tu-web", priority: 0.9 },
     { path: "/contacto", priority: 0.8 },
     // Las páginas legales solo entran en el sitemap cuando el texto está completo
     ...(legalIsComplete
