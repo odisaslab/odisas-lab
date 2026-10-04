@@ -269,11 +269,11 @@ export const method = {
 
 export const about = {
   eyebrow: "Sobre Odisas Lab",
-  title: "No vas a hablar con una agencia.",
-  title2: "Vas a hablar con la persona que hace *el trabajo.*",
+  title: "No vas a hablar con una agencia grande.",
+  title2: "Vas a hablar con el equipo que hace *el trabajo.*",
   text: [
-    "Detrás de Odisas Lab está Alejandro. Es quien analiza tu negocio, diseña la estrategia y la ejecuta. Sin comerciales que prometen y equipos que no se enteran.",
-    "Trabaja con pocos proyectos a la vez, y por eso cada uno se atiende de verdad.",
+    "Odisas Lab es un equipo pequeño. Las personas que analizan tu negocio, diseñan la estrategia y la ejecutan son las mismas con las que hablas. Sin comerciales que prometen y equipos que no se enteran.",
+    "Trabajamos con pocos proyectos a la vez, y por eso cada uno se atiende de verdad.",
   ],
   pillars: [
     { title: "Trato directo", text: "Preguntas algo y te responde quien tiene la respuesta." },
@@ -282,7 +282,7 @@ export const about = {
     { title: "Tecnología con sentido", text: "IA y herramientas solo cuando aportan una ventaja real." },
   ],
   chainBig: ["Tú", "Comercial", "Gestor de cuenta", "Equipo"],
-  chainSmall: ["Tú", "Alejandro"],
+  chainSmall: ["Tú", "El equipo de Odisas"],
   link: "Conocer Odisas Lab",
 };
 

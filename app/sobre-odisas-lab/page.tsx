@@ -15,7 +15,7 @@ import { pageMeta } from "@/lib/seo";
 export const metadata = pageMeta({
   title: "Sobre Odisas Lab",
   description:
-    "Detrás de Odisas Lab está Alejandro. Marketing digital con trato directo, estrategias a medida y orientación a resultados.",
+    "Un equipo pequeño de marketing digital con trato directo, estrategias a medida y orientación a resultados.",
   path: "/sobre-odisas-lab",
 });
 
@@ -37,8 +37,8 @@ export default function SobrePage() {
           <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
             <div>
               <h1 className="text-display font-semibold">
-                Detrás de Odisas Lab está{" "}
-                <span className="text-primary-ink">Alejandro</span>
+                Un equipo pequeño,{" "}
+                <span className="text-primary-ink">trato directo</span>
               </h1>
 
               <div className="mt-8 flex max-w-2xl flex-col gap-4 text-lead text-gray">

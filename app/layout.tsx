@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   },
   description: site.description,
   applicationName: site.name,
-  authors: [{ name: site.owner }],
+  authors: [{ name: site.name }],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",

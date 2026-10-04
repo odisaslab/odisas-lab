@@ -5,7 +5,7 @@ export const site = {
     "Marketing, tecnología e IA para que tu negocio se vea, crezca y convierta. SEO, Google Ads, Meta Ads y diseño web orientados a conseguir clientes.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://odisaslab.com",
   locale: "es_ES",
-  owner: "Alejandro",
+  owner: "Equipo de Odisas Lab",
   foundingYear: 2026,
 } as const;
 
@@ -108,5 +108,5 @@ export const assets = {
    * hueco ni un placeholder.
    */
   portrait: "",
-  portraitAlt: "Alejandro, fundador de Odisas Lab",
+  portraitAlt: "El equipo de Odisas Lab",
 };
