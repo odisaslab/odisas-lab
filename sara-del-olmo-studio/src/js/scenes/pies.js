@@ -5,7 +5,7 @@
  * Los pies son una fotografía recortada (transparente) que se mueve con una transformación CSS.
  */
 import { registerScene } from '../lib/scene.js';
-import { $, $$, seg, ease, lerp, spline } from '../lib/util.js';
+import { $, $$, seg, ease, lerp, spline, warmImages } from '../lib/util.js';
 import { applyLookTheme, onLook } from '../lib/look.js';
 import { FEET } from '../../data/scene-photos.js';
 
@@ -14,6 +14,7 @@ export function init(el) {
   const k = $('.kicker', el), t1 = $('.pies__t1', el), t2 = $('.pies__t2', el), lead = $('.pies__lead', el);
   const items = $$('.mini-list li', el), cta = $('.pies__cta', el);
 
+  warmImages(feet, 600);
   applyLookTheme();
   onLook(() => { scene.force = true; });
 
@@ -70,7 +71,7 @@ export function init(el) {
     // al final, la pantalla se oscurece (las cejas empiezan en la penumbra)
     stage.style.setProperty('--dark', seg(p, 0.93, 1, ease.io).toFixed(3));
   };
-  const scene = registerScene(el, render, { damp: 7 });
+  const scene = registerScene(el, render, { damp: 5.5 });
   el.classList.add('is-ready');
   return { scene };
 }

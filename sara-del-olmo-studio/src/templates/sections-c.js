@@ -184,7 +184,7 @@ export function contact() {
 /* ───────────────────────────── 16 · FINAL · RESERVA ───────────────────────────── */
 export function final() {
   const c = COPY.final;
-  return `<section class="scene scene--final" id="reserva" data-scene="final" data-theme="dark" style="--len:4.6" aria-labelledby="h-final">
+  return `<section class="scene scene--final" id="reserva" data-scene="final" data-theme="dark" style="--len:5.6" aria-labelledby="h-final">
   <div class="scene__stage">
     <div class="final__bg" aria-hidden="true"></div>
     ${handWorldMarkup({ lazy: true, cls: 'final__pw' })}

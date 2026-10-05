@@ -89,7 +89,9 @@ scene-src/     fotos originales de las escenas (se versionan; salida en public/i
   Para mover la cámara de una escena basta con editar su `render(p)`; los tramos se definen con `seg(p, desde, hasta, easing)`.
 - **Escenas con fotografías.** La cámara es una transformación CSS (traslación + giro + zoom, `lib/handworld.js`) sobre varias fotos
   alineadas en un mismo «mundo». Para saltar de una foto a la siguiente se encadena un **cambio de enfoque**: nítida → borrosa →
-  (borrosa) → nítida. Las versiones borrosas son diminutas (3–10 kB), así que no hay filtros en tiempo real ni «uñas dobles».
+  (borrosa) → nítida. Las versiones borrosas son diminutas, así que no hay filtros en tiempo real ni «uñas dobles». Las ventanas de fundido
+  de cada capa se solapan y la capa que entra llega con un pequeño zoom (`lib/handworld.js`: `ZOOM`, `ZOOM_UNDER`), para que el cambio de foto
+  se lea como continuación del movimiento de cámara.
   - **Portada:** mano → cuatro uñas → macro de una uña (se alinean por la uña central) → el shader de esmalte líquido
     (`lib/liquid.js`) toma el relevo. Sin WebGL, un portal CSS lo sustituye; con `prefers-reduced-motion`, versión estática.
   - **Pies:** foto con el fondo verde recortado (croma) sobre el color del look. **Cejas:** rostro + guías de medida SVG en las

@@ -65,7 +65,7 @@ el resto son secciones normales con interacción propia (diseñador, tarifas, va
 
 ## 3. Storyboard del scroll
 
-### Acto 1 · La uña (escena de 600 % de pantalla)
+### Acto 1 · La uña (escena de 740 % de pantalla)
 
 | Scroll | Cámara | Qué ocurre |
 |---|---|---|
@@ -83,12 +83,12 @@ el resto son secciones normales con interacción propia (diseñador, tarifas, va
 
 | Escena | Secuencia |
 |---|---|
-| **Pies** (360 %) | Sobre el color de tu look, la cámara está sobre las uñas de los dedos gordos → se aleja hasta los dos pies (foto recortada). Aparece «De las manos a los pies.» y los 6 servicios reales. Al final la pantalla se oscurece. |
-| **Cejas** (420 %) | Oscuridad → emerge el rostro → guías de medida (eje de la nariz, comisuras, arco, cola) y puntos clave → las guías se apagan y la cámara se acerca a la ceja → texto y precios. |
-| **Piercing** (440 %) | La ceja se apaga hasta un destello metálico → **macro de una joya de titanio** → se desenfoca, penumbra → la cámara, ya lejos, descubre que está en una oreja con otras joyas que titilan una a una → Precisión · Estilo · Seguridad. |
+| **Pies** (420 %) | Sobre el color de tu look, la cámara está sobre las uñas de los dedos gordos → se aleja hasta los dos pies (foto recortada). Aparece «De las manos a los pies.» y los 6 servicios reales. Al final la pantalla se oscurece. |
+| **Cejas** (500 %) | Oscuridad → emerge el rostro → guías de medida (eje de la nariz, comisuras, arco, cola) y puntos clave → las guías se apagan y la cámara se acerca a la ceja → texto y precios. |
+| **Piercing** (560 %) | La ceja se apaga hasta un destello metálico → **macro de una joya de titanio** → se desenfoca, penumbra → la cámara, ya lejos, descubre que está en una oreja con otras joyas que titilan una a una → Precisión · Estilo · Seguridad. |
 | **Seguridad** (340 %) | Un escáner barre la pantalla y deja un fondo clínico → por cada elemento: se dibuja un instrumental, una línea lo rodea y se transforma en icono (Esterilización · Protección · Materiales de calidad). |
 | **Estudio** (240 %) | La cámara está dentro de la primera foto y se aleja hasta mostrar el estudio entero; después, galería horizontal arrastrable (ratón con inercia, dedo, flechas y teclado). |
-| **Final** (460 %) | Macro de la uña → la cámara se aleja (viaje inverso al de la portada) hasta la mano entera → «Ahora, hazlo tuyo.» → SARA DEL OLMO STUDIO / Humanes de Madrid → **PEDIR CITA** (Booksy). |
+| **Final** (560 %) | Macro de la uña → la cámara se aleja (viaje inverso al de la portada) hasta la mano entera → «Ahora, hazlo tuyo.» → SARA DEL OLMO STUDIO / Humanes de Madrid → **PEDIR CITA** (Booksy). |
 
 Momentos WOW: ① la cámara entra en la uña · ② el esmalte se vuelve un universo de color · ③ la uña se diseña en tiempo real ·
 ④ la línea de la ceja se convierte en una joya · ⑤ la cámara vuelve a la mano terminada y aparece el CTA.

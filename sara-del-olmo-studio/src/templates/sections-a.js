@@ -13,7 +13,7 @@ import { esc, euro, priceHtml, words, kicker, bookAttrs, waAttrs, nailBtn } from
 export function hero() {
   const c = COPY.hero;
   const r = CONFIG.rating;
-  return `<section class="scene scene--hero" id="inicio" data-scene="hero" data-theme="dark" style="--len:6" aria-label="Inicio">
+  return `<section class="scene scene--hero" id="inicio" data-scene="hero" data-theme="dark" style="--len:7.4" aria-label="Inicio">
   <div class="scene__stage">
     <div class="hero__bg" aria-hidden="true"></div>
     <canvas class="hero__gl" aria-hidden="true"></canvas>
@@ -129,7 +129,7 @@ export function designer() {
 export function pies() {
   const c = COPY.pies;
   const list = svcsByCat('pies');
-  return `<section class="scene scene--pies" id="pies" data-scene="pies" data-theme="color" style="--len:3.6" aria-labelledby="h-pies">
+  return `<section class="scene scene--pies" id="pies" data-scene="pies" data-theme="color" style="--len:4.2" aria-labelledby="h-pies">
   <div class="scene__stage">
     <div class="pies__flood" aria-hidden="true"></div>
     <div class="pies__feet">${feetPhoto()}</div>
@@ -149,7 +149,7 @@ export function pies() {
 export function cejas() {
   const c = COPY.cejas;
   const s1 = svcById('c1'), s2 = svcById('c2');
-  return `<section class="scene scene--cejas" id="cejas" data-scene="cejas" data-theme="dark" style="--len:4.2" aria-labelledby="h-cejas">
+  return `<section class="scene scene--cejas" id="cejas" data-scene="cejas" data-theme="dark" style="--len:5" aria-labelledby="h-cejas">
   <div class="scene__stage">
     <div class="cejas__bg" aria-hidden="true"></div>
     <div class="bw cejas__bw">${browsMarkup({ guides: true })}</div>
@@ -176,7 +176,7 @@ export function cejas() {
 export function piercing() {
   const c = COPY.piercing;
   const s1 = svcById('x1');
-  return `<section class="scene scene--piercing" id="piercing" data-scene="piercing" data-theme="dark" style="--len:4.4" aria-labelledby="h-piercing">
+  return `<section class="scene scene--piercing" id="piercing" data-scene="piercing" data-theme="dark" style="--len:5.6" aria-labelledby="h-piercing">
   <div class="scene__stage">
     <div class="piercing__bg" aria-hidden="true"></div>
     <div class="bw piercing__brow">${browsMarkup()}</div>

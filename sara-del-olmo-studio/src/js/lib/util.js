@@ -86,3 +86,9 @@ export function spline(xs, ys) {
     return (2 * t3 - 3 * t2 + 1) * ys[i] + (t3 - 2 * t2 + t) * h * m[i] + (-2 * t3 + 3 * t2) * ys[i + 1] + (t3 - t2) * h * m[i + 1];
   };
 }
+
+/** Decodifica por adelantado las fotos que aún están ocultas, para que no haya tirón cuando aparezcan en pantalla. */
+export const warmImages = (root, delay = 1200) => {
+  const go = () => $$('img', root).forEach((i) => { if (i.decode) i.decode().catch(() => {}); });
+  setTimeout(() => ('requestIdleCallback' in window ? requestIdleCallback(go, { timeout: 2500 }) : go()), delay);
+};

@@ -34,20 +34,44 @@ html = html
   .replace(/<link rel="modulepreload" href="\/__js__">\n?/, '')
   .replace(/<script type="module" src="\/__js__"><\/script>/, () => `<script>${jsText}</script>`);
 
-// Las fotos de las escenas se incrustan en WebP y a la mitad de resolución: así el archivo pesa ~1,5 MB (en vez de 4 MB)
-// y lo abre cualquier visor. Es solo la vista previa; la build de verdad usa AVIF/WebP a resolución completa.
-const { default: sharp } = await import('sharp');
-const inline = new Map();
-const files = [...new Set([...html.matchAll(/\/img\/scene\/([\w-]+)\.(?:avif|webp)/g)].map((m) => m[1]))];
-for (const f of files) {
-  const src = path.join(root, 'public/img/scene', `${f}.webp`);
-  const meta = await sharp(src).metadata();
-  const w = /blur/.test(f) ? meta.width : Math.round(meta.width / 2);
-  const buf = await sharp(src).resize({ width: w }).webp({ quality: 55, alphaQuality: 70 }).toBuffer();
-  inline.set(f, `data:image/webp;base64,${buf.toString('base64')}`);
+const artifact = process.argv.includes('--artifact');
+const scenePath = (f, ext) => path.join(root, 'public/img/scene', `${f}.${ext}`);
+const names = [...new Set([...html.matchAll(/\/img\/scene\/([\w-]+)\.(?:avif|webp)/g)].map((m) => m[1]))];
+
+if (artifact) {
+  // Para publicar como Artifact: el HTML es solo el contenido (la plataforma pone <html>/<head>) y las fotos van como archivos
+  // aparte a resolución completa (AVIF + WebP), con rutas relativas. JS, CSS y fuentes siguen incrustados.
+  html = html
+    .replace(/<!doctype html>\s*<html[^>]*>\s*<head>/i, '')
+    .replace(/<\/head>\s*<body>/i, '')
+    .replace(/<\/body>\s*<\/html>\s*$/i, '')
+    .replace(/<link rel="(?:icon|apple-touch-icon|manifest|canonical|preload)"[^>]*>\n?/g, '')
+    .replace(/<title>[^<]*<\/title>/, '<title>Sara del Olmo Studio</title>')
+    .replace(/\/img\/scene\//g, 'img/scene/');
+  const dir = path.join(root, 'preview', 'artifact');
+  fs.rmSync(dir, { recursive: true, force: true });
+  fs.mkdirSync(path.join(dir, 'img/scene'), { recursive: true });
+  for (const f of names) for (const ext of ['avif', 'webp']) fs.copyFileSync(scenePath(f, ext), path.join(dir, 'img/scene', `${f}.${ext}`));
+  fs.writeFileSync(path.join(dir, 'index.html'), html);
+  console.log(`Artifact: ${path.relative(root, dir)}/index.html (${(html.length / 1024).toFixed(0)} kB) + ${names.length * 2} fotos`);
+  process.exit(0);
 }
-html = html.replace(/<link rel="preload" as="image"[^>]*>\n?/, '').replace(/ type="image\/avif"/g, ' type="image/webp"');
-html = html.replace(/\/img\/scene\/([\w-]+)\.(?:avif|webp)/g, (m, f) => inline.get(f));
+
+// Vista previa en UN archivo: las fotos se incrustan en WebP (cada una UNA sola vez, aunque la web la use en varios sitios),
+// a resolución completa. Solo la usa quien quiera abrir un único .html sin servidor; la build real usa AVIF/WebP.
+const { default: sharp } = await import('sharp');
+const uri = new Map();
+for (const f of names) {
+  const buf = await sharp(scenePath(f, 'webp')).webp({ quality: /blur/.test(f) ? 70 : 74, alphaQuality: 80, effort: 5 }).toBuffer();
+  uri.set(f, `data:image/webp;base64,${buf.toString('base64')}`);
+}
+html = html.replace(/<link rel="preload" as="image"[^>]*>\n?/, '').replace(/<source type="image\/avif" srcset="[^"]*">/g, '');
+// cada foto vive una sola vez en un objeto JS y se asigna a su <img> al arrancar
+html = html.replace(/<img src="\/img\/scene\/([\w-]+)\.webp"/g, (m, f) => `<img data-i="${f}" src="data:image/gif;base64,R0lGODlhAQABAAAAACw="`);
+const imgScript = `<script>(function(){var D=${JSON.stringify(Object.fromEntries(uri))};document.querySelectorAll('img[data-i]').forEach(function(i){i.src=D[i.getAttribute('data-i')]})})()</script>`;
+// va justo antes del script principal (el último <script> del <body>): ahí ya existen todas las etiquetas <img>
+const at = html.lastIndexOf('<script>');
+html = html.slice(0, at) + imgScript + '\n' + html.slice(at);
 
 const out = path.join(root, 'preview');
 fs.mkdirSync(out, { recursive: true });

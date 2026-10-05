@@ -11,14 +11,13 @@ import { HAND, handWorld } from '../../data/scene-photos.js';
 export function init(el) {
   const pw = $('.final__pw', el), shade = $('.final__shade', el);
   const words = $$('.final__t .w > span', el), lock = $('.final__lock', el), cta = $('.final__cta', el), bg = $('.final__bg', el);
-  const world = createWorld(pw);
   const N = HAND.nailWide, HW = handWorld();
   const nailW = Math.max(N.w, HAND.nailClose.w * HW.k);
   const cMid = { x: HW.c.x + HW.c.w / 2, y: HW.c.y + HW.c.h / 2 };
   words.forEach((w) => { w.style.transition = 'none'; });
-  // cambio de enfoque encadenado (inverso al de la portada): uña → cuatro uñas → mano entera. p → u (6 = uña nítida … 0 = mano)
-  const U = [[0, 6], [0.04, 6], [0.08, 5], [0.12, 4], [0.16, 3], [0.2, 3], [0.3, 0]];
-  const uOf = (p) => { if (p >= U[U.length - 1][0]) return 0; for (let i = 1; i < U.length; i++) if (p <= U[i][0]) return lerp(U[i - 1][1], U[i][1], (p - U[i - 1][0]) / (U[i][0] - U[i - 1][0])); return 0; };
+  // cambio de enfoque encadenado (inverso al de la portada): las capas de arriba se van apagando (c → cb → bb2 → b → bb → ab)
+  const WIN = [[0.28, 0.36], [0.24, 0.3], [0.2, 0.26], [0.11, 0.17], [0.07, 0.13], [0.03, 0.09]];
+  const world = createWorld(pw, ['a', 'ab', 'bb', 'b', 'bb2', 'cb', 'c'], WIN, { covers: ['ab'], anchor: { x: N.cx, y: N.cy }, reverse: true });
 
   let K, vw = 1, vh = 1, sC = 1;
   const measure = () => {
@@ -34,9 +33,9 @@ export function init(el) {
     const mid = { x: 0.5 * vw, y: 0.5 * vh };
     const keys = [
       { p: 0, s: sC, fx: cMid.x, fy: cMid.y, ax: mid.x, ay: mid.y },
-      { p: 0.15, s: sFill, fx: N.cx, fy: N.cy + 2, ax: mid.x, ay: mid.y },
-      { p: 0.3, s: sRow, fx: HAND.tips.x, fy: HAND.tips.y, ax: mid.x, ay: mid.y },
-      { p: 0.62, s: sEnd, fx: HAND.centerX, fy: HAND.top, ax: aEnd.x, ay: aEnd.y },
+      { p: 0.2, s: sFill, fx: N.cx, fy: N.cy + 2, ax: mid.x, ay: mid.y },
+      { p: 0.36, s: sRow, fx: HAND.tips.x, fy: HAND.tips.y, ax: mid.x, ay: mid.y },
+      { p: 0.66, s: sEnd, fx: HAND.centerX, fy: HAND.top, ax: aEnd.x, ay: aEnd.y },
       { p: 1, s: sEnd * 1.03, fx: HAND.centerX, fy: HAND.top + 4, ax: aEnd.x, ay: aEnd.y },
     ];
     const xs = keys.map((q) => q.p);
@@ -48,7 +47,7 @@ export function init(el) {
 
   const render = (p) => {
     world.cam({ s: Math.exp(K.s(p)), fx: K.fx(p), fy: K.fy(p), ax: K.ax(p), ay: K.ay(p), rot: lerp(-1.2, 2.4, seg(p, 0.1, 0.66, ease.io)) });
-    world.mix(uOf(p), p < 0.02);   // uña → cuatro uñas → mano entera
+    world.mix(p, p < 0.03);   // uña → cuatro uñas → mano entera
     shade.style.setProperty('--shade', seg(p, 0.5, 0.7).toFixed(3));
     // titular palabra a palabra
     words.forEach((w, i) => {
@@ -64,7 +63,7 @@ export function init(el) {
     cta.style.visibility = c > 0.02 ? 'visible' : 'hidden';
     bg.style.opacity = (0.55 + 0.45 * seg(p, 0.3, 0.8)).toFixed(3);
   };
-  const scene = registerScene(el, render, { damp: 7 });
+  const scene = registerScene(el, render, { damp: 5.5 });
   el.classList.add('is-ready');
   return { scene };
 }

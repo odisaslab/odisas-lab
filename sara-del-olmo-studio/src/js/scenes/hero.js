@@ -16,13 +16,12 @@ export function init(el) {
   const pw = $('.hero__pw', el), canvas = $('.hero__gl', el), shade = $('.hero__shade', el), floor = $('.hero__floor', el);
   const bg = $('.hero__bg', el), copy = $('.hero__copy', el), caps = $$('.hero__cap', el), hint = $('.hero__hint', el), iris = $('.hero__iris', el);
   const low = isLowEnd();
-  const world = createWorld(pw);
   const N = HAND.nailWide, HW = handWorld();
   const nailW = Math.max(N.w, HAND.nailClose.w * HW.k);   // ancho de la uña en el mundo
   const cMid = { x: HW.c.x + HW.c.w / 2, y: HW.c.y + HW.c.h / 2 };   // centro de la macro de una uña
-  // tramos del cambio de enfoque: p → u (0 = mano general … 6 = uña nítida)
-  const U = [[0.15, 0], [0.26, 3], [0.3, 3], [0.34, 4], [0.4, 5], [0.45, 6]];
-  const uOf = (p) => { if (p <= U[0][0]) return 0; for (let i = 1; i < U.length; i++) if (p <= U[i][0]) return lerp(U[i - 1][1], U[i][1], (p - U[i - 1][0]) / (U[i][0] - U[i - 1][0])); return 6; };
+  // cambio de enfoque encadenado: ventanas de p en las que aparece cada capa (a → ab → bb → b → bb2 → cb → c). Se solapan un poco.
+  const WIN = [[0.13, 0.22], [0.2, 0.27], [0.25, 0.32], [0.36, 0.42], [0.4, 0.46], [0.44, 0.5]];
+  const world = createWorld(pw, ['a', 'ab', 'bb', 'b', 'bb2', 'cb', 'c'], WIN, { covers: ['ab'], anchor: { x: N.cx, y: N.cy } });
 
   /* ───── medidas de la cámara (se recalculan al cambiar el tamaño) ───── */
   let vw = 1, vh = 1, portrait = false, K = null, sC = 1;
@@ -41,8 +40,8 @@ export function init(el) {
       { p: 0, s: s0, fx: HAND.centerX, fy: HAND.top, ax: a0.x, ay: a0.y },
       { p: 0.15, s: sRow, fx: HAND.tips.x, fy: HAND.tips.y, ax: 0.5 * vw, ay: 0.5 * vh },
       { p: 0.3, s: sFill, fx: N.cx, fy: N.cy + 2, ax: 0.5 * vw, ay: 0.5 * vh },
-      { p: 0.46, s: sC, fx: cMid.x, fy: cMid.y, ax: 0.5 * vw, ay: 0.5 * vh },
-      { p: 0.64, s: sC * 1.06, fx: cMid.x, fy: cMid.y, ax: 0.5 * vw, ay: 0.5 * vh },
+      { p: 0.5, s: sC, fx: cMid.x, fy: cMid.y, ax: 0.5 * vw, ay: 0.5 * vh },
+      { p: 0.66, s: sC * 1.06, fx: cMid.x, fy: cMid.y, ax: 0.5 * vw, ay: 0.5 * vh },
     ];
     const xs = keys.map((k) => k.p);
     const sp = (f) => spline(xs, keys.map(f));
@@ -80,14 +79,14 @@ export function init(el) {
     document.body.classList.toggle('is-hero-top', p < 0.04 && sceneActive !== false);
     // 1) cámara sobre las fotos
     const gl = liquid && liquid.ok;
-    const camVisible = gl ? p < 0.64 : p < 0.82;
+    const camVisible = gl ? p < 0.66 : p < 0.82;
     pw.style.visibility = camVisible ? 'visible' : 'hidden';
     pw.style.opacity = gl ? '' : (1 - seg(p, 0.64, 0.8)).toFixed(3);
     // la cabecera pasa a tinta oscura cuando el portal inunda la pantalla de luz
     el.dataset.theme = p > 0.94 ? 'light' : 'dark';
     if (camVisible) {
       world.cam({ s: Math.exp(K.s(p)), fx: K.fx(p), fy: K.fy(p), ax: K.ax(p), ay: K.ay(p), rot: lerp(3, -0.8, seg(p, 0, 0.46, ease.io)) });
-      world.mix(uOf(p), p >= 0.455);   // mano → uñas → una uña (cambio de enfoque encadenado)
+      world.mix(p, p >= 0.5);   // mano → uñas → una uña (cambio de enfoque encadenado)
     }
     // 2) texto de portada: sale en los primeros pasos del scroll
     const out = seg(p, 0.015, 0.1);
@@ -103,13 +102,13 @@ export function init(el) {
       caps[i].style.transform = `translate3d(0, ${((1 - o) * 26).toFixed(1)}px, 0)`;
     });
     // 4) esmalte: el shader aparece sobre la macro (fundido) y toma el relevo
-    const reveal = seg(p, 0.48, 0.6, ease.io);
+    const reveal = seg(p, 0.5, 0.63, ease.io);
     canvas.style.opacity = liquid && liquid.ok ? reveal.toFixed(3) : '0';
     floor.style.opacity = (1 - seg(p, 0.5, 0.7)).toFixed(3);
     uP = clamp((p - 0.38) / 0.62);
     if (liquid && liquid.ok) {
-      setLive(sceneActive && p > 0.45 && p < 0.997);
-      if (p >= 0.997 || (!live && p > 0.45)) liquid.draw(uP, (performance.now() - t0) / 1000, ptr);
+      setLive(sceneActive && p > 0.48 && p < 0.997);
+      if (p >= 0.997 || (!live && p > 0.48)) liquid.draw(uP, (performance.now() - t0) / 1000, ptr);
       iris.style.clipPath = 'circle(0% at 50% 50%)';
     } else {
       // sin WebGL: el portal es un círculo de luz que se abre
@@ -121,7 +120,7 @@ export function init(el) {
   };
 
   const scene = registerScene(el, render, {
-    damp: 7,
+    damp: 5.5,
     onToggle: (on) => { sceneActive = on; if (!on) { setLive(false); document.body.classList.remove('is-hero-top'); } else scene.force = true; },
   });
   sceneActive = true;

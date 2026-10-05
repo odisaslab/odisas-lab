@@ -102,16 +102,18 @@ if (want('mano')) {
   const img = await readRGBA('mano.webp');
   lumaKey(img, 7, 34);
   const big = await scale(img, 2);
+  grain(big, 3);
   feather(big, { l: 300, r: 300, t: 340, b: 460 });
-  await save(big, 'mano-2048', { avifQ: 60, webpQ: 80 });
+  await save(big, 'mano-2048', { avifQ: 76, webpQ: 88 });
   await save(await blurred(big, 512, 7), 'mano-blur', { avifQ: 55, webpQ: 74 });
 }
 
 /* ───────── 2 · mano-cerca (macro de las uñas, x2) ───────── */
 if (want('mano-cerca')) {
   const img = await scale(await readRGBA('mano-cerca.webp'), 2);
+  grain(img, 3);
   feather(img, { l: 300, r: 300, t: 260, b: 320 });
-  await save(img, 'mano-cerca-3072', { avifQ: 62, webpQ: 80 });
+  await save(img, 'mano-cerca-3072', { avifQ: 76, webpQ: 88 });
   await save(await blurred(img, 768, 9), 'mano-cerca-blur', { avifQ: 55, webpQ: 74 });
 }
 
@@ -120,29 +122,33 @@ if (want('macro-una')) {
   const src = await readRGBA('macro-una.webp');
   lumaKey(src, 12, 30);   // las esquinas negras del encuadre pasan a transparentes (dejan ver la foto de debajo)
   const img = await scale(src, 2);
+  grain(img, 3);
   feather(img, { l: 200, r: 200, t: 120, b: 200 });
-  await save(img, 'macro-una-3072', { avifQ: 62, webpQ: 80 });
+  await save(img, 'macro-una-3072', { avifQ: 76, webpQ: 88 });
   await save(await blurred(img, 768, 9), 'macro-una-blur', { avifQ: 55, webpQ: 74 });
 }
 
 /* ───────── 2c · cejas (rostro con cejas, x2) ───────── */
 if (want('cejas')) {
   const img = await scale(await readRGBA('cejas.webp'), 2);
+  grain(img, 3);
   feather(img, { l: 120, r: 120, t: 90, b: 360 });
-  await save(img, 'cejas-3072', { avifQ: 60, webpQ: 80 });
+  await save(img, 'cejas-3072', { avifQ: 76, webpQ: 88 });
 }
 
 /* ───────── 2d · oreja y joya (piercing) ───────── */
 if (want('oreja')) {
   const img = await scale(await readRGBA('oreja.webp'), 2);
+  grain(img, 3);
   feather(img, { l: 620, r: 200, t: 260, b: 460 });
-  await save(img, 'oreja-2048', { avifQ: 60, webpQ: 80 });
+  await save(img, 'oreja-2048', { avifQ: 76, webpQ: 88 });
   await save(await blurred(img, 512, 6), 'oreja-blur', { avifQ: 55, webpQ: 74 });
 }
 if (want('joya')) {
   const img = await scale(await readRGBA('joya.webp'), 2);
+  grain(img, 2.5);
   feather(img, { l: 300, r: 300, t: 300, b: 300 });
-  await save(img, 'joya-2508', { avifQ: 60, webpQ: 80 });
+  await save(img, 'joya-2508', { avifQ: 76, webpQ: 88 });
   await save(await blurred(img, 512, 6), 'joya-blur', { avifQ: 55, webpQ: 74 });
 }
 
@@ -183,7 +189,7 @@ if (want('pies')) {
   // los tobillos continúan fuera del encuadre: difuminamos el corte inferior
   feather(img, { l: 0, r: 0, t: 0, b: 260 });
   const big = await scale(img, 2);
-  grain(big, 2.5);
-  await save(big, 'pies-2048', { avifQ: 56, webpQ: 78 });
+  grain(big, 3);
+  await save(big, 'pies-2048', { avifQ: 76, webpQ: 88 });
 }
 console.log('\nListo. Ejecuta  npm run build  para verlo.');

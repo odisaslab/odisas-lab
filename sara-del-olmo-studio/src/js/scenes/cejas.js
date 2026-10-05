@@ -4,12 +4,13 @@
  * El rostro es una fotografía; las guías son un dibujo SVG en las mismas coordenadas, dentro del mismo «mundo».
  */
 import { registerScene } from '../lib/scene.js';
-import { $, $$, seg, ease, lerp, clamp, spline } from '../lib/util.js';
+import { $, $$, seg, ease, lerp, clamp, spline, warmImages } from '../lib/util.js';
 import { BROWS } from '../../data/scene-photos.js';
 import { setDash, browCam } from './cam.js';
 
 export function init(el) {
   const bw = $('.cejas__bw', el), world = $('.bw__world', el), svg = $('.bw__guides', el), shade = $('.cejas__shade', el);
+  warmImages(bw, 600);
   const guides = $$('.bz-g', svg), points = $$('.bz-p', svg);
   points.forEach((pt) => { pt.style.transformBox = 'fill-box'; pt.style.transformOrigin = 'center'; });
   const kicker = $('.kicker', el), title = $('.mega', el), lead = $('.lead', el);
@@ -62,7 +63,7 @@ export function init(el) {
     const u = a(btns, 0.86, 0.94, 14);
     btns.style.visibility = u > 0.02 ? 'visible' : 'hidden';
   };
-  const scene = registerScene(el, render, { damp: 7 });
+  const scene = registerScene(el, render, { damp: 5.5 });
   el.classList.add('is-ready');
   return { scene };
 }

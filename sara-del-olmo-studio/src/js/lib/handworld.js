@@ -6,42 +6,64 @@
  * Cada paso es un fundido entre dos imágenes idénticas (nítida/borrosa) o entre dos manchas de color, así que
  * no se ven «uñas dobles» aunque las fotos no coincidan fuera del punto de alineación, y no hace falta ningún
  * filtro en tiempo real (las borrosas son diminutas y el navegador las estira suavemente).
- * `mix(u)`: u va de 0 (solo la primera capa) a N-1 (solo la última); cada capa aparece en un tramo de 1.
- * Lo usan la portada (general → uña), el cierre (uña → general) y el piercing (joya → oreja).
+ *
+ * Cada capa tiene su ventana de fundido en términos del progreso `p` de la escena; las ventanas se solapan un poco,
+ * así el paso de una foto a otra no tiene «escalones». Además cada capa que entra llega con un pequeño zoom
+ * (1 - ZOOM → 1) y la que queda debajo se infla un poco (1 → 1 + ZOOM_UNDER) alrededor del punto de alineación:
+ * el ojo lee el cambio de foto como una continuación del movimiento de cámara, no como un fundido encima.
+ *
+ * Lo usan la portada (general → uña, `reverse: false`), el cierre (uña → general, `reverse: true`: las capas de arriba
+ * se van apagando) y el piercing (joya → oreja).
  */
-import { $, ease, clamp } from './util.js';
+import { $, clamp, ease, warmImages } from './util.js';
+
+const ZOOM = 0.1, ZOOM_UNDER = 0.05;
 
 /**
  * @param root     contenedor `.pw`
  * @param names    clases de las capas sin el prefijo `pw__`, en orden de apilado (de abajo a arriba)
- * @param covers   nombres de capas que tapan por completo a la anterior (esta puede ocultarse cuando aquella es opaca)
+ * @param windows  [p0, p1] de cada capa (salvo la primera): tramo de p en el que aparece (o desaparece, si `reverse`)
+ * @param opts     covers: capas que tapan por completo a la anterior · anchor: punto del mundo alrededor del que se infla ·
+ *                 reverse: las capas se apagan en lugar de encenderse
  */
-export function createWorld(root, names = ['a', 'ab', 'bb', 'b', 'bb2', 'cb', 'c'], covers = ['ab']) {
+export function createWorld(root, names, windows, { covers = [], anchor = { x: 0, y: 0 }, reverse = false } = {}) {
   const world = $('.pw__world', root);
   const L = names.map((n) => $('.pw__' + n, root));
   const cov = names.map((n) => covers.includes(n));
   const last = L.length - 1;
+  // el origen de la transformación de cada capa, en coordenadas de la propia capa (están colocadas con left/top en px de mundo)
+  L.forEach((el) => { el.style.transformOrigin = `${anchor.x - (parseFloat(el.style.left) || 0)}px ${anchor.y - (parseFloat(el.style.top) || 0)}px`; });
+  warmImages(root);
   let shown = '', mixed = '';
-  const op = new Array(L.length).fill(0);
+  const op = new Array(L.length).fill(1), sc = new Array(L.length).fill(1);
   return {
     /** Cámara: punto (fx, fy) del mundo anclado al píxel (ax, ay) de la pantalla, con zoom s y giro rot (grados). */
     cam({ s, fx, fy, ax, ay, rot = 0 }) {
       const t = `translate(${ax.toFixed(2)}px, ${ay.toFixed(2)}px) rotate(${rot.toFixed(3)}deg) scale(${s.toFixed(4)}) translate(${(-fx).toFixed(2)}px, ${(-fy).toFixed(2)}px)`;
       if (t !== shown) { world.style.transform = t; shown = t; }
     },
-    /** u = 0 primera foto · u = N-1 última. `solo`: oculta todo lo que queda bajo la última capa opaca (cuando ya llena la pantalla). */
-    mix(u, solo = false) {
-      const key = u.toFixed(4) + solo;
+    /** Pinta el estado de las capas para el progreso p. `solo`: oculta lo que queda bajo la última capa opaca (cuando ya llena la pantalla). */
+    mix(p, solo = false) {
+      const key = p.toFixed(4) + solo;
       if (key === mixed) return;
       mixed = key;
-      for (let i = 0; i <= last; i++) op[i] = i === 0 ? 1 : ease.smooth(clamp(u - (i - 1)));
+      for (let i = 1; i <= last; i++) {
+        const t = ease.smooth(clamp((p - windows[i - 1][0]) / (windows[i - 1][1] - windows[i - 1][0])));
+        op[i] = reverse ? 1 - t : t;
+      }
+      op[0] = 1;
       let top = 0;
       if (solo) for (let i = last; i > 0; i--) if (op[i] >= 0.999) { top = i; break; }
       for (let i = 0; i <= last; i++) {
+        const next = i < last ? op[i + 1] : 0;
+        // la capa que entra llega con un poco menos de zoom; la que queda debajo se infla un poco al ser cubierta
+        sc[i] = (i === 0 ? 1 : 1 - ZOOM * (1 - op[i])) * (1 + ZOOM_UNDER * next);
         const covered = (i < last && cov[i + 1] && op[i + 1] >= 0.999) || (solo && i < top);
         const v = !covered && (i === 0 || op[i] > 0.002) ? 'visible' : 'hidden';
-        if (L[i].style.visibility !== v) L[i].style.visibility = v;
-        L[i].style.opacity = op[i].toFixed(3);
+        const el = L[i];
+        if (el.style.visibility !== v) el.style.visibility = v;
+        if (i > 0) el.style.opacity = op[i].toFixed(3);
+        if (v === 'visible') el.style.transform = `scale(${sc[i].toFixed(4)})`;
       }
     },
   };

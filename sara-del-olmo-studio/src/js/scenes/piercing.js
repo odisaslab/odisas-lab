@@ -15,12 +15,11 @@ export function init(el) {
   const stage = $('.scene__stage', el);
   const brow = $('.piercing__brow', el), bworld = $('.bw__world', brow);
   const pw = $('.piercing__pw', el), pworld = $('.pw__world', pw), shade = $('.piercing__shade', el);
-  const world = createWorld(pw, ['j', 'jb', 'e'], ['jb', 'e']);
   const veil = $('.piercing__veil', el);
   const sparks = $$('.spark', pw);
   const EW = earWorld();
-  const U = [[0.46, 0], [0.52, 1], [0.575, 1], [0.585, 2]];   // p → u (0 = joya nítida, 1 = joya borrosa, 2 = oreja nítida; el cambio ocurre bajo el velo)
-  const uOf = (p) => { if (p <= U[0][0]) return 0; for (let i = 1; i < U.length; i++) if (p <= U[i][0]) return lerp(U[i - 1][1], U[i][1], (p - U[i - 1][0]) / (U[i][0] - U[i - 1][0])); return 2; };
+  // joya nítida → joya borrosa → (penumbra) → oreja nítida: ventanas de p de cada capa
+  const world = createWorld(pw, ['j', 'jb', 'e'], [[0.43, 0.52], [0.55, 0.64]], { covers: ['jb', 'e'], anchor: { x: EW.cx, y: EW.cy } });
 
   const glint = document.createElement('div');
   glint.className = 'glint';
@@ -82,8 +81,8 @@ export function init(el) {
     pw.style.visibility = p > 0.2 ? 'visible' : 'hidden';
     const s = Math.exp(K.s(p));
     world.cam({ s, fx: K.fx(p), fy: K.fy(p), ax: K.ax(p), ay: K.ay(p), rot: lerp(-1.5, 2.5, seg(p, 0.3, 0.78, ease.io)) });
-    world.mix(uOf(p), p > 0.6);
-    veil.style.opacity = (seg(p, 0.49, 0.56) * (1 - seg(p, 0.6, 0.7))).toFixed(3);
+    world.mix(p, p > 0.66);
+    veil.style.opacity = (0.94 * seg(p, 0.46, 0.57, ease.io) * (1 - seg(p, 0.59, 0.72, ease.io))).toFixed(3);
     // 4) destellos sobre cada piercing (tamaño constante en pantalla)
     pworld.style.setProperty('--sp', `${(70 / s).toFixed(3)}px`);
     pworld.style.setProperty('--lw', `${(1.5 / s).toFixed(3)}px`);
@@ -102,7 +101,7 @@ export function init(el) {
     const bu = show(btns, p, 0.9, 0.96, 12);
     btns.style.visibility = bu > 0.02 ? 'visible' : 'hidden';
   };
-  const scene = registerScene(el, render, { damp: 7 });
+  const scene = registerScene(el, render, { damp: 5.5 });
   el.classList.add('is-ready');
   return { scene };
 }
