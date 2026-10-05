@@ -34,6 +34,10 @@ html = html
   .replace(/<link rel="modulepreload" href="\/__js__">\n?/, '')
   .replace(/<script type="module" src="\/__js__"><\/script>/, () => `<script>${jsText}</script>`);
 
+// las fotos de las escenas se incrustan (solo AVIF: es lo que usan los navegadores actuales)
+html = html.replace(/<link rel="preload" as="image"[^>]*>\n?/, '').replace(/\/img\/scene\/([\w-]+)\.webp/g, '/img/scene/$1.avif');
+html = html.replace(/\/img\/scene\/([\w-]+\.avif)/g, (m, f) => `data:image/avif;base64,${fs.readFileSync(path.join(root, 'public/img/scene', f)).toString('base64')}`);
+
 const out = path.join(root, 'preview');
 fs.mkdirSync(out, { recursive: true });
 const file = path.join(out, 'sara-del-olmo-studio.html');
