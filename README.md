@@ -262,3 +262,7 @@ Cada vez que cambies un color, comprueba que sigue cumpliendo:
 ```bash
 python3 scripts/auditoria-contraste.py
 ```
+
+## Otros proyectos en este repositorio
+
+- [`sara-del-olmo-studio/`](./sara-del-olmo-studio): web inmersiva con scrolltelling de Sara del Olmo Studio (Humanes de Madrid). Proyecto independiente (vanilla JS + esbuild) con su propio `package.json` y README.
