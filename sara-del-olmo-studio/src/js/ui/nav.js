@@ -59,7 +59,7 @@ export function initNav() {
 
   /* ───── menú a pantalla completa ───── */
   const burger = $('.burger'), menu = $('#menu');
-  let closeTimer;
+  let closeTimer, openRaf = 0;
   const open = () => {
     clearTimeout(closeTimer);
     menu.hidden = false;
@@ -67,10 +67,13 @@ export function initNav() {
     burger.querySelector('.sr-only').textContent = 'Cerrar menú';
     root.style.overflow = 'hidden';
     header.style.setProperty('--h-ink', '#F8EAE7');
-    requestAnimationFrame(() => requestAnimationFrame(() => menu.classList.add('is-open')));
+    cancelAnimationFrame(openRaf);
+    // el estado «abierto» solo se aplica si el menú sigue pidiendo estar abierto (evita una carrera si se cierra enseguida)
+    openRaf = requestAnimationFrame(() => { openRaf = requestAnimationFrame(() => { if (burger.getAttribute('aria-expanded') === 'true') menu.classList.add('is-open'); }); });
     setTimeout(() => { const f = menu.querySelector('a'); f && f.focus({ preventScroll: true }); }, 80);
   };
   const close = (focusBack = false) => {
+    cancelAnimationFrame(openRaf);
     burger.setAttribute('aria-expanded', 'false');
     burger.querySelector('.sr-only').textContent = 'Abrir menú';
     menu.classList.remove('is-open');
