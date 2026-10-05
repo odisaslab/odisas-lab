@@ -23,7 +23,7 @@ export function nailPath(s) {
 /** Brillo base por acabado: [reflejo largo, destello, borde de luz, reflejo difuso]. */
 export const GLOSS = {
   brillo: { soft: 0.5, spot: 0.9, rim: 0.4, core: 0.22, grain: 0 },
-  mate: { soft: 0.05, spot: 0, rim: 0.1, core: 0.06, grain: 0.55 },
+  mate: { soft: 0.05, spot: 0, rim: 0.1, core: 0.06, grain: 0.4 },
   cromado: { soft: 0.75, spot: 1, rim: 0.65, core: 0.1, grain: 0 },
   aura: { soft: 0.4, spot: 0.8, rim: 0.34, core: 0.3, grain: 0 },
   francesa: { soft: 0.46, spot: 0.85, rim: 0.36, core: 0.2, grain: 0 },
@@ -33,8 +33,8 @@ export const GLOSS = {
 function grainDots() {
   let s = 7, out = '';
   const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647);
-  for (let i = 0; i < 46; i++) {
-    out += `<circle cx="${f2(rnd() * 16)}" cy="${f2(rnd() * 16)}" r="${f2(0.28 + rnd() * 0.5)}" fill="${rnd() > 0.5 ? '#fff' : '#000'}" opacity="${f2(0.1 + rnd() * 0.22)}"/>`;
+  for (let i = 0; i < 170; i++) {
+    out += `<circle cx="${f2(rnd() * 44)}" cy="${f2(rnd() * 44)}" r="${f2(0.16 + rnd() * 0.3)}" fill="${rnd() > 0.5 ? '#fff' : '#000'}" opacity="${f2(0.08 + rnd() * 0.2)}"/>`;
   }
   return out;
 }
@@ -73,7 +73,7 @@ export function nailMarkup(uid, look = DEFAULT_LOOK, opts = {}) {
       <stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
     <linearGradient id="cu-${uid}" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#1a0408" stop-opacity="0"/><stop offset="1" stop-color="#1a0408" stop-opacity=".55"/></linearGradient>
-    <pattern id="gr-${uid}" width="16" height="16" patternUnits="userSpaceOnUse">${GRAIN}</pattern>
+    <pattern id="gr-${uid}" width="44" height="44" patternUnits="userSpaceOnUse">${GRAIN}</pattern>
   </defs>
   <g class="n-body" clip-path="url(#nc-${uid})">
     <rect class="n-bare" x="-10" y="-10" width="120" height="190" fill="${BARE}"/>
