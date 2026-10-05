@@ -3,3 +3,4 @@ dist
 .cache
 photos-src/*
 !photos-src/.gitkeep
+preview
