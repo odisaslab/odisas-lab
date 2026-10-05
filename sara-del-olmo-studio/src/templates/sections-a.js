@@ -3,11 +3,9 @@ import { CONFIG } from '../data/config.js';
 import { COPY } from '../data/copy.js';
 import { SERVICES, svcById, svcsByCat, starOf } from '../data/services.js';
 import { COLORS, SHAPES, FINISHES, DEFAULT_LOOK } from '../data/look.js';
-import { handMarkup, HAND_VIEWBOX } from '../js/art/hand.js';
-import { nailMarkup, nailPath } from '../js/art/nail-markup.js';
-import { feetMarkup, FEET_VIEWBOX } from '../js/art/feet.js';
-import { browMarkup, BROW_VIEWBOX } from '../js/art/brow.js';
-import { earMarkup, EAR_VIEWBOX } from '../js/art/ear.js';
+import { HAND_VIEWBOX } from '../js/art/hand.js';
+import { handWorldMarkup, feetMarkup as feetPhoto, browsMarkup, earWorldMarkup } from './media.js';
+import { nailPath } from '../js/art/nail-markup.js';
 import { SAFETY, TECHNIQUES } from '../js/art/icons.js';
 import { esc, euro, priceHtml, words, kicker, bookAttrs, waAttrs, nailBtn } from './util.js';
 
@@ -19,9 +17,10 @@ export function hero() {
   <div class="scene__stage">
     <div class="hero__bg" aria-hidden="true"></div>
     <canvas class="hero__gl" aria-hidden="true"></canvas>
-    <svg class="hero__svg" viewBox="${HAND_VIEWBOX}" role="img" aria-label="Mano con las uñas pintadas en rojo cereza, ilustración" preserveAspectRatio="xMidYMid meet">
-      <g class="hero__cam">${handMarkup('hh', DEFAULT_LOOK, { skin: CONFIG.skinTone })}</g>
-    </svg>
+    ${handWorldMarkup({ cls: 'hero__pw' })}
+    <div class="hero__shade" aria-hidden="true"></div>
+    <div class="hero__floor" aria-hidden="true"></div>
+    <div class="hero__film grain" aria-hidden="true"></div>
     <div class="hero__copy">
       <p class="lockup"><span class="lockup__name">Sara del Olmo</span><span class="lockup__sub">Studio</span></p>
       <h1 class="hero__title"><span class="sr-only">Sara del Olmo Studio: uñas, manicura, pedicura, cejas y piercing en Humanes de Madrid. </span>${c.titleLines.map((l) => `<span class="hl" aria-hidden="true"><span>${esc(l)}</span></span>`).join('')}</h1>
@@ -133,9 +132,7 @@ export function pies() {
   return `<section class="scene scene--pies" id="pies" data-scene="pies" data-theme="color" style="--len:3.6" aria-labelledby="h-pies">
   <div class="scene__stage">
     <div class="pies__flood" aria-hidden="true"></div>
-    <svg class="pies__svg" viewBox="${FEET_VIEWBOX}" role="img" aria-label="Un par de pies con las uñas pintadas, ilustración" preserveAspectRatio="xMidYMid meet">
-      <g class="pies__cam"></g>
-    </svg>
+    <div class="pies__feet">${feetPhoto()}</div>
     <div class="pies__copy">
       ${kicker(c.kicker)}
       <h2 class="mega mega--md" id="h-pies"><span class="pies__t1">${esc(c.titleLines[0])}</span> <span class="pies__t2">${esc(c.titleLines[1])}</span></h2>
@@ -155,9 +152,8 @@ export function cejas() {
   return `<section class="scene scene--cejas" id="cejas" data-scene="cejas" data-theme="dark" style="--len:4.2" aria-labelledby="h-cejas">
   <div class="scene__stage">
     <div class="cejas__bg" aria-hidden="true"></div>
-    <svg class="cejas__svg" viewBox="${BROW_VIEWBOX}" role="img" aria-label="Dibujo de dos cejas simétricas con guías de medida y efecto sombreado" preserveAspectRatio="xMidYMid meet">
-      <g class="cejas__cam"></g>
-    </svg>
+    <div class="bw cejas__bw">${browsMarkup({ guides: true })}</div>
+    <div class="cejas__shade" aria-hidden="true"></div>
     <div class="cejas__copy">
       ${kicker(c.kicker)}
       <h2 class="mega mega--md" id="h-cejas">${esc(c.title)}</h2>
@@ -183,9 +179,10 @@ export function piercing() {
   return `<section class="scene scene--piercing" id="piercing" data-scene="piercing" data-theme="dark" style="--len:4.4" aria-labelledby="h-piercing">
   <div class="scene__stage">
     <div class="piercing__bg" aria-hidden="true"></div>
-    <svg class="piercing__brow" viewBox="${BROW_VIEWBOX}" aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid meet"><g class="piercing__browcam"></g></svg>
-    <canvas class="piercing__jewel" width="720" height="720" role="img" aria-label="Joya de titanio girando"></canvas>
-    <svg class="piercing__ear" viewBox="${EAR_VIEWBOX}" role="img" aria-label="Oreja con una composición de joyas, ilustración"></svg>
+    <div class="bw piercing__brow">${browsMarkup()}</div>
+    ${earWorldMarkup()}
+    <div class="piercing__veil" aria-hidden="true"></div>
+    <div class="piercing__shade" aria-hidden="true"></div>
     <div class="piercing__copy">
       ${kicker(c.kicker)}
       <h2 class="mega mega--md" id="h-piercing">${esc(c.title)}</h2>

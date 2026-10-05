@@ -5,6 +5,7 @@ import { services, prices, about, studio, reviews } from './sections-b.js';
 import { gift, events, instagram, promos, faq, contact, final, footer, header, brush, bottomBar, drawer, sprite } from './sections-c.js';
 import { headTags, gtmHead, gtmBody } from './seo.js';
 import { esc } from './util.js';
+import { SCENE_DIR, HAND } from '../data/scene-photos.js';
 
 /** Script de arranque en <head>: decide el modo (cine / reducido) antes del primer pintado. */
 const BOOT = `(function(d){var r=d.documentElement;r.className=r.className.replace('no-js','js');window.dataLayer=window.dataLayer||[];` +
@@ -17,6 +18,7 @@ export function renderPage(assets) {
 <html lang="es" class="no-js">
 <head>
 ${headTags(assets)}
+<link rel="preload" as="image" href="${SCENE_DIR}/${HAND.wide.file}.avif" type="image/avif" fetchpriority="high">
 <script>${BOOT}</script>
 ${gtmHead()}
 </head>

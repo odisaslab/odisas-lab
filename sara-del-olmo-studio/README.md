@@ -16,6 +16,7 @@ npm run build      # genera dist/ (HTML prerenderizado + JS/CSS minificados + si
 npm run preview    # sirve dist/ tal cual saldría a producción
 npm run check      # valida los datos y lista lo que sigue pendiente de Sara
 npm run photos     # optimiza fotos reales (AVIF/WebP/JPG responsive)
+npm run scene-photos  # prepara las fotos de las escenas (portada, pies, cejas, piercing, final) desde scene-src/
 ```
 
 Requiere Node 20+. El resultado (`dist/`) es estático: sirve cualquier hosting. Con Vercel basta con apuntar el proyecto a esta carpeta
@@ -76,18 +77,34 @@ src/
   css/         tokens · base · chrome (cabecera, menú, pincel, barra móvil, ficha) · scenes · sections
   js/
     main.js    arranque + carga perezosa de módulos
-    lib/       scene.js (motor «scroll = cámara»), liquid.js (shader WebGL), look.js (estado del look), util, color, ui
-    art/       arte vectorial: nail-markup, hand, feet, brow, ear, jewel (canvas 3D), icons, nail-view
+    lib/       scene.js (motor «scroll = cámara»), handworld.js (fotos alineadas + cambio de enfoque), liquid.js (shader WebGL), look.js, util, color, ui
+    art/       arte vectorial del diseñador de uñas y de los iconos: nail-markup, hand, nail-view, icons
     scenes/    hero, pies, cejas, piercing, safety, studio, final, static (modo reducido)
     ui/        links+analítica, nav, effects, designer, tarifas, drawer, voucher, forms, quiz, gallery
-scripts/       build, dev, serve, check-data, photos, make-assets
+scripts/       build, dev, serve, check-data, photos, scene-photos, make-assets
+scene-src/     fotos originales de las escenas (se versionan; salida en public/img/scene/)
 ```
 
 - **Escenas:** `section.scene` (alto = `--len` × pantalla) + `.scene__stage` sticky. `registerScene(el, render)` entrega `p` de 0 a 1.
   Para mover la cámara de una escena basta con editar su `render(p)`; los tramos se definen con `seg(p, desde, hasta, easing)`.
-- **Hero:** el dibujo vectorial se amplía con una cámara (spline en logaritmo) hasta que una uña llena la pantalla; después el shader de
-  esmalte líquido (`lib/liquid.js`) toma el relevo. Sin WebGL, un portal CSS lo sustituye; con `prefers-reduced-motion`, versión estática.
-- **Mano, pies, cejas, oreja y joya** son dibujos generados por código (se pueden recolorear: `CONFIG.skinTone`, paleta del diseñador).
+- **Escenas con fotografías.** La cámara es una transformación CSS (traslación + giro + zoom, `lib/handworld.js`) sobre varias fotos
+  alineadas en un mismo «mundo». Para saltar de una foto a la siguiente se encadena un **cambio de enfoque**: nítida → borrosa →
+  (borrosa) → nítida. Las versiones borrosas son diminutas (3–10 kB), así que no hay filtros en tiempo real ni «uñas dobles».
+  - **Portada:** mano → cuatro uñas → macro de una uña (se alinean por la uña central) → el shader de esmalte líquido
+    (`lib/liquid.js`) toma el relevo. Sin WebGL, un portal CSS lo sustituye; con `prefers-reduced-motion`, versión estática.
+  - **Pies:** foto con el fondo verde recortado (croma) sobre el color del look. **Cejas:** rostro + guías de medida SVG en las
+    mismas coordenadas. **Piercing:** la ceja de la escena anterior → destello → joya macro → penumbra → oreja.
+  - **Final:** el mismo viaje de la portada a la inversa.
+- Las coordenadas de alineación están en `src/data/scene-photos.js` (uña central, borde de la cutícula, piercing de la concha…).
+
+### Fotos de las escenas — ⚠ PROVISIONALES (generadas con IA)
+
+Las imágenes de `scene-src/` (mano, macro de uña, pies, rostro con cejas, oreja, joya) son **ambientación generada con IA**; no son
+trabajos de Sara del Olmo Studio, y la web no las presenta como tales (los `alt` las describen de forma genérica). Antes de publicar:
+sustituirlas por fotos reales del estudio (con consentimiento de las clientas) o, si se mantienen, indicar en la web que son imágenes
+generadas con IA. Para cambiar una: copia la foto nueva en `scene-src/` con el mismo nombre, ajusta las medidas en
+`src/data/scene-photos.js` (la mano y la macro se alinean por la uña central; la joya y la oreja, por el piercing de la concha) y
+ejecuta `npm run scene-photos && npm run build`. Con fotos reales los pies/mano ya **no** adoptan el color del look: solo lo hace el fondo de «Pies».
 
 ### Rendimiento, accesibilidad y responsive
 

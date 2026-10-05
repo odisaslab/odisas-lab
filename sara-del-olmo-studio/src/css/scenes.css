@@ -21,7 +21,18 @@
   position: absolute; inset: 0; z-index: 0;
   background: radial-gradient(60% 56% at 64% 42%, rgba(122, 16, 39, .42), transparent 72%), radial-gradient(90% 70% at 50% 118%, #2A1418 0%, transparent 62%), var(--stage-deep);
 }
-.hero__svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 2; }
+.hero__pw { z-index: 2; }
+/* fotos de la mano (plano general + macro) dentro de un «mundo» que la cámara mueve con una transformación CSS */
+.pw { position: absolute; inset: 0; overflow: hidden; }
+.pw__world { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; }
+.pw__a, .pw__ab, .pw__bb, .pw__b, .pw__bb2, .pw__cb, .pw__c { position: absolute; display: block; }
+.pw__a, .pw__ab { left: 0; top: 0; width: 1024px; height: 1536px; }
+.pw__ab, .pw__bb, .pw__b, .pw__bb2, .pw__cb, .pw__c { opacity: 0; visibility: hidden; }
+.pw picture, .pw img, .pies__pic, .pies__pic img { display: block; max-width: none; }
+.pw img, .pies__pic img { width: 100%; height: 100%; max-width: none; user-select: none; -webkit-user-drag: none; pointer-events: none; }
+.hero__floor { position: absolute; inset: 0; z-index: 4; pointer-events: none; background: linear-gradient(0deg, rgba(14, 6, 8, .78) 0%, rgba(14, 6, 8, .4) 18%, transparent 38%); }
+.hero__film { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
+.hero__shade { position: absolute; inset: 0; z-index: 4; pointer-events: none; background: linear-gradient(90deg, rgba(18, 8, 10, .8) 0%, rgba(18, 8, 10, .5) 36%, transparent 64%), linear-gradient(0deg, rgba(18, 8, 10, .55), transparent 40%); }
 .hero__gl { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3; opacity: 0; pointer-events: none; }
 .hero__copy { position: absolute; z-index: 6; left: var(--gutter); bottom: clamp(56px, 11vh, 120px); max-width: min(620px, 52vw); }
 .lockup { display: flex; flex-direction: column; gap: .2em; margin-bottom: clamp(18px, 3vh, 34px); }
@@ -48,6 +59,7 @@
 @media (max-width: 900px) {
   .hero__copy { left: var(--gutter); right: var(--gutter); max-width: none; bottom: clamp(70px, 12vh, 110px); }
   .hero__title { font-size: clamp(3.6rem, 19vw, 7rem); }
+  .hero__shade { background: linear-gradient(0deg, rgba(18, 8, 10, .94) 0%, rgba(18, 8, 10, .74) 34%, transparent 68%); }
   .lockup { margin-bottom: 14px; }
   .hero__cap { font-size: clamp(2rem, 11vw, 4rem); }
   .hero__hint { display: none; }
@@ -58,7 +70,10 @@
 .pies__flood { position: absolute; inset: 0; z-index: 0; background: var(--pies-bg); }
 /* al final de la escena la pantalla se oscurece: las cejas empiezan en la penumbra */
 .scene--pies .scene__stage::after { content: ""; position: absolute; inset: 0; z-index: 6; background: #12080A; opacity: var(--dark, 0); pointer-events: none; }
-.pies__svg { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.pies__feet { position: absolute; z-index: 1; left: 0; top: 0; width: 1024px; height: 1536px; transform-origin: 0 0; }
+.pies__pic { width: 100%; height: 100%; }
+/* en pantallas estrechas solo se ven los dedos y el empeine: lo demás se difumina antes de llegar al texto */
+.pies__feet.is-fade .pies__pic { -webkit-mask-image: linear-gradient(180deg, #000 var(--m0, 60%), transparent var(--m1, 66%)); mask-image: linear-gradient(180deg, #000 var(--m0, 60%), transparent var(--m1, 66%)); }
 .pies__copy { will-change: transform; }
 .pies__copy { position: absolute; z-index: 3; left: var(--gutter); top: 50%; transform: translateY(-50%); max-width: min(540px, 46vw); }
 .scene--pies .kicker { color: var(--pies-ink-2); }
@@ -92,7 +107,14 @@
 /* ───────── 5 · CEJAS ───────── */
 .scene--cejas { background: var(--stage-deep); color: var(--stage-ink); }
 .cejas__bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(60% 50% at 50% 46%, #2e1319 0%, #0e0608 72%); }
-.cejas__svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 1; color: var(--stage-ink); -webkit-mask-image: linear-gradient(90deg, rgba(0,0,0,var(--lm, 1)) 0%, rgba(0,0,0,var(--lm, 1)) 20%, #000 52%); mask-image: linear-gradient(90deg, rgba(0,0,0,var(--lm, 1)) 0%, rgba(0,0,0,var(--lm, 1)) 20%, #000 52%); }
+/* rostro con las cejas: foto + guías de medida dentro de un «mundo» que la cámara mueve con una transformación CSS */
+.bw { position: absolute; inset: 0; z-index: 1; overflow: hidden; }
+.bw__world { position: absolute; left: 0; top: 0; width: 1536px; height: 1024px; transform-origin: 0 0; }
+.bw__img { position: absolute; inset: 0; display: block; max-width: none; }
+.bw__img img { display: block; width: 100%; height: 100%; max-width: none; user-select: none; -webkit-user-drag: none; pointer-events: none; }
+.bw__guides { position: absolute; left: 0; top: 0; width: 1536px; height: 1024px; overflow: visible; fill: none; stroke: #F8EEEB; stroke-width: var(--sw, 2px); stroke-linecap: round; opacity: .78; }
+.bz-p { fill: rgba(18, 8, 10, .45); stroke: #E7788F; stroke-width: calc(var(--sw, 2px) * 1.3); }
+.cejas__shade { position: absolute; inset: 0; z-index: 2; pointer-events: none; opacity: 0; background: linear-gradient(90deg, rgba(14, 6, 8, .94) 0%, rgba(14, 6, 8, .8) 34%, rgba(14, 6, 8, .22) 60%, transparent 72%); }
 .cejas__copy { position: absolute; z-index: 3; left: var(--gutter); bottom: clamp(60px, 11vh, 120px); max-width: min(560px, 46vw); }
 .cejas__copy .lead { margin: 16px 0 20px; }
 .facts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
@@ -105,8 +127,7 @@
 .price-pair small { font-size: .72rem; margin-right: .3em; }
 .bz-g, .bz-line { transition: none; }
 @media (max-width: 900px) {
-  .cejas__svg { top: 0; height: 52%; -webkit-mask-image: none; mask-image: none; }
-  .piercing__brow { top: 0; height: 52%; }
+  .cejas__shade { background: linear-gradient(0deg, rgba(14, 6, 8, .97) 0%, rgba(14, 6, 8, .84) 38%, transparent 66%); }
   .cejas__copy { left: var(--gutter); right: var(--gutter); max-width: none; bottom: calc(76px + 4px); }
   .cejas__copy .mega--md { font-size: clamp(2.8rem, 15vw, 5rem); }
   .cejas__copy .lead { margin: 10px 0 14px; font-size: 1rem; }
@@ -116,9 +137,21 @@
 /* ───────── 6 · PIERCING ───────── */
 .scene--piercing { background: var(--stage-deep); color: var(--stage-ink); }
 .piercing__bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(52% 52% at 56% 50%, #33202a 0%, #120a0e 72%); }
-.piercing__brow { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 1; color: var(--stage-ink); }
-.piercing__jewel { position: absolute; z-index: 2; left: 58%; top: 50%; width: min(64vmin, 600px); height: auto; aspect-ratio: 1; transform: translate(-50%, -50%); }
-.piercing__ear { position: absolute; z-index: 1; right: 7%; top: 50%; height: min(78vh, 740px); width: auto; transform: translateY(-50%); color: var(--stage-ink); overflow: visible; }
+/* la ceja de la escena anterior (misma foto, misma cámara) y, encima, la joya y la oreja alineadas por el piercing de la concha */
+.piercing__brow { z-index: 1; }
+.piercing__pw { z-index: 2; }
+.pw__j, .pw__jb, .pw__e { position: absolute; display: block; }
+.pw__e { left: 0; top: 0; width: 1024px; height: 1536px; }
+.pw__jb, .pw__e { opacity: 0; visibility: hidden; }
+.pw__j img, .pw__jb img, .pw__e img { display: block; width: 100%; height: 100%; max-width: none; user-select: none; -webkit-user-drag: none; pointer-events: none; }
+.pw__j, .pw__jb, .pw__e { max-width: none; }
+/* entre la joya y la oreja la pantalla pasa por la penumbra (un respiro, y así no se ve el zoom por la piel borrosa) */
+.piercing__veil { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; background: radial-gradient(70% 60% at 50% 50%, #2a0f16 0%, #12080A 75%); }
+/* destellos sobre cada piercing: tamaño constante en pantalla (--sp y --lw los fija la escena según el zoom) */
+.spark { position: absolute; width: var(--sp, 1px); aspect-ratio: 1; transform: translate(-50%, -50%) scale(var(--k, 0)); opacity: var(--o, 0); pointer-events: none; background: radial-gradient(closest-side, rgba(255, 255, 255, .95) 0 12%, rgba(255, 226, 232, .5) 34%, transparent 70%); }
+.spark::before, .spark::after { content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: linear-gradient(90deg, transparent, #fff, transparent); width: 340%; height: var(--lw, 1px); }
+.spark::after { width: var(--lw, 1px); height: 340%; background: linear-gradient(180deg, transparent, #fff, transparent); }
+.piercing__shade { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: var(--shade, 0); background: linear-gradient(90deg, rgba(14, 6, 8, .92) 0%, rgba(14, 6, 8, .6) 40%, transparent 68%); }
 .piercing__copy { position: absolute; z-index: 3; left: var(--gutter); bottom: clamp(60px, 11vh, 120px); max-width: min(520px, 44vw); }
 .piercing__copy .lead { margin: 14px 0 20px; }
 .values { display: flex; gap: 10px 22px; flex-wrap: wrap; margin-bottom: 18px; font-family: var(--ff-display); font-style: italic; font-size: clamp(1.4rem, 2.4vw, 2rem); }
@@ -127,8 +160,7 @@
 .piercing__price { color: var(--stage-ink-2); font-size: .95rem; margin-bottom: 22px; }
 .piercing__price b { font-family: var(--ff-display); color: var(--stage-ink); font-size: 1.15rem; font-weight: 500; }
 @media (max-width: 900px) {
-  .piercing__jewel { left: 50%; top: 27%; width: min(62vw, 300px); }
-  .piercing__ear { right: 4%; top: 26%; height: 36%; }
+  .piercing__shade { background: linear-gradient(0deg, rgba(14, 6, 8, .97) 0%, rgba(14, 6, 8, .84) 38%, transparent 66%); }
   .piercing__copy { left: var(--gutter); right: var(--gutter); max-width: none; bottom: calc(76px + 4px); }
   .piercing__copy .mega--md { font-size: clamp(2.8rem, 15vw, 5rem); }
   .piercing__copy .lead { font-size: 1rem; margin: 8px 0 12px; }
@@ -197,7 +229,8 @@
 /* ───────── 16 · FINAL ───────── */
 .scene--final { background: var(--stage-deep); color: var(--stage-ink); }
 .final__bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(70% 60% at 50% 70%, rgba(122, 16, 39, .5), transparent 72%), radial-gradient(60% 50% at 50% 30%, #2A1418, transparent 70%), var(--stage-deep); }
-.final__svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: 2; }
+.final__pw { z-index: 2; }
+.final__shade { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: var(--shade, 0); background: linear-gradient(90deg, rgba(18, 8, 10, .82) 0%, rgba(18, 8, 10, .5) 38%, transparent 62%); }
 .final__copy { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; text-align: left; padding: var(--header-h) 46% 0 var(--gutter); pointer-events: none; }
 .final__t { font-size: clamp(3.4rem, 9.4vw, 9.6rem); line-height: .88; color: var(--stage-ink); text-shadow: 0 6px 60px rgba(0,0,0,.45); max-width: 8ch; letter-spacing: -.04em; }
 .final__t .w:nth-child(3) > span, .final__t .w:last-child > span { font-style: italic; }
@@ -207,6 +240,7 @@
 .final__cta { margin-top: clamp(22px, 4vh, 40px); display: flex; pointer-events: auto; }
 @media (max-width: 900px) {
   .final__copy { justify-content: flex-end; padding: var(--header-h) var(--gutter) calc(76px + 22px) var(--gutter); }
+  .final__shade { background: linear-gradient(0deg, rgba(18, 8, 10, .94) 0%, rgba(18, 8, 10, .72) 36%, transparent 68%); }
   .final__t { font-size: clamp(3.2rem, 15vw, 6.4rem); max-width: 9ch; }
   .final__lock { margin-top: 12px; }
   .final__cta { margin-top: 18px; }
@@ -215,12 +249,15 @@
 /* ═════════ Versión simple (movimiento reducido, sin JS o escena que falló) ═════════ */
 :is(.reduced, .no-js) .scene, .scene.is-static { height: auto; }
 :is(.reduced, .no-js) .scene__stage, .scene.is-static .scene__stage { position: relative; height: auto; min-height: 0; overflow: visible; display: flex; flex-direction: column; gap: 28px; padding: clamp(90px, 14vh, 150px) var(--gutter) clamp(50px, 8vh, 90px); }
-:is(.reduced, .no-js) .scene__stage > :is(.hero__bg, .cejas__bg, .piercing__bg, .final__bg, .safety__grid, .safety__scan, .pies__flood, .hero__gl, .hero__iris, .hero__caps, .hero__hint),
-.scene.is-static .scene__stage > :is(.hero__bg, .cejas__bg, .piercing__bg, .final__bg, .safety__grid, .safety__scan, .hero__gl, .hero__iris, .hero__caps, .hero__hint) { display: none; }
+:is(.reduced, .no-js) .scene__stage > :is(.hero__bg, .cejas__bg, .piercing__bg, .final__bg, .safety__grid, .safety__scan, .pies__flood, .hero__gl, .hero__iris, .hero__caps, .hero__hint, .hero__shade, .hero__floor, .hero__film, .final__shade),
+.scene.is-static .scene__stage > :is(.hero__bg, .cejas__bg, .piercing__bg, .final__bg, .safety__grid, .safety__scan, .hero__gl, .hero__iris, .hero__caps, .hero__hint, .hero__shade, .hero__floor, .hero__film, .final__shade) { display: none; }
 :is(.reduced, .no-js) .scene--hero .scene__stage { background: radial-gradient(60% 56% at 64% 42%, rgba(122,16,39,.42), transparent 72%), var(--stage-deep); }
-:is(.reduced, .no-js) :is(.hero__svg, .pies__svg, .cejas__svg, .piercing__brow, .piercing__ear, .final__svg),
-.scene.is-static :is(.hero__svg, .pies__svg, .cejas__svg, .piercing__ear, .final__svg) { position: relative; inset: auto; right: auto; top: auto; width: min(100%, 520px); height: auto; margin-inline: auto; transform: none; order: -1; }
-:is(.reduced, .no-js) .piercing__brow, :is(.reduced, .no-js) .piercing__jewel { display: none; }
+:is(.reduced, .no-js) :is(.pw, .pies__feet, .cejas__bw),
+.scene.is-static :is(.pw, .pies__feet, .cejas__bw) { position: relative; inset: auto; right: auto; top: auto; width: min(100%, 520px); height: auto; margin-inline: auto; transform: none; order: -1; }
+:is(.reduced, .no-js) :is(.piercing__brow, .cejas__shade, .piercing__shade, .piercing__veil, .bw__guides, .spark, .pw__j, .pw__jb), .scene.is-static :is(.piercing__brow, .cejas__shade, .piercing__shade, .piercing__veil, .bw__guides, .spark, .pw__j, .pw__jb) { display: none; }
+:is(.reduced, .no-js) .cejas__bw, .scene.is-static .cejas__bw { width: min(100%, 560px); aspect-ratio: 3 / 2; overflow: hidden; border-radius: var(--r); }
+:is(.reduced, .no-js) .bw__world, .scene.is-static .bw__world { transform: none !important; width: 100%; height: 100%; }
+:is(.reduced, .no-js) .pw__e, .scene.is-static .pw__e { opacity: 1 !important; visibility: visible !important; inset: 0; width: 100%; height: 100%; }
 :is(.reduced, .no-js) :is(.hero__copy, .pies__copy, .cejas__copy, .piercing__copy, .final__copy),
 .scene.is-static :is(.hero__copy, .pies__copy, .cejas__copy, .piercing__copy, .final__copy) { position: relative; inset: auto; left: auto; right: auto; top: auto; bottom: auto; transform: none; max-width: 640px; width: 100%; margin-inline: auto; padding: 0; }
 :is(.reduced, .no-js) .final__copy { pointer-events: auto; padding: 0; }
@@ -230,8 +267,14 @@
 :is(.reduced, .no-js) .safe__tool, :is(.reduced, .no-js) .safe__ring { display: none; }
 :is(.reduced, .no-js) .safe__icon { inset: 0 !important; width: 100% !important; height: 100% !important; }
 :is(.reduced, .no-js) .safe__icon path { stroke-dashoffset: 0 !important; }
-:is(.reduced, .no-js) .hero__svg { width: min(100%, 460px); }
+:is(.reduced, .no-js) .pw, .scene.is-static .pw { width: min(100%, 460px); aspect-ratio: 2 / 3; overflow: hidden; }
+:is(.reduced, .no-js) .pw__world, .scene.is-static .pw__world { position: absolute; inset: 0; width: auto; height: auto; transform: none !important; }
+:is(.reduced, .no-js) .pw__a, .scene.is-static .pw__a { inset: 0; width: 100%; height: 100%; }
+:is(.reduced, .no-js) :is(.pw__ab, .pw__bb, .pw__b, .pw__bb2, .pw__cb, .pw__c), .scene.is-static :is(.pw__ab, .pw__bb, .pw__b, .pw__bb2, .pw__cb, .pw__c) { display: none; }
+:is(.reduced, .no-js) .pies__feet, .scene.is-static .pies__feet { width: min(100%, 360px); height: auto; aspect-ratio: 1024 / 1180; overflow: hidden; }
+:is(.reduced, .no-js) .pies__pic, .scene.is-static .pies__pic { -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent 100%); mask-image: linear-gradient(180deg, #000 70%, transparent 100%); }
 :is(.reduced, .no-js) .studio__zoom { transform: none !important; }
 :is(.reduced, .no-js) .scene--studio .scene__stage { padding-top: clamp(80px, 12vh, 130px); }
-:is(.reduced, .no-js) .cejas__svg { color: var(--stage-ink); }
 @media (max-width: 760px) { :is(.reduced, .no-js) .safe { display: grid; } }
+/* en la versión simple la foto de la oreja se funde con el fondo en vez de acabar en un rectángulo */
+:is(.reduced, .no-js) .pw__e, .scene.is-static .pw__e { -webkit-mask-image: radial-gradient(80% 72% at 46% 50%, #000 55%, transparent 100%); mask-image: radial-gradient(80% 72% at 46% 50%, #000 55%, transparent 100%); }

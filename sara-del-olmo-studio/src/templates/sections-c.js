@@ -8,7 +8,7 @@ import { PROMOS } from '../data/promos.js';
 import { INSTAGRAM_POSTS, INSTAGRAM_SLOTS } from '../data/media.js';
 import { DEFAULT_LOOK } from '../data/look.js';
 import { CATS } from '../data/services.js';
-import { handMarkup, HAND_VIEWBOX } from '../js/art/hand.js';
+import { handWorldMarkup } from './media.js';
 import { svgSprite } from '../js/art/icons.js';
 import { esc, euro, priceHtml, pricePlain, words, kicker, bookAttrs, waAttrs, telAttrs, nailBtn, hoursHtml, phoneHtml } from './util.js';
 import { picture, placeholder, hasPhoto } from './media.js';
@@ -187,9 +187,8 @@ export function final() {
   return `<section class="scene scene--final" id="reserva" data-scene="final" data-theme="dark" style="--len:4.6" aria-labelledby="h-final">
   <div class="scene__stage">
     <div class="final__bg" aria-hidden="true"></div>
-    <svg class="final__svg" viewBox="${HAND_VIEWBOX}" role="img" aria-label="Una mano con las uñas terminadas, ilustración" preserveAspectRatio="xMidYMid meet">
-      <g class="final__cam"></g>
-    </svg>
+    ${handWorldMarkup({ lazy: true, cls: 'final__pw' })}
+    <div class="final__shade" aria-hidden="true"></div>
     <div class="final__copy">
       <h2 class="mega final__t" id="h-final">${words(c.title)}</h2>
       <p class="final__lock"><span class="lockup__name">Sara del Olmo</span><span class="lockup__sub">Studio</span><span class="final__place">${esc(c.place)}</span></p>

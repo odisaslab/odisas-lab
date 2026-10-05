@@ -30,15 +30,15 @@ El **look que elige la clienta** viaja con ella: el color que diseña en «Dise�
 y es el esmalte de la mano terminada del final. La película es suya.
 
 > Regla de contenido (obligatoria): solo datos reales. Lo que falta se marca `[ DATOS PENDIENTES ]`.
-> No hay fotografías inventadas: las manos, pies, cejas y oreja son **ilustraciones vectoriales** hechas para la web.
-> Las fotos reales se sustituyen cuando Sara las entregue (ver README).
+> Las fotos de las escenas (mano, pies, cejas, oreja, joya) son **ambientación provisional generada con IA**, no trabajos del estudio:
+> se sustituyen por fotos reales cuando Sara las entregue (ver README). El diseñador de uñas sigue siendo vectorial (cambia de color en vivo).
 
 ## 2. Arquitectura
 
 ```
 Datos editables (src/data/*.js)  ──►  Plantillas (src/templates/*.js)  ──►  HTML estático prerenderizado
                                                                               │
-Arte vectorial (src/js/art/*.js) ──►  se usa en el HTML y en el navegador     │
+Fotos (scene-src → public/img/scene) + arte vectorial del diseñador (src/js/art/*.js)   │
                                                                               ▼
 Motor de escenas (src/js/lib/scene.js) ◄── escenas (src/js/scenes/*.js) ◄── scroll
 ```
@@ -69,10 +69,11 @@ el resto son secciones normales con interacción propia (diseñador, tarifas, va
 
 | Scroll | Cámara | Qué ocurre |
 |---|---|---|
-| 0 % | Mano completa | Surge de la oscuridad, destellos en las uñas, aparece el logo, «Uñas con arte.», Humanes de Madrid y el CTA «Pedir cita» (con forma de uña lacada) |
+| 0 % | Mano completa (foto) | Surge de la oscuridad, aparece el logo, «Uñas con arte.», Humanes de Madrid y el CTA «Pedir cita» (con forma de uña lacada) |
 | 15 % | Las uñas | «Cada detalle importa.» |
-| 30 % | Una uña llena la pantalla | El dibujo vectorial sigue nítido a cualquier zoom |
-| 45 % | Textura y brillo | Relevo al **shader de esmalte líquido** (WebGL): reflejos, micro-textura, luz |
+| 15–30 % | Cuatro uñas → una uña | Cambio de enfoque encadenado entre fotos (mano → cuatro uñas), alineadas por la uña central |
+| 34–46 % | Macro de la laca | Segundo cambio de enfoque a la macro de una uña: reflejos y micro-textura reales |
+| 48–60 % | El esmalte | Relevo al **shader de esmalte líquido** (WebGL) |
 | 60 % | Más cerca | «Textura. Brillo. Reflejo.» |
 | 75 % | El color es un universo abstracto | El esmalte se vuelve líquido (domain warping, contornos irisados) · «Color.» |
 | 90 % | Dentro del color | Vórtice de cáusticas, partículas, el portal de luz crece |
@@ -82,12 +83,12 @@ el resto son secciones normales con interacción propia (diseñador, tarifas, va
 
 | Escena | Secuencia |
 |---|---|
-| **Pies** (360 %) | La cámara está dentro de la uña de tu look → se aleja: uña → dedo → pie → los dos pies. Aparece «De las manos a los pies.» y los 6 servicios reales. Al final la pantalla se oscurece. |
-| **Cejas** (420 %) | Oscuridad → una línea se dibuja desde el centro → se transforma en dos cejas simétricas → guías de medida, ojos, puntos clave (precisión) → la cámara se acerca → el pigmento «sombreado» se asienta → texto y precios. |
-| **Piercing** (440 %) | La línea de la ceja se recoge hasta su punta → destello metálico → **joya de titanio facetada que gira con el scroll** → vuela a una oreja → composición de joyas que aparecen una a una → Precisión · Estilo · Seguridad. |
+| **Pies** (360 %) | Sobre el color de tu look, la cámara está sobre las uñas de los dedos gordos → se aleja hasta los dos pies (foto recortada). Aparece «De las manos a los pies.» y los 6 servicios reales. Al final la pantalla se oscurece. |
+| **Cejas** (420 %) | Oscuridad → emerge el rostro → guías de medida (eje de la nariz, comisuras, arco, cola) y puntos clave → las guías se apagan y la cámara se acerca a la ceja → texto y precios. |
+| **Piercing** (440 %) | La ceja se apaga hasta un destello metálico → **macro de una joya de titanio** → se desenfoca, penumbra → la cámara, ya lejos, descubre que está en una oreja con otras joyas que titilan una a una → Precisión · Estilo · Seguridad. |
 | **Seguridad** (340 %) | Un escáner barre la pantalla y deja un fondo clínico → por cada elemento: se dibuja un instrumental, una línea lo rodea y se transforma en icono (Esterilización · Protección · Materiales de calidad). |
 | **Estudio** (240 %) | La cámara está dentro de la primera foto y se aleja hasta mostrar el estudio entero; después, galería horizontal arrastrable (ratón con inercia, dedo, flechas y teclado). |
-| **Final** (460 %) | Macro de una uña (la tuya) con la luz recorriéndola → la cámara se aleja a la mano terminada → «Ahora, hazlo tuyo.» → SARA DEL OLMO STUDIO / Humanes de Madrid → **PEDIR CITA** (Booksy). |
+| **Final** (460 %) | Macro de la uña → la cámara se aleja (viaje inverso al de la portada) hasta la mano entera → «Ahora, hazlo tuyo.» → SARA DEL OLMO STUDIO / Humanes de Madrid → **PEDIR CITA** (Booksy). |
 
 Momentos WOW: ① la cámara entra en la uña · ② el esmalte se vuelve un universo de color · ③ la uña se diseña en tiempo real ·
 ④ la línea de la ceja se convierte en una joya · ⑤ la cámara vuelve a la mano terminada y aparece el CTA.

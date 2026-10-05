@@ -1,53 +1,61 @@
 /**
- * ACTO 5 · CEJAS. En la oscuridad aparece una línea. La línea se transforma en dos cejas simétricas,
- * se dibujan las guías de medida (precisión), la cámara se acerca y el «efecto sombreado» se llena de pigmento.
+ * ACTO 5 · CEJAS. En la oscuridad aparece un rostro. Se dibujan las guías de medida (precisión, simetría: eje de la
+ * nariz, comisuras, arco y cola), la cámara se acerca a la ceja y aparece el texto.
+ * El rostro es una fotografía; las guías son un dibujo SVG en las mismas coordenadas, dentro del mismo «mundo».
  */
 import { registerScene } from '../lib/scene.js';
-import { $, $$, seg, ease, lerp, clamp, isSmall } from '../lib/util.js';
-import { browMarkup, browD } from '../art/brow.js';
-import { camT, setDash, browEnd } from './cam.js';
+import { $, $$, seg, ease, lerp, clamp, spline } from '../lib/util.js';
+import { BROWS } from '../../data/scene-photos.js';
+import { setDash, browCam } from './cam.js';
 
 export function init(el) {
-  const cam = $('.cejas__cam', el), svgEl = $('.cejas__svg', el);
-  cam.innerHTML = browMarkup('bz');
-  const lineL = $('.bz-line-l', cam), lineR = $('.bz-line-r', cam);
-  const shades = $$('.bz-shade', cam), blur = $('feGaussianBlur', cam);
-  const guides = $$('.bz-g', cam), points = $$('.bz-p', cam), face = $('.bz-face', cam);
-  guides.forEach((g, i) => { g.setAttribute('pathLength', '1'); g.dataset.i = i; });
+  const bw = $('.cejas__bw', el), world = $('.bw__world', el), svg = $('.bw__guides', el), shade = $('.cejas__shade', el);
+  const guides = $$('.bz-g', svg), points = $$('.bz-p', svg);
+  points.forEach((pt) => { pt.style.transformBox = 'fill-box'; pt.style.transformOrigin = 'center'; });
   const kicker = $('.kicker', el), title = $('.mega', el), lead = $('.lead', el);
   const facts = $$('.facts li', el), prices = $$('.price-pair > div', el), btns = $('.btn-row', el);
 
+  let K, vw = 1, vh = 1;
+  const measure = () => {
+    const r = bw.getBoundingClientRect();
+    vw = r.width || innerWidth; vh = r.height || innerHeight;
+    const portrait = vw < vh * 0.95;
+    // plano general: las dos cejas y los ojos
+    const s0 = portrait ? (0.96 * vw) / 1175 : Math.max(vw / BROWS.img.refW, vh / BROWS.img.refH) * 1.04;
+    const a0 = { x: 0.5 * vw, y: portrait ? 0.27 * vh : 0.5 * vh };
+    const f0 = { x: BROWS.center.x, y: portrait ? 620 : 560 };
+    const e = browCam(vw, vh, BROWS);
+    const keys = [
+      { p: 0, s: s0, fx: f0.x, fy: f0.y, ax: a0.x, ay: a0.y },
+      { p: 0.4, s: s0 * 1.1, fx: f0.x, fy: f0.y, ax: a0.x, ay: a0.y },
+      { p: 0.76, s: e.s, fx: e.fx, fy: e.fy, ax: e.ax, ay: e.ay },
+      { p: 1, s: e.s, fx: e.fx, fy: e.fy, ax: e.ax, ay: e.ay },
+    ];
+    const xs = keys.map((k) => k.p), sp = (f) => spline(xs, keys.map(f));
+    K = { s: sp((k) => Math.log(k.s)), fx: sp((k) => k.fx), fy: sp((k) => k.fy), ax: sp((k) => k.ax), ay: sp((k) => k.ay) };
+  };
+  measure();
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { measure(); scene.force = true; }, 90); });
+
   const render = (p) => {
-    const portrait = isSmall();
-    // 1) la línea se dibuja desde el centro hacia fuera, y se transforma en ceja
-    const draw = seg(p, 0.06, 0.2, ease.out);
-    const morph = seg(p, 0.2, 0.42, ease.io);
-    const d0 = browD(morph), d1 = browD(morph, true);
-    lineL.setAttribute('d', d0); lineR.setAttribute('d', d1);
-    // 0..0.5 = la línea (ida); 0.5..1 = vuelta que cierra la silueta
-    const strokeFrac = lerp(0.5 * draw, 1, morph);
-    [lineL, lineR].forEach((l) => { l.style.strokeDasharray = '1 1'; l.style.strokeDashoffset = (1 - strokeFrac).toFixed(4); l.style.opacity = draw > 0 ? 1 : 0; });
-    // 2) guías de medida y puntos (precisión, simetría)
-    const gp = seg(p, 0.4, 0.56, ease.out);
-    guides.forEach((g, i) => setDash(g, clamp(gp * 1.6 - (i / guides.length) * 0.6)));
+    // 1) el rostro emerge de la oscuridad
+    bw.style.opacity = seg(p, 0, 0.14, ease.out).toFixed(3);
+    // 2) cámara: mirada general → se acerca a la ceja
+    const s = Math.exp(K.s(p));
+    world.style.transform = `translate(${K.ax(p).toFixed(2)}px, ${K.ay(p).toFixed(2)}px) scale(${s.toFixed(4)}) translate(${(-K.fx(p)).toFixed(2)}px, ${(-K.fy(p)).toFixed(2)}px)`;
+    // 3) guías de medida y puntos (precisión, simetría); el trazo mide lo mismo en pantalla a cualquier zoom
+    svg.style.setProperty('--sw', `${(1.7 / s).toFixed(3)}px`);
+    const gp = seg(p, 0.1, 0.4, ease.out);
+    guides.forEach((g, i) => setDash(g, clamp(gp * 1.7 - (i / guides.length) * 0.7)));
     points.forEach((pt, i) => {
-      const u = seg(p, 0.46 + i * 0.012, 0.54 + i * 0.012, ease.out);
-      pt.style.transformBox = 'fill-box'; pt.style.transformOrigin = 'center';
+      const u = seg(p, 0.3 + i * 0.012, 0.4 + i * 0.012, ease.out);
       pt.style.transform = `scale(${u})`; pt.style.opacity = u;
     });
-    face.style.opacity = (0.7 * seg(p, 0.42, 0.56)).toFixed(3);
-    // 3) cámara: se acerca a la ceja
-    const end = browEnd(portrait);
-    const zoom = seg(p, 0.46, 0.76, ease.io);
-    cam.setAttribute('transform', camT(600, 400, lerp(1, end.s, zoom), lerp(600, end.x, zoom), lerp(400, end.y, zoom)));
-    // 4) sombreado (pigmento): aparece y se asienta
-    const sh = seg(p, 0.54, 0.8, ease.out);
-    shades.forEach((s) => (s.style.opacity = sh.toFixed(3)));
-    blur && blur.setAttribute('stdDeviation', lerp(7, 2.2, sh).toFixed(2));
-    // el lado izquierdo se funde para dejar limpio el texto (en móvil el texto va abajo)
-    svgEl.style.setProperty('--lm', (portrait ? 1 : 1 - seg(p, 0.6, 0.78)).toFixed(3));
+    svg.style.opacity = (0.78 * (1 - seg(p, 0.5, 0.64))).toFixed(3);
+    // 4) el lado izquierdo (arriba en móvil) se oscurece para dejar limpio el texto
+    shade.style.opacity = seg(p, 0.56, 0.74).toFixed(3);
     // 5) texto
-    const a = (n, s, e, dy = 26) => { const u = seg(p, s, e, ease.out); n.style.opacity = u.toFixed(3); n.style.transform = `translate3d(0, ${((1 - u) * dy).toFixed(1)}px, 0)`; return u; };
+    const a = (n, st, en, dy = 26) => { const u = seg(p, st, en, ease.out); n.style.opacity = u.toFixed(3); n.style.transform = `translate3d(0, ${((1 - u) * dy).toFixed(1)}px, 0)`; return u; };
     a(kicker, 0.62, 0.7, 14); a(title, 0.64, 0.76, 40); a(lead, 0.72, 0.8);
     facts.forEach((f, i) => a(f, 0.76 + i * 0.015, 0.84 + i * 0.015, 14));
     prices.forEach((f, i) => a(f, 0.8 + i * 0.02, 0.88 + i * 0.02, 14));

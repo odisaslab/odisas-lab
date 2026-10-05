@@ -1,62 +1,55 @@
 /**
- * ACTO FINAL · RESERVA. La cámara vuelve a acercarse a una uña: ahora es la TUYA (el look que has diseñado),
- * en una mano terminada. La luz recorre la superficie, la cámara se aleja y aparece «Ahora, hazlo tuyo.»
- * con el CTA definitivo hacia Booksy.
+ * ACTO FINAL · RESERVA. La cámara vuelve a acercarse a una uña (la macro de la portada) y se aleja hasta la mano
+ * entera: es el cierre de la película, gemelo del arranque. Aparece «Ahora, hazlo tuyo.» con el CTA definitivo
+ * hacia Booksy.
  */
 import { registerScene } from '../lib/scene.js';
-import { $, $$, seg, ease, lerp, spline, clamp } from '../lib/util.js';
-import { handMarkup, slotById } from '../art/hand.js';
-import { NailSet } from '../art/nail-view.js';
-import { look, onLook, lookHex } from '../lib/look.js';
-import { CONFIG } from '../../data/config.js';
-import { camT } from './cam.js';
+import { $, $$, seg, ease, lerp, spline } from '../lib/util.js';
+import { createWorld } from '../lib/handworld.js';
+import { HAND, handWorld } from '../../data/scene-photos.js';
 
 export function init(el) {
-  const svg = $('.final__svg', el), cam = $('.final__cam', el);
+  const pw = $('.final__pw', el), shade = $('.final__shade', el);
   const words = $$('.final__t .w > span', el), lock = $('.final__lock', el), cta = $('.final__cta', el), bg = $('.final__bg', el);
-  cam.innerHTML = handMarkup('fh', look, { skin: CONFIG.skinTone, lightX: 500, lightY: 470 });
-  const nails = new NailSet($$('.nail', cam), look);
-  const mid = slotById('middle');
-  const midNail = $$('.nail', cam)[2];
-  const sync = () => { nails.setShape(look.shape, { animate: false }); nails.paint(lookHex(), look.finish, { instant: true }); };
-  sync();
-  onLook(() => { sync(); });
+  const world = createWorld(pw);
+  const N = HAND.nailWide, HW = handWorld();
+  const nailW = Math.max(N.w, HAND.nailClose.w * HW.k);
+  const cMid = { x: HW.c.x + HW.c.w / 2, y: HW.c.y + HW.c.h / 2 };
   words.forEach((w) => { w.style.transition = 'none'; });
+  // cambio de enfoque encadenado (inverso al de la portada): uña → cuatro uñas → mano entera. p → u (6 = uña nítida … 0 = mano)
+  const U = [[0, 6], [0.04, 6], [0.08, 5], [0.12, 4], [0.16, 3], [0.2, 3], [0.3, 0]];
+  const uOf = (p) => { if (p >= U[U.length - 1][0]) return 0; for (let i = 1; i < U.length; i++) if (p <= U[i][0]) return lerp(U[i - 1][1], U[i][1], (p - U[i - 1][0]) / (U[i][0] - U[i - 1][0])); return 0; };
 
-  let K, vw = 1, vh = 1, unit = 1, end = { dx: 0, dy: 0 };
+  let K, vw = 1, vh = 1, sC = 1;
   const measure = () => {
-    const r = svg.getBoundingClientRect();
+    const r = pw.getBoundingClientRect();
     vw = r.width || innerWidth; vh = r.height || innerHeight;
-    unit = Math.min(vw / 1000, vh / 1300);
     const portrait = vw < 900;
-    const nailH = 164 * mid.k, nailW = 88 * mid.k;
-    const sMacro = Math.max((0.9 * vh) / (nailH * unit), (0.5 * vw) / (nailW * unit)) * 1.05;
+    const sFill = Math.min((0.8 * vh) / N.h, (0.62 * vw) / (nailW * 1.05));
+    sC = Math.max(sFill * 2, vw / (0.92 * HW.c.w), vh / (0.92 * HW.c.h));
+    const sRow = portrait ? (0.84 * vw) / 343 : (0.5 * vw) / 343;
     // composición final: la mano a un lado (arriba en móvil) y el texto al otro, como en la portada
-    const sEnd = portrait ? clamp((0.8 * vw) / (520 * unit), 0.8, 1.7) : Math.min(1.2, (0.46 * vw) / (520 * unit));
-    const tipY = 300;
-    const fyEnd = tipY + (0.5 - (portrait ? 0.21 : 0.2)) * vh / (unit * sEnd);
-    end = portrait ? { dx: 0, dy: 0 } : { dx: 0.2 * vw, dy: 0 };
+    const sEnd = portrait ? (0.9 * vw) / 600 : (vh * 1.04) / HAND.wide.h;
+    const aEnd = portrait ? { x: 0.5 * vw, y: 0.17 * vh } : { x: 0.5 * vw + 0.19 * vw, y: 0.15 * vh };
+    const mid = { x: 0.5 * vw, y: 0.5 * vh };
     const keys = [
-      { p: 0, s: sMacro * 1.18, x: mid.cx, y: mid.cy },
-      { p: 0.3, s: sMacro, x: mid.cx, y: mid.cy },
-      { p: 0.46, s: lerp(sMacro, sEnd, 0.5), x: lerp(mid.cx, 520, 0.6), y: lerp(mid.cy, fyEnd, 0.5) },
-      { p: 0.64, s: sEnd, x: 520, y: fyEnd },
-      { p: 1, s: sEnd * 1.03, x: 520, y: fyEnd + 4 },
+      { p: 0, s: sC, fx: cMid.x, fy: cMid.y, ax: mid.x, ay: mid.y },
+      { p: 0.15, s: sFill, fx: N.cx, fy: N.cy + 2, ax: mid.x, ay: mid.y },
+      { p: 0.3, s: sRow, fx: HAND.tips.x, fy: HAND.tips.y, ax: mid.x, ay: mid.y },
+      { p: 0.62, s: sEnd, fx: HAND.centerX, fy: HAND.top, ax: aEnd.x, ay: aEnd.y },
+      { p: 1, s: sEnd * 1.03, fx: HAND.centerX, fy: HAND.top + 4, ax: aEnd.x, ay: aEnd.y },
     ];
     const xs = keys.map((q) => q.p);
-    K = { s: spline(xs, keys.map((q) => Math.log(q.s))), x: spline(xs, keys.map((q) => q.x)), y: spline(xs, keys.map((q) => q.y)) };
+    const sp = (f) => spline(xs, keys.map(f));
+    K = { s: sp((k) => Math.log(k.s)), fx: sp((k) => k.fx), fy: sp((k) => k.fy), ax: sp((k) => k.ax), ay: sp((k) => k.ay) };
   };
   measure();
   let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { measure(); scene.force = true; }, 90); });
 
   const render = (p) => {
-    const sh = seg(p, 0.3, 0.64, ease.io);
-    cam.setAttribute('transform', camT(500 + (end.dx * sh) / unit, 650, Math.exp(K.s(p)), K.x(p), K.y(p)));
-    // la luz recorre la uña (el barrido está controlado por el scroll, no es una animación suelta)
-    const sw = $('.n-sweep', midNail);
-    const sp = seg(p, 0.04, 0.3, ease.io);
-    sw.style.transform = `translateX(${lerp(-30, 250, sp).toFixed(1)}px)`;
-    sw.style.opacity = (Math.sin(Math.PI * sp) * 0.95).toFixed(3);
+    world.cam({ s: Math.exp(K.s(p)), fx: K.fx(p), fy: K.fy(p), ax: K.ax(p), ay: K.ay(p), rot: lerp(-1.2, 2.4, seg(p, 0.1, 0.66, ease.io)) });
+    world.mix(uOf(p), p < 0.02);   // uña → cuatro uñas → mano entera
+    shade.style.setProperty('--shade', seg(p, 0.5, 0.7).toFixed(3));
     // titular palabra a palabra
     words.forEach((w, i) => {
       const u = seg(p, 0.58 + i * 0.035, 0.7 + i * 0.035, ease.out);
@@ -73,5 +66,5 @@ export function init(el) {
   };
   const scene = registerScene(el, render, { damp: 7 });
   el.classList.add('is-ready');
-  return { scene, nails };
+  return { scene };
 }
