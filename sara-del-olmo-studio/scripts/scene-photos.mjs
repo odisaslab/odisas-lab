@@ -119,13 +119,18 @@ if (want('mano-cerca')) {
 
 /* ───────── 2b · macro-una (macro de una uña, x2): la inmersión final de la portada ───────── */
 if (want('macro-una')) {
-  const src = await readRGBA('macro-una.webp');
-  lumaKey(src, 12, 30);   // las esquinas negras del encuadre pasan a transparentes (dejan ver la foto de debajo)
-  const img = await scale(src, 2);
-  grain(img, 3);
+  const img = await scale(await readRGBA('macro-una.webp'), 2);
+  // la versión borrosa cubre el TRIPLE de área (los bordes se prolongan repitiendo el último píxel y se desenfocan): así la capa
+  // nítida entra en la pantalla sobre un fondo que ya la rodea y no se ve ningún «recuadro» durante el fundido
+  const padded = await sharp(img.data, { raw: { width: img.w, height: img.h, channels: 4 } }).extend({ top: img.h, bottom: img.h, left: img.w, right: img.w, extendWith: 'copy' }).raw().toBuffer({ resolveWithObject: true });
+  const wide = await blurred({ data: padded.data, w: padded.info.width, h: padded.info.height }, 1152, 12);
+  feather(wide, { l: 60, r: 60, t: 40, b: 60 });
+  await save(wide, 'macro-una-blur', { avifQ: 55, webpQ: 74 });
+  // la nítida: las esquinas negras del encuadre pasan a transparentes (dejan ver el fondo borroso, que es igual de oscuro ahí)
+  lumaKey(img, 12, 30);
+  grain(img, 3);   // el grano va DESPUÉS de recortar las esquinas, para que el borde transparente quede limpio
   feather(img, { l: 200, r: 200, t: 120, b: 200 });
   await save(img, 'macro-una-3072', { avifQ: 76, webpQ: 88 });
-  await save(await blurred(img, 768, 9), 'macro-una-blur', { avifQ: 55, webpQ: 74 });
 }
 
 /* ───────── 2c · cejas (rostro con cejas, x2) ───────── */

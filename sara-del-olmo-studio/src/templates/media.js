@@ -45,7 +45,7 @@ export function handWorldMarkup({ lazy = false, cls = '' } = {}) {
   const W = HAND.wide, C = HAND.close, M = HAND.macro, pr = lazy ? 'low' : 'high';
   const pic = (file, cls, o, extra = {}) => scenePic(file, { cls, w: o.w, h: o.h, priority: 'low', lazy, ...extra });
   // orden de apilado = orden del viaje: general nítida → general borrosa → macro borrosa → macro nítida → macro borrosa → uña borrosa → uña nítida
-  return `<div class="pw ${esc(cls)}"><div class="pw__world">${scenePic(W.file, { alt: HAND.alt, cls: 'pw__a', w: W.w, h: W.h, priority: pr, lazy })}${pic(W.blur, 'pw__ab', W)}${pic(C.blur, 'pw__bb', C, { style: rect(g.b) })}${pic(C.file, 'pw__b', C, { style: rect(g.b) })}${pic(C.blur, 'pw__bb2', C, { style: rect(g.b) })}${pic(M.blur, 'pw__cb', M, { style: rect(g.c) })}${pic(M.file, 'pw__c', M, { style: rect(g.c) })}</div></div>`;
+  return `<div class="pw ${esc(cls)}"><div class="pw__world">${scenePic(W.file, { alt: HAND.alt, cls: 'pw__a', w: W.w, h: W.h, priority: pr, lazy })}${pic(W.blur, 'pw__ab', W)}${pic(C.blur, 'pw__bb', C, { style: rect(g.b) })}${pic(C.file, 'pw__b', C, { style: rect(g.b) })}${pic(C.blur, 'pw__bb2', C, { style: rect(g.b) })}${pic(M.blur, 'pw__cb', { w: M.w * 3, h: M.h * 3 }, { style: rect(g.cp) })}${pic(M.file, 'pw__c', M, { style: rect(g.c) })}</div></div>`;
 }
 
 /** Los dos pies recortados (transparentes) sobre el color del look. */

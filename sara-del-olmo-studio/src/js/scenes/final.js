@@ -16,7 +16,7 @@ export function init(el) {
   const cMid = { x: HW.c.x + HW.c.w / 2, y: HW.c.y + HW.c.h / 2 };
   words.forEach((w) => { w.style.transition = 'none'; });
   // cambio de enfoque encadenado (inverso al de la portada): las capas de arriba se van apagando (c → cb → bb2 → b → bb → ab)
-  const WIN = [[0.28, 0.36], [0.24, 0.3], [0.2, 0.26], [0.11, 0.17], [0.07, 0.13], [0.03, 0.09]];
+  const WIN = [[0.31, 0.39], [0.27, 0.33], [0.23, 0.29], [0.14, 0.2], [0.1, 0.16], [0.06, 0.12]];
   const world = createWorld(pw, ['a', 'ab', 'bb', 'b', 'bb2', 'cb', 'c'], WIN, { covers: ['ab'], anchor: { x: N.cx, y: N.cy }, reverse: true });
 
   let K, vw = 1, vh = 1, sC = 1;
@@ -33,9 +33,9 @@ export function init(el) {
     const mid = { x: 0.5 * vw, y: 0.5 * vh };
     const keys = [
       { p: 0, s: sC, fx: cMid.x, fy: cMid.y, ax: mid.x, ay: mid.y },
-      { p: 0.2, s: sFill, fx: N.cx, fy: N.cy + 2, ax: mid.x, ay: mid.y },
-      { p: 0.36, s: sRow, fx: HAND.tips.x, fy: HAND.tips.y, ax: mid.x, ay: mid.y },
-      { p: 0.66, s: sEnd, fx: HAND.centerX, fy: HAND.top, ax: aEnd.x, ay: aEnd.y },
+      { p: 0.23, s: sFill, fx: N.cx, fy: N.cy + 2, ax: mid.x, ay: mid.y },
+      { p: 0.39, s: sRow, fx: HAND.tips.x, fy: HAND.tips.y, ax: mid.x, ay: mid.y },
+      { p: 0.68, s: sEnd, fx: HAND.centerX, fy: HAND.top, ax: aEnd.x, ay: aEnd.y },
       { p: 1, s: sEnd * 1.03, fx: HAND.centerX, fy: HAND.top + 4, ax: aEnd.x, ay: aEnd.y },
     ];
     const xs = keys.map((q) => q.p);
@@ -47,7 +47,7 @@ export function init(el) {
 
   const render = (p) => {
     world.cam({ s: Math.exp(K.s(p)), fx: K.fx(p), fy: K.fy(p), ax: K.ax(p), ay: K.ay(p), rot: lerp(-1.2, 2.4, seg(p, 0.1, 0.66, ease.io)) });
-    world.mix(p, p < 0.03);   // uña → cuatro uñas → mano entera
+    world.mix(p, p < 0.06);   // uña → cuatro uñas → mano entera
     shade.style.setProperty('--shade', seg(p, 0.5, 0.7).toFixed(3));
     // titular palabra a palabra
     words.forEach((w, i) => {

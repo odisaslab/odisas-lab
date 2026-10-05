@@ -42,7 +42,9 @@ export function handWorld() {
   const c0 = toWorld(cb.x, cb.y);
   const c = { x: c0.x, y: c0.y, w: m.refW * kc * k, h: m.refH * kc * k, k: kc * k };
   const look = { x: c.x + m.look.x * c.k, y: c.y + m.look.y * c.k };
-  return { k, ...b, b, c, look };
+  // el fondo borroso de la macro de una uña cubre el triple de área (ver scripts/scene-photos.mjs)
+  const cp = { x: c.x - c.w, y: c.y - c.h, w: c.w * 3, h: c.h * 3 };
+  return { k, ...b, b, c, cp, look };
 }
 
 export const FEET = {
