@@ -22,7 +22,7 @@ export const STUDIO_PHOTOS = [
 ];
 
 /**
- * Trabajos reales para «See the work». Vacío = se muestran huecos pendientes.
+ * Trabajos reales para «Mira el trabajo». Vacío = se muestran huecos pendientes.
  * Cada entrada: { file: 'trabajo-01', alt: 'Descripción', href: 'https://www.instagram.com/p/XXXX/' }
  */
 export const INSTAGRAM_POSTS = [];

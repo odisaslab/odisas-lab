@@ -1,6 +1,6 @@
 # Sara del Olmo Studio · Dossier creativo
 
-> «From nail to art.» Una película interactiva en la que el scroll es la cámara.
+> «De la uña al arte.» (*From nail to art*) Una película interactiva en la que el scroll es la cámara.
 
 Este documento recoge lo que pedía el encargo antes de construir: concepto, arquitectura, storyboard del scroll,
 dirección visual, sistema de animaciones y estrategia de conversión.
@@ -9,22 +9,22 @@ dirección visual, sistema de animaciones y estrategia de conversión.
 
 ## 1. Concepto creativo
 
-**Idea madre: FROM NAIL TO ART.** La uña no es un adorno de la página: es el portal.
+**Idea madre: DE LA UÑA AL ARTE.** La uña no es un adorno de la página: es el portal.
 El visitante empieza mirando una uña lacada, hace scroll, la cámara se acerca hasta *entrar en el esmalte*
 y al otro lado descubre el universo del estudio (manos, pies, cejas, piercing, el equipo, las clientas) hasta
-volver a una mano terminada que le dice: **«Now make it yours.»** y le lleva a reservar.
+volver a una mano terminada que le dice: **«Ahora, hazlo tuyo.»** y le lleva a reservar.
 
-Hilo conductor, en voz alta, a lo largo del viaje:
+Hilo conductor, en voz alta, a lo largo del viaje (todo el texto de la web está en español; el brief original usaba estas frases en inglés):
 
 | Frase | Dónde vive |
 |---|---|
-| **Nails with art.** | Portada |
-| **Every detail matters.** | Primer acercamiento de la cámara (el concepto: detalle, cuidado, personalización) |
-| **From hands to feet.** | Transición a pedicura |
-| **Behind the beauty.** | El equipo |
-| **Make it yours.** | Eventos |
-| **See the work.** | Instagram |
-| **Now make it yours.** | Final · reserva |
+| **Uñas con arte.** | Portada |
+| **Cada detalle importa.** | Primer acercamiento de la cámara (el concepto: detalle, cuidado, personalización) |
+| **De las manos a los pies.** | Transición a pedicura |
+| **Detrás de la belleza.** | El equipo |
+| **Hazlo tuyo.** | Eventos |
+| **Mira el trabajo.** | Instagram |
+| **Ahora, hazlo tuyo.** | Final · reserva |
 
 El **look que elige la clienta** viaja con ella: el color que diseña en «Diseña tu look» inunda la pantalla de los pies
 y es el esmalte de la mano terminada del final. La película es suya.
@@ -69,8 +69,8 @@ el resto son secciones normales con interacción propia (diseñador, tarifas, va
 
 | Scroll | Cámara | Qué ocurre |
 |---|---|---|
-| 0 % | Mano completa | Surge de la oscuridad, destellos en las uñas, aparece el logo, «Nails with art.», Humanes de Madrid y el CTA «Pedir cita» (con forma de uña lacada) |
-| 15 % | Las uñas | «Every detail matters.» |
+| 0 % | Mano completa | Surge de la oscuridad, destellos en las uñas, aparece el logo, «Uñas con arte.», Humanes de Madrid y el CTA «Pedir cita» (con forma de uña lacada) |
+| 15 % | Las uñas | «Cada detalle importa.» |
 | 30 % | Una uña llena la pantalla | El dibujo vectorial sigue nítido a cualquier zoom |
 | 45 % | Textura y brillo | Relevo al **shader de esmalte líquido** (WebGL): reflejos, micro-textura, luz |
 | 60 % | Más cerca | «Textura. Brillo. Reflejo.» |
@@ -82,12 +82,12 @@ el resto son secciones normales con interacción propia (diseñador, tarifas, va
 
 | Escena | Secuencia |
 |---|---|
-| **Pies** (360 %) | La cámara está dentro de la uña de tu look → se aleja: uña → dedo → pie → los dos pies. Aparece «From hands to feet.» y los 6 servicios reales. Al final la pantalla se oscurece. |
+| **Pies** (360 %) | La cámara está dentro de la uña de tu look → se aleja: uña → dedo → pie → los dos pies. Aparece «De las manos a los pies.» y los 6 servicios reales. Al final la pantalla se oscurece. |
 | **Cejas** (420 %) | Oscuridad → una línea se dibuja desde el centro → se transforma en dos cejas simétricas → guías de medida, ojos, puntos clave (precisión) → la cámara se acerca → el pigmento «sombreado» se asienta → texto y precios. |
 | **Piercing** (440 %) | La línea de la ceja se recoge hasta su punta → destello metálico → **joya de titanio facetada que gira con el scroll** → vuela a una oreja → composición de joyas que aparecen una a una → Precisión · Estilo · Seguridad. |
 | **Seguridad** (340 %) | Un escáner barre la pantalla y deja un fondo clínico → por cada elemento: se dibuja un instrumental, una línea lo rodea y se transforma en icono (Esterilización · Protección · Materiales de calidad). |
 | **Estudio** (240 %) | La cámara está dentro de la primera foto y se aleja hasta mostrar el estudio entero; después, galería horizontal arrastrable (ratón con inercia, dedo, flechas y teclado). |
-| **Final** (460 %) | Macro de una uña (la tuya) con la luz recorriéndola → la cámara se aleja a la mano terminada → «Now make it yours.» → SARA DEL OLMO STUDIO / Humanes de Madrid → **PEDIR CITA** (Booksy). |
+| **Final** (460 %) | Macro de una uña (la tuya) con la luz recorriéndola → la cámara se aleja a la mano terminada → «Ahora, hazlo tuyo.» → SARA DEL OLMO STUDIO / Humanes de Madrid → **PEDIR CITA** (Booksy). |
 
 Momentos WOW: ① la cámara entra en la uña · ② el esmalte se vuelve un universo de color · ③ la uña se diseña en tiempo real ·
 ④ la línea de la ceja se convierte en una joya · ⑤ la cámara vuelve a la mano terminada y aparece el CTA.

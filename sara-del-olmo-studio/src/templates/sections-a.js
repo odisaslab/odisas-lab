@@ -24,7 +24,7 @@ export function hero() {
     </svg>
     <div class="hero__copy">
       <p class="lockup"><span class="lockup__name">Sara del Olmo</span><span class="lockup__sub">Studio</span></p>
-      <h1 class="hero__title"><span class="sr-only">Sara del Olmo Studio: uñas, manicura, pedicura, cejas y piercing en Humanes de Madrid. </span><span class="hl" aria-hidden="true"><span>Nails</span></span><span class="hl" aria-hidden="true"><span>with art.</span></span></h1>
+      <h1 class="hero__title"><span class="sr-only">Sara del Olmo Studio: uñas, manicura, pedicura, cejas y piercing en Humanes de Madrid. </span>${c.titleLines.map((l) => `<span class="hl" aria-hidden="true"><span>${esc(l)}</span></span>`).join('')}</h1>
       <p class="hero__place"><span class="hero__rule" aria-hidden="true"></span>${esc(c.place)}<span class="hero__tag">${esc(c.tagline)}</span></p>
       <div class="hero__cta">${nailBtn({ label: c.cta, attrs: bookAttrs('hero'), cls: 'btn-nail--lg' })}
         <p class="hero__proof"><svg aria-hidden="true" focusable="false"><use href="#i-star"/></svg><span><strong>${esc(r.value.toLocaleString('es-ES', { minimumFractionDigits: 1 }))}</strong> · ${r.count} reseñas en ${esc(r.source)}</span></p></div>
@@ -138,7 +138,7 @@ export function pies() {
     </svg>
     <div class="pies__copy">
       ${kicker(c.kicker)}
-      <h2 class="mega mega--md" id="h-pies"><span class="pies__t1">From hands</span> <span class="pies__t2">to feet.</span></h2>
+      <h2 class="mega mega--md" id="h-pies"><span class="pies__t1">${esc(c.titleLines[0])}</span> <span class="pies__t2">${esc(c.titleLines[1])}</span></h2>
       <p class="lead pies__lead">${esc(c.lead)}</p>
       <ul class="mini-list">${list.map((s) => `<li><button type="button" data-open-svc="${s.id}"><span class="mini-list__n">${esc(s.name)}${s.star ? ' <em>favorito</em>' : ''}</span><span class="mini-list__p">${priceHtml(s)}</span></button></li>`).join('')}</ul>
       <div class="btn-row pies__cta"><a class="btn btn--solid" href="#tarifas" data-cat-link="pies" data-track="service_view" data-loc="pies">${esc(c.cta)}</a>

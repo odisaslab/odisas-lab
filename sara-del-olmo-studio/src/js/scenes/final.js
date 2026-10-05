@@ -1,6 +1,6 @@
 /**
  * ACTO FINAL · RESERVA. La cámara vuelve a acercarse a una uña: ahora es la TUYA (el look que has diseñado),
- * en una mano terminada. La luz recorre la superficie, la cámara se aleja y aparece «Now make it yours.»
+ * en una mano terminada. La luz recorre la superficie, la cámara se aleja y aparece «Ahora, hazlo tuyo.»
  * con el CTA definitivo hacia Booksy.
  */
 import { registerScene } from '../lib/scene.js';

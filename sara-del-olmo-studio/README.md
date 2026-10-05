@@ -1,6 +1,6 @@
 # Sara del Olmo Studio · Web inmersiva
 
-Web one-page con **scrolltelling real** («From nail to art»): el scroll controla una cámara que entra en una uña, atraviesa el esmalte
+Web one-page con **scrolltelling real** («De la uña al arte»): el scroll controla una cámara que entra en una uña, atraviesa el esmalte
 y recorre manos, pies, cejas y piercing hasta la reserva en Booksy. Vanilla JS + CSS (sin framework), SEO local, analítica preparada
 y un único fichero de datos por tema para que Sara pueda cambiar lo que quiera.
 

@@ -56,7 +56,7 @@ h1{font:400 128px/.86 B;letter-spacing:-.045em;margin:34px 0 26px}h1 i{display:b
 .p{font-size:20px;letter-spacing:.26em;text-transform:uppercase;font-weight:600;display:flex;align-items:center;gap:16px}.p:before{content:"";width:52px;height:1px;background:#E7788F}
 </style></head><body><div class="bg"></div>
 <svg viewBox="0 0 1000 1300">${handMarkup('og', DEFAULT_LOOK, { skin: CONFIG.skinTone })}</svg>
-<div class="t"><div class="n">Sara del Olmo</div><div class="s">Studio</div><h1>Nails<i>with art.</i></h1><div class="p">Humanes de Madrid</div></div></body></html>`;
+<div class="t"><div class="n">Sara del Olmo</div><div class="s">Studio</div><h1>Uñas<i>con arte.</i></h1><div class="p">Humanes de Madrid</div></div></body></html>`;
 
 const iconHtml = (size) => `<!doctype html><body style="margin:0;width:${size}px;height:${size}px">${favicon.replace('<svg ', `<svg width="${size}" height="${size}" `)}</body>`;
 

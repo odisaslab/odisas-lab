@@ -3,17 +3,18 @@
  * aquí solo hay voz editorial. Cambiar un texto no requiere tocar el código visual.
  */
 export const COPY = {
-  concept: 'From nail to art.',
-  everyDetail: 'Every detail matters.',
+  concept: 'De la uña al arte.',
+  everyDetail: 'Cada detalle importa.',
 
   hero: {
-    title: 'Nails with art.',
+    title: 'Uñas con arte.',
+    titleLines: ['Uñas', 'con arte.'],
     place: 'Humanes de Madrid',
     tagline: 'Manicura · Pedicura · Cejas · Piercing',
     cta: 'Pedir cita',
     scroll: 'Desliza para entrar',
     captions: [
-      { at: 0.17, text: 'Every detail matters.' },
+      { at: 0.17, text: 'Cada detalle importa.' },
       { at: 0.46, text: 'Textura. Brillo. Reflejo.' },
       { at: 0.76, text: 'Color.' },
     ],
@@ -38,7 +39,8 @@ export const COPY = {
 
   pies: {
     kicker: '03 · Pies',
-    title: 'From hands to feet.',
+    title: 'De las manos a los pies.',
+    titleLines: ['De las manos', 'a los pies.'],
     lead: 'La misma atención al detalle, de la punta de los dedos a los pies.',
     cta: 'Descubrir pedicura',
   },
@@ -80,7 +82,7 @@ export const COPY = {
 
   about: {
     kicker: 'Nosotras',
-    title: 'Behind the beauty.',
+    title: 'Detrás de la belleza.',
     lead: 'Seis personas, cada una con su especialidad.',
     cta: 'Conoce nuestros servicios',
   },
@@ -115,7 +117,7 @@ export const COPY = {
 
   events: {
     kicker: 'Eventos',
-    title: 'Make it yours.',
+    title: 'Hazlo tuyo.',
     lead: 'Bodas, despedidas, cumpleaños o un día de amigas: cuéntanos el plan y lo preparamos juntas.',
     occasions: ['Bodas', 'Despedidas', 'Cumpleaños', 'Grupos'],
     cta: 'Organiza tu experiencia',
@@ -123,7 +125,7 @@ export const COPY = {
 
   instagram: {
     kicker: 'Instagram',
-    title: 'See the work.',
+    title: 'Mira el trabajo.',
     lead: 'Trabajos reales del estudio, cuando se publican.',
   },
 
@@ -134,7 +136,7 @@ export const COPY = {
   },
 
   final: {
-    title: 'Now make it yours.',
+    title: 'Ahora, hazlo tuyo.',
     place: 'Humanes de Madrid',
     cta: 'Pedir cita',
   },
