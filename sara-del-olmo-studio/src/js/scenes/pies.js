@@ -8,13 +8,20 @@ import { registerScene } from '../lib/scene.js';
 import { $, $$, seg, ease, lerp, spline, warmImages } from '../lib/util.js';
 import { applyLookTheme, onLook } from '../lib/look.js';
 import { FEET } from '../../data/scene-photos.js';
+import { createPhotoGL } from '../lib/gpu.js';
+import { isLowEnd } from '../lib/util.js';
 
 export function init(el) {
   const feet = $('.pies__feet', el), stage = $('.scene__stage', el);
   const k = $('.kicker', el), t1 = $('.pies__t1', el), t2 = $('.pies__t2', el), lead = $('.pies__lead', el);
   const items = $$('.mini-list li', el), cta = $('.pies__cta', el);
 
-  warmImages(feet, 600);
+  // la foto se pinta en la tarjeta gráfica (WebGL); la capa HTML solo queda de reserva
+  const pic = $('.pies__pic', feet);
+  const gpu = createPhotoGL(stage, [pic], { low: isLowEnd(), before: feet });
+  if (gpu) gpu.onLost(() => { feet.style.display = ''; });
+  else warmImages(feet, 600);
+  let glOn = false;
   applyLookTheme();
   onLook(() => { scene.force = true; });
 
@@ -45,6 +52,7 @@ export function init(el) {
     feet.classList.toggle('is-fade', portrait);
     feet.style.setProperty('--m0', `${(((yEnd - 130) / FEET.img.h) * 100).toFixed(1)}%`);
     feet.style.setProperty('--m1', `${(((yEnd + 90) / FEET.img.h) * 100).toFixed(1)}%`);
+    gpu && gpu.fade(0, portrait ? [(yEnd - 130) / FEET.img.h, (yEnd + 90) / FEET.img.h] : null);
   };
   measure();
   let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { measure(); scene.force = true; }, 90); });
@@ -60,7 +68,8 @@ export function init(el) {
     const s = Math.exp(K.s(p));
     const sh = seg(p, 0.3, 0.64, ease.io);
     const ax = W / 2 + end.dx * sh, ay = H / 2 + end.dy * sh;
-    feet.style.transform = `translate(${ax.toFixed(2)}px, ${ay.toFixed(2)}px) scale(${s.toFixed(4)}) translate(${(-K.x(p)).toFixed(2)}px, ${(-K.y(p)).toFixed(2)}px)`;
+    if (gpu) { gpu.layer(0, 1, 1, true); gpu.cam({ s, fx: K.x(p), fy: K.y(p), ax, ay, rot: 0 }); }
+    if (!glOn) feet.style.transform = `translate(${ax.toFixed(2)}px, ${ay.toFixed(2)}px) scale(${s.toFixed(4)}) translate(${(-K.x(p)).toFixed(2)}px, ${(-K.y(p)).toFixed(2)}px)`;
     show(k, p, 0.56, 0.64, 16);
     show(t1, p, 0.58, 0.7, 50);
     show(t2, p, 0.63, 0.75, 50);
@@ -71,7 +80,10 @@ export function init(el) {
     // al final, la pantalla se oscurece (las cejas empiezan en la penumbra)
     stage.style.setProperty('--dark', seg(p, 0.93, 1, ease.io).toFixed(3));
   };
-  const scene = registerScene(el, render, { damp: 5.5 });
+  const scene = registerScene(el, render, {
+    damp: 5.5,
+    onToggle: (on) => gpu && gpu.setActive(on, (ready) => { glOn = ready; feet.style.display = ready ? 'none' : ''; scene.force = true; }),
+  });
   el.classList.add('is-ready');
   return { scene };
 }

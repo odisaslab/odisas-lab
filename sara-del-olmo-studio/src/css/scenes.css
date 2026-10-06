@@ -2,7 +2,7 @@
    Cada escena es un contenedor alto (--len × alto de pantalla) con un «escenario» pegajoso (sticky) dentro.
    El scroll no anima al entrar: controla la cámara (ver src/js/lib/scene.js). */
 .scene { position: relative; }
-.scene__stage { position: relative; height: 100svh; min-height: 560px; overflow: clip; isolation: isolate; }
+.scene__stage { position: relative; height: 100svh; min-height: 560px; overflow: clip; isolation: isolate; contain: layout paint; }
 .cine .scene:not(.is-static) { height: calc(var(--len, 3) * 100svh); }
 .cine .scene:not(.is-static) .scene__stage { position: sticky; top: 0; }
 @media (max-width: 760px) { .cine .scene:not(.is-static) { height: calc(var(--len, 3) * 82svh); } }
@@ -10,10 +10,8 @@
 .cine .scene:not(.is-ready):not(.is-static) .scene__stage > * { visibility: hidden; }
 .cine .scene:not(.is-ready):not(.is-static) .scene__stage > :is(.hero__bg, .cejas__bg, .piercing__bg, .final__bg, .safety__grid, .pies__flood) { visibility: visible; }
 
-.grain::after, .hero__bg::after, .cejas__bg::after, .final__bg::after, .piercing__bg::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .09; mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-}
+/* (el grano de las escenas va dentro de las propias fotos: una capa con mezcla `overlay` sobre toda la pantalla era cara de pintar) */
+.grain::after { content: none; }
 
 /* ───────── 1 · HERO ───────── */
 .scene--hero { background: var(--stage-deep); color: var(--stage-ink); }
@@ -22,6 +20,9 @@
   background: radial-gradient(60% 56% at 64% 42%, rgba(122, 16, 39, .42), transparent 72%), radial-gradient(90% 70% at 50% 118%, #2A1418 0%, transparent 62%), var(--stage-deep);
 }
 .hero__pw { z-index: 2; }
+/* lienzo WebGL de fotos (si está disponible reemplaza a las capas HTML, que quedan de reserva) */
+.gpu-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+.pw.is-gl .pw__world, .bw.is-gl .bw__img { display: none; }
 /* fotos de la mano (plano general + macro) dentro de un «mundo» que la cámara mueve con una transformación CSS */
 .pw { position: absolute; inset: 0; overflow: hidden; }
 .pw__world { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-origin: 0 0; }
@@ -31,7 +32,6 @@
 .pw picture, .pw img, .pies__pic, .pies__pic img { display: block; max-width: none; }
 .pw img, .pies__pic img { width: 100%; height: 100%; max-width: none; user-select: none; -webkit-user-drag: none; pointer-events: none; }
 .hero__floor { position: absolute; inset: 0; z-index: 4; pointer-events: none; background: linear-gradient(0deg, rgba(14, 6, 8, .78) 0%, rgba(14, 6, 8, .4) 18%, transparent 38%); }
-.hero__film { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
 .hero__shade { position: absolute; inset: 0; z-index: 4; pointer-events: none; background: linear-gradient(90deg, rgba(18, 8, 10, .8) 0%, rgba(18, 8, 10, .5) 36%, transparent 64%), linear-gradient(0deg, rgba(18, 8, 10, .55), transparent 40%); }
 .hero__gl { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3; opacity: 0; pointer-events: none; }
 .hero__copy { position: absolute; z-index: 6; left: var(--gutter); bottom: clamp(56px, 11vh, 120px); max-width: min(620px, 52vw); }
@@ -147,10 +147,10 @@
 .pw__j, .pw__jb, .pw__e { max-width: none; }
 /* entre la joya y la oreja la pantalla pasa por la penumbra (un respiro, y así no se ve el zoom por la piel borrosa) */
 .piercing__veil { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: 0; background: radial-gradient(70% 60% at 50% 50%, #2a0f16 0%, #12080A 75%); }
-/* destellos sobre cada piercing: tamaño constante en pantalla (--sp y --lw los fija la escena según el zoom) */
-.spark { position: absolute; width: var(--sp, 1px); aspect-ratio: 1; transform: translate(-50%, -50%) scale(var(--k, 0)); opacity: var(--o, 0); pointer-events: none; background: radial-gradient(closest-side, rgba(255, 255, 255, .95) 0 12%, rgba(255, 226, 232, .5) 34%, transparent 70%); }
-.spark::before, .spark::after { content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: linear-gradient(90deg, transparent, #fff, transparent); width: 340%; height: var(--lw, 1px); }
-.spark::after { width: var(--lw, 1px); height: 340%; background: linear-gradient(180deg, transparent, #fff, transparent); }
+/* destellos sobre cada piercing: se colocan en pantalla (la escena calcula dónde cae cada uno) */
+.spark { position: absolute; left: 0; top: 0; width: 70px; aspect-ratio: 1; transform: translate(-50%, -50%) scale(0); opacity: 0; pointer-events: none; will-change: transform, opacity; background: radial-gradient(closest-side, rgba(255, 255, 255, .95) 0 12%, rgba(255, 226, 232, .5) 34%, transparent 70%); }
+.spark::before, .spark::after { content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); background: linear-gradient(90deg, transparent, #fff, transparent); width: 340%; height: 1.5px; }
+.spark::after { width: 1.5px; height: 340%; background: linear-gradient(180deg, transparent, #fff, transparent); }
 .piercing__shade { position: absolute; inset: 0; z-index: 3; pointer-events: none; opacity: var(--shade, 0); background: linear-gradient(90deg, rgba(14, 6, 8, .92) 0%, rgba(14, 6, 8, .6) 40%, transparent 68%); }
 .piercing__copy { position: absolute; z-index: 3; left: var(--gutter); bottom: clamp(60px, 11vh, 120px); max-width: min(520px, 44vw); }
 .piercing__copy .lead { margin: 14px 0 20px; }
@@ -249,8 +249,8 @@
 /* ═════════ Versión simple (movimiento reducido, sin JS o escena que falló) ═════════ */
 :is(.reduced, .no-js) .scene, .scene.is-static { height: auto; }
 :is(.reduced, .no-js) .scene__stage, .scene.is-static .scene__stage { position: relative; height: auto; min-height: 0; overflow: visible; display: flex; flex-direction: column; gap: 28px; padding: clamp(90px, 14vh, 150px) var(--gutter) clamp(50px, 8vh, 90px); }
-:is(.reduced, .no-js) .scene__stage > :is(.hero__bg, .cejas__bg, .piercing__bg, .final__bg, .safety__grid, .safety__scan, .pies__flood, .hero__gl, .hero__iris, .hero__caps, .hero__hint, .hero__shade, .hero__floor, .hero__film, .final__shade),
-.scene.is-static .scene__stage > :is(.hero__bg, .cejas__bg, .piercing__bg, .final__bg, .safety__grid, .safety__scan, .hero__gl, .hero__iris, .hero__caps, .hero__hint, .hero__shade, .hero__floor, .hero__film, .final__shade) { display: none; }
+:is(.reduced, .no-js) .scene__stage > :is(.hero__bg, .cejas__bg, .piercing__bg, .final__bg, .safety__grid, .safety__scan, .pies__flood, .hero__gl, .hero__iris, .hero__caps, .hero__hint, .hero__shade, .hero__floor, .final__shade),
+.scene.is-static .scene__stage > :is(.hero__bg, .cejas__bg, .piercing__bg, .final__bg, .safety__grid, .safety__scan, .hero__gl, .hero__iris, .hero__caps, .hero__hint, .hero__shade, .hero__floor, .final__shade) { display: none; }
 :is(.reduced, .no-js) .scene--hero .scene__stage { background: radial-gradient(60% 56% at 64% 42%, rgba(122,16,39,.42), transparent 72%), var(--stage-deep); }
 :is(.reduced, .no-js) :is(.pw, .pies__feet, .cejas__bw),
 .scene.is-static :is(.pw, .pies__feet, .cejas__bw) { position: relative; inset: auto; right: auto; top: auto; width: min(100%, 520px); height: auto; margin-inline: auto; transform: none; order: -1; }
@@ -278,3 +278,7 @@
 @media (max-width: 760px) { :is(.reduced, .no-js) .safe { display: grid; } }
 /* en la versión simple la foto de la oreja se funde con el fondo en vez de acabar en un rectángulo */
 :is(.reduced, .no-js) .pw__e, .scene.is-static .pw__e { -webkit-mask-image: radial-gradient(80% 72% at 46% 50%, #000 55%, transparent 100%); mask-image: radial-gradient(80% 72% at 46% 50%, #000 55%, transparent 100%); }
+
+/* Modo ligero (lo activa el regulador de rendimiento si la máquina no llega): sin sombras de texto ni efectos de mezcla */
+.lite .hero__cap, .lite .final__t { text-shadow: none; }
+.lite .scene__stage { contain: paint; }

@@ -6,11 +6,17 @@
 import { registerScene } from '../lib/scene.js';
 import { $, $$, seg, ease, lerp, clamp, spline, warmImages } from '../lib/util.js';
 import { BROWS } from '../../data/scene-photos.js';
+import { createPhotoGL } from '../lib/gpu.js';
+import { isLowEnd } from '../lib/util.js';
 import { setDash, browCam } from './cam.js';
 
 export function init(el) {
   const bw = $('.cejas__bw', el), world = $('.bw__world', el), svg = $('.bw__guides', el), shade = $('.cejas__shade', el);
-  warmImages(bw, 600);
+  // el rostro se pinta en la tarjeta gráfica (WebGL); las guías son SVG y siguen con la transformación CSS
+  const gpu = createPhotoGL(bw, [$('.bw__img', bw)], { low: isLowEnd() });
+  let glOn = false;
+  if (gpu) gpu.onLost(() => { glOn = false; bw.classList.remove('is-gl'); });
+  else warmImages(bw, 600);
   const guides = $$('.bz-g', svg), points = $$('.bz-p', svg);
   points.forEach((pt) => { pt.style.transformBox = 'fill-box'; pt.style.transformOrigin = 'center'; });
   const kicker = $('.kicker', el), title = $('.mega', el), lead = $('.lead', el);
@@ -44,6 +50,7 @@ export function init(el) {
     // 2) cámara: mirada general → se acerca a la ceja
     const s = Math.exp(K.s(p));
     world.style.transform = `translate(${K.ax(p).toFixed(2)}px, ${K.ay(p).toFixed(2)}px) scale(${s.toFixed(4)}) translate(${(-K.fx(p)).toFixed(2)}px, ${(-K.fy(p)).toFixed(2)}px)`;
+    if (gpu) { gpu.layer(0, 1, 1, true); gpu.cam({ s, fx: K.fx(p), fy: K.fy(p), ax: K.ax(p), ay: K.ay(p), rot: 0 }); }
     // 3) guías de medida y puntos (precisión, simetría); el trazo mide lo mismo en pantalla a cualquier zoom
     svg.style.setProperty('--sw', `${(1.7 / s).toFixed(3)}px`);
     const gp = seg(p, 0.1, 0.4, ease.out);
@@ -52,7 +59,9 @@ export function init(el) {
       const u = seg(p, 0.3 + i * 0.012, 0.4 + i * 0.012, ease.out);
       pt.style.transform = `scale(${u})`; pt.style.opacity = u;
     });
-    svg.style.opacity = (0.78 * (1 - seg(p, 0.5, 0.64))).toFixed(3);
+    const ga = 0.78 * (1 - seg(p, 0.5, 0.64));
+    svg.style.opacity = ga.toFixed(3);
+    svg.style.display = gp <= 0 || ga <= 0.002 ? 'none' : '';   // fuera de su tramo no se pinta ni se vuelve a rasterizar
     // 4) el lado izquierdo (arriba en móvil) se oscurece para dejar limpio el texto
     shade.style.opacity = seg(p, 0.56, 0.74).toFixed(3);
     // 5) texto
@@ -63,7 +72,10 @@ export function init(el) {
     const u = a(btns, 0.86, 0.94, 14);
     btns.style.visibility = u > 0.02 ? 'visible' : 'hidden';
   };
-  const scene = registerScene(el, render, { damp: 5.5 });
+  const scene = registerScene(el, render, {
+    damp: 5.5,
+    onToggle: (on) => gpu && gpu.setActive(on, (ready) => { glOn = ready; bw.classList.toggle('is-gl', ready); }),
+  });
   el.classList.add('is-ready');
   return { scene };
 }

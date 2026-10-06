@@ -9,14 +9,22 @@ import { registerScene } from '../lib/scene.js';
 import { $, $$, seg, ease, lerp, clamp, spline } from '../lib/util.js';
 import { BROWS, EAR, earWorld } from '../../data/scene-photos.js';
 import { createWorld } from '../lib/handworld.js';
+import { createPhotoGL } from '../lib/gpu.js';
+import { isLowEnd } from '../lib/util.js';
 import { browCam } from './cam.js';
 
 export function init(el) {
   const stage = $('.scene__stage', el);
   const brow = $('.piercing__brow', el), bworld = $('.bw__world', brow);
-  const pw = $('.piercing__pw', el), pworld = $('.pw__world', pw), shade = $('.piercing__shade', el);
+  const pw = $('.piercing__pw', el), shade = $('.piercing__shade', el);
   const veil = $('.piercing__veil', el);
+  // los destellos se colocan en pantalla (fuera del mundo): `world.project` dice dónde cae cada piercing
   const sparks = $$('.spark', pw);
+  sparks.forEach((sp) => pw.appendChild(sp));
+  const studsXY = EAR.studs.map((st) => [st.x, st.y]);
+  // la ceja de la escena anterior (misma foto y cámara) también va en WebGL
+  const bgl = createPhotoGL(brow, [$('.bw__img', brow)], { low: isLowEnd() });
+  if (bgl) bgl.onLost(() => brow.classList.remove('is-gl'));
   const EW = earWorld();
   // joya nítida → joya borrosa → (penumbra) → oreja nítida: ventanas de p de cada capa
   const world = createWorld(pw, ['j', 'jb', 'e'], [[0.43, 0.52], [0.55, 0.64]], { covers: ['jb', 'e'], anchor: { x: EW.cx, y: EW.cy } });
@@ -60,6 +68,7 @@ export function init(el) {
   const render = (p) => {
     // 1) la ceja de la escena anterior (misma foto y cámara) se apaga
     bworld.style.transform = `translate(${bc.ax.toFixed(2)}px, ${bc.ay.toFixed(2)}px) scale(${bc.s.toFixed(4)}) translate(${(-bc.fx).toFixed(2)}px, ${(-bc.fy).toFixed(2)}px)`;
+    if (bgl) { bgl.layer(0, 1, 1, true); bgl.cam({ s: bc.s, fx: bc.fx, fy: bc.fy, ax: bc.ax, ay: bc.ay, rot: 0 }); }
     brow.style.opacity = (1 - seg(p, 0.12, 0.34)).toFixed(3);
     brow.style.visibility = p > 0.36 ? 'hidden' : 'visible';
 
@@ -84,12 +93,12 @@ export function init(el) {
     world.mix(p, p > 0.66);
     veil.style.opacity = (0.94 * seg(p, 0.46, 0.57, ease.io) * (1 - seg(p, 0.59, 0.72, ease.io))).toFixed(3);
     // 4) destellos sobre cada piercing (tamaño constante en pantalla)
-    pworld.style.setProperty('--sp', `${(70 / s).toFixed(3)}px`);
-    pworld.style.setProperty('--lw', `${(1.5 / s).toFixed(3)}px`);
     sparks.forEach((sp, i) => {
       const t0 = 0.74 + i * 0.028, k = seg(p, t0, t0 + 0.06, ease.out);
-      sp.style.setProperty('--k', (0.4 + 0.6 * k).toFixed(3));
-      sp.style.setProperty('--o', (k * (0.35 + 0.65 * Math.sin(Math.PI * clamp((p - t0) / 0.1)))).toFixed(3));
+      const [x, y] = world.project(studsXY[i][0], studsXY[i][1]);
+      const o = k * (0.35 + 0.65 * Math.sin(Math.PI * clamp((p - t0) / 0.1)));
+      sp.style.opacity = o.toFixed(3);
+      sp.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%, -50%) scale(${(0.4 + 0.6 * k).toFixed(3)})`;
     });
     shade.style.setProperty('--shade', seg(p, 0.7, 0.86).toFixed(3));
 
@@ -101,7 +110,10 @@ export function init(el) {
     const bu = show(btns, p, 0.9, 0.96, 12);
     btns.style.visibility = bu > 0.02 ? 'visible' : 'hidden';
   };
-  const scene = registerScene(el, render, { damp: 5.5 });
+  const scene = registerScene(el, render, {
+    damp: 5.5,
+    onToggle: (on) => { world.setActive(on); bgl && bgl.setActive(on, (ready) => brow.classList.toggle('is-gl', ready)); },
+  });
   el.classList.add('is-ready');
   return { scene };
 }

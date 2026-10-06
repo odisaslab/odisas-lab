@@ -77,6 +77,6 @@ export function earWorldMarkup() {
   const px = (n) => `${+n.toFixed(2)}px`;
   const at = `left:${px(g.x)};top:${px(g.y)};width:${px(g.w)};height:${px(g.h)}`;
   const pic = (file, cls, o, extra = {}) => scenePic(file, { cls, w: o.w, h: o.h, priority: 'low', lazy: true, ...extra });
-  const sparks = EAR.studs.map((st) => `<i class="spark" data-stud="${st.id}" style="left:${st.x}px;top:${st.y}px"></i>`).join('');
+  const sparks = EAR.studs.map((st) => `<i class="spark" data-stud="${st.id}"></i>`).join('');
   return `<div class="pw piercing__pw"><div class="pw__world">${pic(J.file, 'pw__j', J, { alt: EAR.jewelAlt, style: at })}${pic(J.blur, 'pw__jb', J, { style: at })}${pic(E.file, 'pw__e', E, { alt: EAR.alt })}${sparks}</div></div>`;
 }

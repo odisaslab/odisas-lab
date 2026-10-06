@@ -15,7 +15,8 @@
  * Lo usan la portada (general → uña, `reverse: false`), el cierre (uña → general, `reverse: true`: las capas de arriba
  * se van apagando) y el piercing (joya → oreja).
  */
-import { $, clamp, ease, warmImages } from './util.js';
+import { $, clamp, ease, warmImages, isLowEnd } from './util.js';
+import { createPhotoGL } from './gpu.js';
 
 const ZOOM = 0.1, ZOOM_UNDER = 0.05;
 
@@ -33,18 +34,36 @@ export function createWorld(root, names, windows, { covers = [], anchor = { x: 0
   const last = L.length - 1;
   // el origen de la transformación de cada capa, en coordenadas de la propia capa (están colocadas con left/top en px de mundo)
   L.forEach((el) => { el.style.transformOrigin = `${anchor.x - (parseFloat(el.style.left) || 0)}px ${anchor.y - (parseFloat(el.style.top) || 0)}px`; });
-  warmImages(root);
-  let shown = '', mixed = '';
-  const op = new Array(L.length).fill(1), sc = new Array(L.length).fill(1);
+  // Compositor WebGL: si está disponible, las fotos se pintan en la tarjeta gráfica y las capas HTML solo quedan de reserva
+  const gpu = createPhotoGL(root, L, { low: isLowEnd() });
+  let glOn = false;
+  if (gpu) gpu.onLost(() => { glOn = false; root.classList.remove('is-gl'); shown = ''; mixed = ''; });
+  else warmImages(root);
+  let shown = '', mixed = '', camp = { s: 1, fx: 0, fy: 0, ax: 0, ay: 0, rot: 0 };
+  const op = new Array(L.length).fill(1), sc = new Array(L.length).fill(1), vis = new Array(L.length).fill(false);
   return {
     /** Cámara: punto (fx, fy) del mundo anclado al píxel (ax, ay) de la pantalla, con zoom s y giro rot (grados). */
-    cam({ s, fx, fy, ax, ay, rot = 0 }) {
+    cam(c) {
+      camp = { rot: 0, ...c };
+      gpu && gpu.cam(camp);
+      if (glOn) return;
+      const { s, fx, fy, ax, ay, rot } = camp;
       const t = `translate(${ax.toFixed(2)}px, ${ay.toFixed(2)}px) rotate(${rot.toFixed(3)}deg) scale(${s.toFixed(4)}) translate(${(-fx).toFixed(2)}px, ${(-fy).toFixed(2)}px)`;
       if (t !== shown) { world.style.transform = t; shown = t; }
     },
+    /** Dónde cae un punto del mundo en la pantalla (para colocar elementos HTML sobre la foto). */
+    project(x, y) {
+      const { s, fx, fy, ax, ay, rot } = camp, th = (rot * Math.PI) / 180, co = Math.cos(th) * s, si = Math.sin(th) * s;
+      return [ax + co * (x - fx) - si * (y - fy), ay + si * (x - fx) + co * (y - fy)];
+    },
+    /** La escena entra/sale del área cercana a la pantalla: se cargan/liberan las texturas. */
+    setActive(on) {
+      if (!gpu) return;
+      gpu.setActive(on, (ready) => { glOn = ready; root.classList.toggle('is-gl', ready); if (!ready) { shown = ''; mixed = ''; } });
+    },
     /** Pinta el estado de las capas para el progreso p. `solo`: oculta lo que queda bajo la última capa opaca (cuando ya llena la pantalla). */
     mix(p, solo = false) {
-      const key = p.toFixed(4) + solo;
+      const key = p.toFixed(4) + solo + glOn;
       if (key === mixed) return;
       mixed = key;
       for (let i = 1; i <= last; i++) {
@@ -59,11 +78,13 @@ export function createWorld(root, names, windows, { covers = [], anchor = { x: 0
         // la capa que entra llega con un poco menos de zoom; la que queda debajo se infla un poco al ser cubierta
         sc[i] = (i === 0 ? 1 : 1 - ZOOM * (1 - op[i])) * (1 + ZOOM_UNDER * next);
         const covered = (i < last && cov[i + 1] && op[i + 1] >= 0.999) || (solo && i < top);
-        const v = !covered && (i === 0 || op[i] > 0.002) ? 'visible' : 'hidden';
-        const el = L[i];
+        vis[i] = !covered && (i === 0 || op[i] > 0.002);
+        gpu && gpu.layer(i, op[i], sc[i], vis[i]);
+        if (glOn) continue;
+        const el = L[i], v = vis[i] ? 'visible' : 'hidden';
         if (el.style.visibility !== v) el.style.visibility = v;
         if (i > 0) el.style.opacity = op[i].toFixed(3);
-        if (v === 'visible') el.style.transform = `scale(${sc[i].toFixed(4)})`;
+        if (vis[i]) el.style.transform = `scale(${sc[i].toFixed(4)})`;
       }
     },
   };

@@ -77,7 +77,7 @@ src/
   css/         tokens · base · chrome (cabecera, menú, pincel, barra móvil, ficha) · scenes · sections
   js/
     main.js    arranque + carga perezosa de módulos
-    lib/       scene.js (motor «scroll = cámara»), handworld.js (fotos alineadas + cambio de enfoque), liquid.js (shader WebGL), look.js, util, color, ui
+    lib/       scene.js (motor «scroll = cámara»), gpu.js (fotos en WebGL), handworld.js (fotos alineadas + cambio de enfoque), perf.js, liquid.js (shader WebGL), look.js, util, color, ui
     art/       arte vectorial del diseñador de uñas y de los iconos: nail-markup, hand, nail-view, icons
     scenes/    hero, pies, cejas, piercing, safety, studio, final, static (modo reducido)
     ui/        links+analítica, nav, effects, designer, tarifas, drawer, voucher, forms, quiz, gallery
@@ -97,6 +97,11 @@ scene-src/     fotos originales de las escenas (se versionan; salida en public/i
   - **Pies:** foto con el fondo verde recortado (croma) sobre el color del look. **Cejas:** rostro + guías de medida SVG en las
     mismas coordenadas. **Piercing:** la ceja de la escena anterior → destello → joya macro → penumbra → oreja.
   - **Final:** el mismo viaje de la portada a la inversa.
+- **Rendimiento (Mac/Retina):** las fotos se pintan en la tarjeta gráfica con un compositor WebGL2 (`lib/gpu.js`): cada foto es una
+  textura (solo mientras su escena está cerca de la pantalla) y cada fotograma son unos pocos rectángulos texturizados, así que el coste
+  no depende del zoom ni de las capas. Las capas HTML quedan de reserva (se ven mientras cargan las texturas, sin WebGL2 o si se pierde
+  el contexto). `lib/perf.js` vigila el tiempo entre fotogramas y, si la máquina no llega, baja la resolución de los lienzos y activa
+  el modo `.lite`. Se evitaron además los desenfoques de fondo en la cabecera y las capas con mezcla sobre toda la pantalla.
 - Las coordenadas de alineación están en `src/data/scene-photos.js` (uña central, borde de la cutícula, piercing de la concha…).
 
 ### Fotos de las escenas — ⚠ PROVISIONALES (generadas con IA)

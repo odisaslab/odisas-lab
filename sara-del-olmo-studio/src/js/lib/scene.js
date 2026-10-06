@@ -7,9 +7,10 @@
  * mientras la escena está cerca de la pantalla.
  */
 import { clamp } from './util.js';
+import { observeFrame } from './perf.js';
 
 const scenes = new Map();
-let io = null, raf = 0, last = 0;
+let io = null, raf = 0, last = 0, streak = false;
 
 const rawProgress = (el) => {
   const r = el.getBoundingClientRect();
@@ -39,6 +40,7 @@ function ensureObserver() {
 function tick(now) {
   raf = 0;
   const dt = Math.min(0.05, (now - last) / 1000 || 0.016);
+  if (streak) observeFrame(now - last);   // solo cuenta fotogramas seguidos de una racha de scroll
   last = now;
   let busy = false;
   for (const s of scenes.values()) {
@@ -48,6 +50,7 @@ function tick(now) {
     if (Math.abs(d) > 0.0002) { s.p += d * (1 - Math.exp(-s.damp * dt)); busy = true; } else s.p = s.tgt;
     if (Math.abs(s.p - s.drawn) > 1e-5 || s.force) { s.force = false; s.render(s.p, s); s.drawn = s.p; }
   }
+  streak = busy;
   if (busy) raf = requestAnimationFrame(tick);
 }
 

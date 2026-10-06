@@ -1,11 +1,11 @@
 /* ───────── Cabecera ───────── */
 .site-header {
-  position: fixed; inset: 0 0 auto 0; z-index: 90; color: var(--h-ink); transition: color .4s, background-color .4s, transform .5s var(--ease), backdrop-filter .4s;
+  position: fixed; inset: 0 0 auto 0; z-index: 90; color: var(--h-ink); transition: color .4s, background-color .4s, transform .5s var(--ease);
 }
 .site-header__in {
   display: flex; align-items: center; gap: 22px; height: var(--header-h); padding-inline: var(--gutter); max-width: 1600px; margin-inline: auto;
 }
-.site-header.is-scrolled { background: color-mix(in srgb, var(--hbg, #12080A) 62%, transparent); -webkit-backdrop-filter: blur(14px) saturate(1.3); backdrop-filter: blur(14px) saturate(1.3); }
+.site-header.is-scrolled { background: color-mix(in srgb, var(--hbg, #12080A) 86%, transparent); }   /* sin desenfoque de fondo: repintarlo en cada fotograma de scroll es muy caro */
 .site-header[data-theme="light"] { --hbg: #F8EEEB; }
 .site-header[data-theme="clinic"] { --hbg: #FBF7F5; }
 .site-header[data-theme="color"] { --hbg: var(--pies-bg, #7A1027); }

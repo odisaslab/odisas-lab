@@ -9,6 +9,7 @@ import { registerScene } from '../lib/scene.js';
 import { seg, bump, ease, clamp, lerp, spline, isLowEnd, isFine, $, $$ } from '../lib/util.js';
 import { createWorld } from '../lib/handworld.js';
 import { createLiquid } from '../lib/liquid.js';
+import { onPerfLevel } from '../lib/perf.js';
 import { COPY } from '../../data/copy.js';
 import { HAND, handWorld } from '../../data/scene-photos.js';
 
@@ -53,6 +54,7 @@ export function init(el) {
   /* ───── esmalte líquido (WebGL) con alternativa CSS ───── */
   const hex = '#8C0E22';   // el rojo cereza de la foto macro (un punto más vivo que el de marca, para que el fundido no se note)
   const liquid = createLiquid(canvas, { low, hex });
+  onPerfLevel(() => liquid && liquid.ok && liquid.degrade());
   let t0 = performance.now(), live = false, lastDraw = 0, acc = 0, nAcc = 0;
   let uP = 0;
   const ptr = [0, 0], ptrT = [0, 0];
@@ -121,7 +123,7 @@ export function init(el) {
 
   const scene = registerScene(el, render, {
     damp: 5.5,
-    onToggle: (on) => { sceneActive = on; if (!on) { setLive(false); document.body.classList.remove('is-hero-top'); } else scene.force = true; },
+    onToggle: (on) => { sceneActive = on; world.setActive(on); if (!on) { setLive(false); document.body.classList.remove('is-hero-top'); } else scene.force = true; },
   });
   sceneActive = true;
 

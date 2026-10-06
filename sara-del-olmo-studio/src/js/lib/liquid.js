@@ -157,7 +157,7 @@ export function createLiquid(canvas, { low = false, hex = '#7A1027' } = {}) {
   ['uRes', 'uT', 'uP', 'uCol', 'uPtr'].forEach((n) => (U[n] = gl.getUniformLocation(prog, n)));
 
   let scale = low ? 0.7 : 1;
-  const maxDpr = low ? 1 : 1.5;
+  const maxDpr = low ? 1 : 1.25;   // el esmalte es orgánico y desenfocado: no necesita resolución Retina completa
   let w = 0, h = 0;
   const api = {
     ok: true,

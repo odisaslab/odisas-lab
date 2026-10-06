@@ -63,7 +63,7 @@ export function init(el) {
     cta.style.visibility = c > 0.02 ? 'visible' : 'hidden';
     bg.style.opacity = (0.55 + 0.45 * seg(p, 0.3, 0.8)).toFixed(3);
   };
-  const scene = registerScene(el, render, { damp: 5.5 });
+  const scene = registerScene(el, render, { damp: 5.5, onToggle: (on) => world.setActive(on) });
   el.classList.add('is-ready');
   return { scene };
 }

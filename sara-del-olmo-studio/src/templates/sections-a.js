@@ -20,7 +20,6 @@ export function hero() {
     ${handWorldMarkup({ cls: 'hero__pw' })}
     <div class="hero__shade" aria-hidden="true"></div>
     <div class="hero__floor" aria-hidden="true"></div>
-    <div class="hero__film grain" aria-hidden="true"></div>
     <div class="hero__copy">
       <p class="lockup"><span class="lockup__name">Sara del Olmo</span><span class="lockup__sub">Studio</span></p>
       <h1 class="hero__title"><span class="sr-only">Sara del Olmo Studio: uñas, manicura, pedicura, cejas y piercing en Humanes de Madrid. </span>${c.titleLines.map((l) => `<span class="hl" aria-hidden="true"><span>${esc(l)}</span></span>`).join('')}</h1>
