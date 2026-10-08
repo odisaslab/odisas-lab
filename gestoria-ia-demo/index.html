@@ -104,7 +104,7 @@ ul{padding:0;list-style:none}
 .num.bump{animation:bump .7s cubic-bezier(.2,.9,.3,1.2)}
 .counter.flashc{animation:cflash 1.4s ease-out}
 
-.work{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:16px;align-items:start}
+.work{position:relative;overflow-x:clip;display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:16px;align-items:start}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
 .card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 18px;border-bottom:1px solid var(--line)}
 .card-h h2{font-size:16px;font-weight:700;color:var(--ink)}
@@ -230,6 +230,128 @@ ul{padding:0;list-style:none}
 .sum-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
 .sum-actions .btn{padding:12px 20px;font-size:15px}
 
+/* ---------- Secciones del panel ---------- */
+.ptabs{display:flex;flex-wrap:wrap;gap:2px;padding:0 10px;border-bottom:1px solid var(--line)}
+.ptab{position:relative;display:inline-flex;align-items:center;gap:6px;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;padding:13px 11px 11px;font-size:13.5px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+.ptab:hover{color:var(--navy)}
+.ptab[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--navy)}
+.pb{min-width:20px;height:20px;padding:0 6px;display:inline-grid;place-items:center;border-radius:999px;background:var(--navy);color:#fff;font-size:11.5px;font-weight:700}
+.pb[hidden],.pdot[hidden]{display:none}
+.pb.bump{animation:bump .7s cubic-bezier(.2,.9,.3,1.2)}
+.pdot{width:8px;height:8px;border-radius:50%;background:var(--bad-dot);animation:beacon 1.6s ease-out infinite}
+.pane[hidden]{display:none}
+.intro{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 18px;background:#fafbfd;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted)}
+.intro p{max-width:620px}
+.intro b{color:var(--ink)}
+.btn.sm{padding:7px 12px;font-size:13px;border-radius:8px;flex:none}
+.legend .hint{margin-left:auto;color:var(--faint)}
+.ficha .legend-ch{display:flex;gap:12px;font-size:12px;color:var(--faint);margin:-2px 0 6px}
+
+.chn{display:inline-flex;align-items:center;font-size:11.5px;font-weight:600;line-height:1.3;padding:2px 9px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--muted);white-space:nowrap}
+.chi{display:inline-grid;place-items:center;width:18px;height:18px;color:var(--faint);flex:none}
+.steps{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.steps li{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;color:var(--faint);background:#f1f3f8;border-radius:999px;padding:2px 10px 2px 8px;transition:background-color .35s,color .35s}
+.steps li::before{content:"";width:8px;height:8px;border-radius:50%;border:1.5px solid #b4bccb;transition:background-color .35s,border-color .35s}
+.steps li.done{background:var(--ok-bg);color:var(--ok)}
+.steps li.done::before{border-color:var(--ok);background:var(--ok)}
+.issue{display:inline-block;margin-top:8px;font-size:12px;font-weight:600;color:var(--warn);background:var(--warn-bg);border-radius:8px;padding:3px 10px}
+.sk{display:block;height:10px;width:100%;border-radius:5px;background:linear-gradient(90deg,#edf0f6,#f7f9fc,#edf0f6);background-size:200% 100%;animation:shimmer 1.2s linear infinite;margin:8px 0}
+.sk.w60{width:60%}
+.sk.inl{display:inline-block;width:130px;margin:0;vertical-align:middle}
+.reveal{animation:capin .5s ease-out}
+.spot{animation:spot 1.9s ease-out}
+.fresh{background:var(--navy-50);animation:taskIn .55s cubic-bezier(.2,.8,.3,1) both}
+
+/* Documentos recibidos */
+.fd{display:grid;grid-template-columns:48px minmax(0,1fr);gap:10px;padding:12px 18px;border-bottom:1px solid var(--line)}
+.fd-t{padding-top:2px;font-size:12.5px;font-weight:600;color:var(--navy)}
+.fd-top{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.fd-top b{font-size:14px}
+.fd-file{margin-top:4px;font:600 12.5px/1.35 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--ink);overflow-wrap:anywhere}
+.fd-path{margin-top:1px;font-size:12px;color:var(--faint)}
+
+/* Notificaciones */
+.nt{padding:14px 18px;border-bottom:1px solid var(--line)}
+.nt-h{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px}
+.org{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--navy);border-radius:6px;padding:2px 8px}
+.nt-h b{font-size:14.5px}
+.nt-tipo{font-size:13px;color:var(--muted)}
+.nt-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 18px;margin-top:10px}
+h5{margin:0 0 3px;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.nt-body p{font-size:13.5px;line-height:1.45}
+.nt-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 18px;margin-top:10px;font-size:13px;color:var(--muted)}
+.nt-meta b{color:var(--ink)}
+.due{display:inline-block;font-weight:700;font-size:12.5px;border-radius:999px;padding:3px 10px}
+.due.bad{background:var(--bad-bg);color:var(--bad)}
+.due.warn{background:var(--warn-bg);color:var(--warn)}
+.due.ok{background:var(--ok-bg);color:var(--ok)}
+.orig{margin-top:10px;font-size:13px}
+.orig summary{cursor:pointer;color:var(--navy);font-weight:600}
+.orig blockquote{margin:8px 0 0;padding:10px 12px;border-left:3px solid var(--navy-100);background:#f8fafc;color:var(--muted);border-radius:0 8px 8px 0;font-size:12.5px;line-height:1.5}
+.orig mark{background:#fff0b8;color:inherit;border-radius:3px;padding:0 2px}
+
+/* Consultas */
+.qy-li{border-bottom:1px solid var(--line)}
+.qy summary{list-style:none;cursor:pointer;padding:13px 18px}
+.qy summary::-webkit-details-marker{display:none}
+.qy summary:hover{background:#f8fafd}
+.qy-h{display:flex;align-items:center;flex-wrap:wrap;gap:6px 8px}
+.qy-h b{font-size:14px}
+.tema{font-size:11.5px;font-weight:700;color:var(--navy);background:var(--navy-50);border:1px solid var(--navy-100);border-radius:6px;padding:1px 8px}
+.qy-sub{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;margin-top:5px}
+.qy-msg{font-size:13.5px;color:var(--muted);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.qs{flex:none;font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px}
+.qs.pending{background:var(--warn-bg);color:var(--warn)}
+.qs.sent{background:var(--ok-bg);color:var(--ok)}
+.qs.auto{background:var(--navy-50);color:var(--navy)}
+.qy-body{padding:0 18px 16px}
+.qy-body label{display:block;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;color:var(--faint);margin-bottom:5px}
+.qy-body textarea{display:block;width:100%;font:inherit;font-size:14px;line-height:1.45;color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px 12px;resize:vertical;background:#fff}
+.qy-body textarea:focus{outline:3px solid #b9cdf0;border-color:#6f9be0}
+.qy-act{display:flex;align-items:center;flex-wrap:wrap;gap:8px 14px;margin-top:10px;font-size:12.5px;color:var(--muted)}
+.qy-sent{font-size:14px;line-height:1.45;padding:10px 12px;background:#f8fafc;border-radius:10px;border:1px solid var(--line)}
+.btn.press{animation:press .6s ease}
+
+/* Nóminas */
+.pn{padding:14px 18px;border-bottom:1px solid var(--line)}
+.pn-h{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px}
+.pn-h b{font-size:14.5px}
+.per{font-size:12.5px;color:var(--muted)}
+.pst{margin-left:auto;font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px}
+.pst.ok{background:var(--ok-bg);color:var(--ok)}
+.pst.rev{background:var(--warn-bg);color:var(--warn)}
+.pst.wait{background:#eef1f6;color:var(--muted)}
+.pn-grid{display:grid;grid-template-columns:minmax(0,1fr) 22px minmax(0,1.7fr);gap:6px 10px;margin-top:10px;align-items:start}
+.pn-arrow{align-self:center;text-align:center;color:var(--faint);font-size:18px}
+.src{margin:0;padding:10px 12px;background:#f8fafc;border-left:3px solid var(--navy-100);border-radius:0 8px 8px 0;font-size:13px;color:var(--muted);line-height:1.5}
+.fileic{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:#f8fafc;font:600 12.5px/1.3 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow-wrap:anywhere}
+.fileic svg{flex:none;color:var(--navy)}
+.pt{width:100%;border-collapse:collapse;font-size:13px}
+.pt th{text-align:left;font-size:11.5px;color:var(--faint);font-weight:700;padding:4px 8px;border-bottom:1px solid var(--line)}
+.pt td{padding:6px 8px;border-bottom:1px solid #f0f2f7;vertical-align:top}
+.pt td:first-child{font-weight:600}
+.flags{margin-top:6px}
+.flags li{font-size:12.5px;font-weight:600;color:var(--warn);background:var(--warn-bg);border-radius:8px;padding:5px 10px;margin-top:6px}
+
+/* Para revisar con tipo y enlace */
+.item[data-tab]{cursor:pointer}
+.item[data-tab]:hover{background:#f8fafd}
+.item.fresh:hover{background:var(--navy-50)}
+.ttype{font-size:11px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--navy);background:var(--navy-50);border:1px solid var(--navy-100);border-radius:5px;padding:0 6px}
+.item .it-top{flex-wrap:wrap}
+
+/* Ficha ampliada */
+.expect{font-size:12.5px;color:var(--muted);margin-top:8px;line-height:1.45}
+.nextrem{font-size:13px;color:var(--muted);margin:0 0 6px}
+.nextrem b{color:var(--navy)}
+.doc .dm{display:inline-flex;align-items:center;gap:6px}
+.msg .from{display:block;font-size:11.5px;font-weight:700;color:var(--navy);margin-bottom:2px}
+
+/* Resumen: lo que se ha visto */
+.seen{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 22px;margin:22px 0 2px}
+.seen li{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;line-height:1.4;color:var(--ink)}
+.seen svg{flex:none;margin-top:2px;color:var(--ok)}
+
 /* ---------- Animaciones ---------- */
 @keyframes msgIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
 @keyframes blink{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
@@ -242,6 +364,9 @@ ul{padding:0;list-style:none}
 @keyframes taskIn{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:none}}
 @keyframes dochl{0%,25%{background:#dcebfb}100%{background:transparent}}
 @keyframes capin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+@keyframes spot{0%,20%{background:#d6e3f8}100%{background:transparent}}
+@keyframes press{0%{box-shadow:0 0 0 0 rgba(18,48,95,.5)}100%{box-shadow:0 0 0 12px rgba(18,48,95,0)}}
 @keyframes beacon{0%{box-shadow:0 0 0 0 rgba(217,58,71,.55)}100%{box-shadow:0 0 0 9px rgba(217,58,71,0)}}
 
 /* ---------- Portátil estrecho: «Para revisar» sobre la tabla ---------- */
@@ -268,6 +393,8 @@ ul{padding:0;list-style:none}
   .screen{border-radius:19px}
   .notch,.statusbar{display:none}
   .work{margin-top:0}
+  .review{order:0}
+  .nt,.qy-li,.pn,.fd{scroll-margin-top:70px}
 }
 @media (max-width:719px){
   .btn{padding:8px 11px;font-size:13px}
@@ -297,6 +424,16 @@ ul{padding:0;list-style:none}
   .t-prog{flex:1}
   .btn.next{padding:11px 22px}
   .ficha{width:100vw;border-width:0}
+  .ptab{flex:1 1 auto;justify-content:center;padding:11px 8px 9px;font-size:13px}
+  .intro{flex-direction:column;align-items:flex-start;padding:12px 14px}
+  .fd{grid-template-columns:42px minmax(0,1fr);padding:12px 14px}
+  .nt,.pn{padding:14px}
+  .qy summary{padding:13px 14px}
+  .qy-body{padding:0 14px 16px}
+  .nt-body,.pn-grid{grid-template-columns:minmax(0,1fr)}
+  .pn-arrow{transform:rotate(90deg)}
+  .legend .hint{margin-left:0}
+  .seen{grid-template-columns:minmax(0,1fr)}
   .sum-card{padding:28px 20px 22px;border-radius:18px}
   .sum h2{font-size:23px}
   .figs{grid-template-columns:minmax(0,1fr);gap:10px}
@@ -351,6 +488,8 @@ ul{padding:0;list-style:none}
             <button class="chip" type="button" data-q="foto">Enviar factura</button>
             <button class="chip" type="button" data-q="falta">¿Qué me falta?</button>
             <button class="chip" type="button" data-q="vence">¿Cuándo vence?</button>
+            <button class="chip" type="button" data-q="coche">¿Puedo deducirme el coche?</button>
+            <button class="chip" type="button" data-q="nomina">Enviar datos de nómina</button>
           </div>
         </div>
       </div>
@@ -369,24 +508,54 @@ ul{padding:0;list-style:none}
 
     <div class="work" id="work">
       <div class="card tablecard">
-        <div class="card-h"><h2>Clientes</h2><span class="hint">Pulsa un cliente para ver su ficha</span></div>
-        <div class="tbl" role="table" aria-label="Clientes de la gestoría">
-          <div role="rowgroup">
-            <div class="tr th" role="row">
-              <div role="columnheader">Cliente</div>
-              <div role="columnheader">Estado</div>
-              <div role="columnheader">Documentos</div>
-              <div role="columnheader">Próxima obligación</div>
-              <div role="columnheader">Gestor</div>
+        <div class="ptabs" role="tablist" aria-label="Secciones del panel">
+          <button class="ptab" role="tab" id="ptab-clientes" data-pane="clientes" aria-selected="true" aria-controls="pane-clientes" type="button">Clientes</button>
+          <button class="ptab" role="tab" id="ptab-docs" data-pane="docs" aria-selected="false" aria-controls="pane-docs" tabindex="-1" type="button">Documentos<i class="pdot" hidden></i></button>
+          <button class="ptab" role="tab" id="ptab-avisos" data-pane="avisos" aria-selected="false" aria-controls="pane-avisos" tabindex="-1" type="button">Notificaciones<span class="pb" data-b="avisos" hidden></span><i class="pdot" hidden></i></button>
+          <button class="ptab" role="tab" id="ptab-consultas" data-pane="consultas" aria-selected="false" aria-controls="pane-consultas" tabindex="-1" type="button">Consultas<span class="pb" data-b="consultas" hidden></span><i class="pdot" hidden></i></button>
+          <button class="ptab" role="tab" id="ptab-nominas" data-pane="nominas" aria-selected="false" aria-controls="pane-nominas" tabindex="-1" type="button">Nóminas<span class="pb" data-b="nominas" hidden></span><i class="pdot" hidden></i></button>
+        </div>
+
+        <section class="pane" id="pane-clientes" role="tabpanel" aria-labelledby="ptab-clientes">
+          <div class="tbl" role="table" aria-label="Clientes de la gestoría">
+            <div role="rowgroup">
+              <div class="tr th" role="row">
+                <div role="columnheader">Cliente</div>
+                <div role="columnheader">Estado</div>
+                <div role="columnheader">Documentos</div>
+                <div role="columnheader">Próxima obligación</div>
+                <div role="columnheader">Gestor</div>
+              </div>
             </div>
+            <div role="rowgroup" id="tbody"></div>
           </div>
-          <div role="rowgroup" id="tbody"></div>
-        </div>
-        <div class="legend">
-          <span><i class="d ok"></i>Al día: lo tiene todo</span>
-          <span><i class="d warn"></i>Faltan papeles: aún hay tiempo</span>
-          <span><i class="d bad"></i>Urgente: faltan papeles y el plazo está cerca</span>
-        </div>
+          <div class="legend">
+            <span><i class="d ok"></i>Al día: lo tiene todo</span>
+            <span><i class="d warn"></i>Faltan papeles: aún hay tiempo</span>
+            <span><i class="d bad"></i>Urgente: faltan papeles y el plazo está cerca</span>
+            <span class="hint">Pulsa un cliente para ver su ficha</span>
+          </div>
+        </section>
+
+        <section class="pane" id="pane-docs" role="tabpanel" aria-labelledby="ptab-docs" hidden>
+          <div class="intro"><p>Lo que llega por WhatsApp, por email o en mano se clasifica, se renombra y queda listo para vuestro OCR. Si algo no se lee, se pide de nuevo al cliente.</p></div>
+          <ul id="feedList"></ul>
+        </section>
+
+        <section class="pane" id="pane-avisos" role="tabpanel" aria-labelledby="ptab-avisos" hidden>
+          <div class="intro"><p>El asistente lee cada notificación de Hacienda o de la Seguridad Social, la resume, saca el plazo, se la asigna a alguien del despacho y avisa al cliente.</p><button class="btn ghost sm" id="btnSimNotif" type="button">Simular notificación nueva</button></div>
+          <ul id="notifList"></ul>
+        </section>
+
+        <section class="pane" id="pane-consultas" role="tabpanel" aria-labelledby="ptab-consultas" hidden>
+          <div class="intro"><p>El asistente clasifica cada consulta y prepara un borrador. <b>Nunca lo envía solo: lo revisa un gestor.</b> Solo contesta directamente cuando basta un dato del propio despacho, como una fecha o lo que falta.</p></div>
+          <ul id="queryList"></ul>
+        </section>
+
+        <section class="pane" id="pane-nominas" role="tabpanel" aria-labelledby="ptab-nominas" hidden>
+          <div class="intro"><p>Los datos del mes que mandan los clientes (horas extra, bajas, incentivos), en un Excel o con sus propias palabras, se convierten en una ficha ordenada. El asistente avisa de lo que falta o no queda claro.</p></div>
+          <ul id="payList"></ul>
+        </section>
       </div>
 
       <aside class="card review" aria-label="Para revisar">
@@ -410,7 +579,7 @@ ul{padding:0;list-style:none}
 <!-- Barra del recorrido -->
 <div class="tour" id="tourBar" role="region" aria-label="Recorrido guiado">
   <div class="tour-in">
-    <div class="t-prog"><div class="t-step" id="tStep">Paso 1 de 6</div><div class="t-dots" id="tDots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+    <div class="t-prog"><div class="t-step" id="tStep">Paso 1</div><div class="t-dots" id="tDots" aria-hidden="true"></div></div>
     <p class="t-cap" id="tCap" aria-live="polite"></p>
     <button class="btn next" id="btnNext" type="button">Siguiente</button>
   </div>
@@ -420,9 +589,15 @@ ul{padding:0;list-style:none}
 <div class="sum" id="sum" role="dialog" aria-modal="true" aria-labelledby="sumTitle" aria-hidden="true">
   <div class="sum-card">
     <button class="xbtn sum-x" id="sumX" type="button" aria-label="Cerrar resumen"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="m2 2 10 10M12 2 2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-    <div class="eyebrow">Paso 6 de 6 · Resumen</div>
+    <div class="eyebrow" id="sumEyebrow">Resumen</div>
     <h2 id="sumTitle">Sin llamadas, sin perseguir a nadie, sin ordenar papeles a mano</h2>
     <p class="lead">El cliente envía sus papeles por el móvil, el asistente los ordena, reclama lo que falta y avisa de los plazos, y la gestoría lo ve todo en un solo panel.</p>
+    <ul class="seen">
+      <li><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="9" fill="currentColor" opacity=".14"/><path d="m5.4 9.3 2.3 2.3 4.9-5.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Recoge y reclama los papeles por WhatsApp, email o en mano, y los deja listos para el OCR.</span></li>
+      <li><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="9" fill="currentColor" opacity=".14"/><path d="m5.4 9.3 2.3 2.3 4.9-5.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Lee las notificaciones de Hacienda y de la Seguridad Social, saca el plazo y avisa al cliente.</span></li>
+      <li><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="9" fill="currentColor" opacity=".14"/><path d="m5.4 9.3 2.3 2.3 4.9-5.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Prepara borradores de respuesta: nada sale sin que lo revise un gestor.</span></li>
+      <li><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="9" fill="currentColor" opacity=".14"/><path d="m5.4 9.3 2.3 2.3 4.9-5.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Convierte los datos de nómina del mes en una ficha ordenada.</span></li>
+    </ul>
     <div class="figs">
       <div class="fig"><div class="big">6 h</div><p>menos cada semana dedicadas a reclamar documentos</p><span class="ilus">Cifra ilustrativa</span></div>
       <div class="fig"><div class="big">−70 %</div><p>de llamadas y mensajes sueltos preguntando qué falta</p><span class="ilus">Cifra ilustrativa</span></div>
@@ -454,11 +629,13 @@ const hash = s => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^
 const pulse = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
 const joinEs = a => a.length < 2 ? (a[0] || '') : a.slice(0, -1).join(', ') + ' y ' + a[a.length - 1];
 const faltan = n => n === 1 ? 'falta 1 documento' : `faltan ${n} documentos`;
+const slug = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
 /* Espera cancelable: si se pulsa «Reiniciar» a mitad de una secuencia, se corta. */
 let epoch = 0;
 class Cancelled extends Error {}
 const wait = (ep, ms) => new Promise((res, rej) => setTimeout(() => ep === epoch ? res() : rej(new Cancelled()), reduced() ? Math.min(ms, 80) : ms));
+const quiet = p => p.catch(e => { if (!(e instanceof Cancelled)) throw e; });
 
 /* =====================================================================
    Datos ficticios
@@ -467,11 +644,21 @@ const TODAY = new Date(2026, 9, 8);
 const MONTHS = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
 const MONTHS_LONG = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 const TYPES = { V: 'Facturas emitidas', C: 'Facturas de compras', G: 'Gastos fijos', N: 'Personal y nóminas', B: 'Banco' };
+const TYPE_FILE = { V: 'Venta', C: 'Compra', G: 'Gasto', N: 'Personal', B: 'Banco' };
 const LABEL = { ok: 'Al día', warn: 'Faltan papeles', bad: 'Urgente' };
+const CHANNELS = { wa: 'WhatsApp', em: 'Email', mano: 'En mano' };
+const CH_LABEL = { wa: 'Llegó por WhatsApp', em: 'Llegó por email', mano: 'Entregado en mano' };
+const CH_ICON = {
+  wa: '<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 3.5h11v7h-6L4.5 13v-2.5h-2z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>',
+  em: '<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><rect x="2" y="3.5" width="12" height="9" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="m2.6 4.6 5.4 4 5.4-4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>',
+  mano: '<svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 2h5l3 3v9H4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9 2v3h3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>'
+};
+const chIcon = ch => `<span class="chi" role="img" aria-label="${CH_LABEL[ch]}" title="${CH_LABEL[ch]}">${CH_ICON[ch]}</span>`;
 
 /* Formato de cada documento: «Nombre|fecha|importe|id». «!» delante = todavía no recibido. */
 const RAW = [
   { id: 'bar', name: 'Bar La Esquina', kind: 'Autónomo · hostelería', nif: '99000101-K', gestor: 'Marta', ob: 'IVA 3T', due: [10, 20], q: '3T',
+    exp: 'facturas de proveedores, gastos fijos del local (luz, alquiler, seguro) y extractos del banco',
     act: 'Hace 5 días · envió un extracto',
     docs: {
       C: ['Cárnicos Valle Verde|3 sep|612,80', 'Hielos y Bebidas Sol|9 sep|148,30', 'Café Selecto Mayorista|22 sep|276,00', '!Distribuciones Levante|14 sep|342,10|levante'],
@@ -479,6 +666,7 @@ const RAW = [
       B: ['Extracto de julio|1 ago', 'Extracto de agosto|1 sep', 'Extracto de septiembre|1 oct']
     } },
   { id: 'pelu', name: 'Peluquería Mar y Sol', kind: 'Autónoma · peluquería', nif: '99000102-L', gestor: 'Javier', ob: 'IVA 3T', due: [10, 20], q: '3T',
+    exp: 'resumen de ventas, facturas de productos, gastos del local y extracto del banco',
     act: 'Ayer · envió el resumen de ventas',
     docs: {
       V: ['Ventas de julio|1 ago', 'Ventas de agosto|1 sep', 'Ventas de septiembre|1 oct'],
@@ -487,6 +675,7 @@ const RAW = [
       B: ['Extracto del 3T|1 oct']
     } },
   { id: 'taller', name: 'Taller Hermanos Vidal', kind: 'S.L. · taller mecánico', nif: 'B-99000103', gestor: 'Lucía', ob: 'IVA 3T', due: [10, 20], q: '3T',
+    exp: 'facturas de recambios, gastos de la nave y extractos del banco',
     act: 'Hace 3 días · envió 2 facturas',
     docs: {
       C: ['Recambios Autosur', 'Neumáticos y Frenos Delta', 'Lubricantes Pista Azul', '!Pinturas Carrocería Norte'],
@@ -494,6 +683,7 @@ const RAW = [
       B: ['Extracto de julio|1 ago', 'Extracto de agosto|1 sep', '!Extracto de septiembre|1 oct']
     } },
   { id: 'clinica', name: 'Clínica Dental Sonrisa Norte', kind: 'S.L. · clínica dental', nif: 'B-99000104', gestor: 'Marta', ob: 'Retenciones 3T', due: [10, 20], q: '3T',
+    exp: 'liquidaciones de mutuas, facturas de material, nóminas y extracto del banco',
     act: 'Hoy 09:05 · envió las nóminas',
     docs: {
       V: ['Liquidación de mutuas de julio|1 ago', 'Liquidación de mutuas de agosto|1 sep', 'Liquidación de mutuas de septiembre|1 oct'],
@@ -502,6 +692,7 @@ const RAW = [
       B: ['Extracto del 3T|1 oct']
     } },
   { id: 'ferre', name: 'Ferretería El Tornillo', kind: 'Autónomo · comercio', nif: '99000105-N', gestor: 'Javier', ob: 'Seguros Sociales', due: [10, 31], q: '4T',
+    exp: 'facturas de proveedores, partes de horas, altas y bajas, y extracto del banco',
     act: 'Ayer · preguntó por una baja médica',
     docs: {
       C: ['Suministros Industriales Poniente', 'Herramientas Maestro Hierro', 'Pinturas y Barnices Costa'],
@@ -509,6 +700,7 @@ const RAW = [
       B: ['Extracto de septiembre|1 oct']
     } },
   { id: 'constru', name: 'Reformas Mediterráneo S.L.', kind: 'S.L. · reformas y obras', nif: 'B-99000106', gestor: 'Lucía', ob: 'Pago de Sociedades', due: [10, 20], q: '3T',
+    exp: 'certificaciones de obra, facturas de materiales y subcontratas, nóminas y extracto del banco',
     act: 'Hace 2 días · envió certificaciones',
     docs: {
       V: ['Certificación de obra n.º 14', 'Certificación de obra n.º 15'],
@@ -517,6 +709,7 @@ const RAW = [
       B: ['Extracto del 3T|1 oct']
     } },
   { id: 'grafico', name: 'Estudio Gráfico Nube', kind: 'Autónomo · diseño gráfico', nif: '99000107-P', gestor: 'Marta', ob: 'IRPF 3T', due: [10, 20], q: '3T',
+    exp: 'facturas emitidas, gastos de licencias y coworking, y extracto del banco',
     act: 'Hoy 08:40 · envió el extracto',
     docs: {
       V: ['Factura emitida n.º 31', 'Factura emitida n.º 32', 'Factura emitida n.º 33', 'Factura emitida n.º 34'],
@@ -524,6 +717,7 @@ const RAW = [
       B: ['Extracto del 3T|1 oct']
     } },
   { id: 'frutas', name: 'Frutas Huerta Viva S.L.', kind: 'S.L. · frutas y verduras', nif: 'B-99000108', gestor: 'Javier', ob: 'IVA de octubre', due: [11, 20], q: '4T',
+    exp: 'facturas a tiendas, facturas de proveedores y transporte, gastos de la nave y extracto del banco',
     act: 'Hace 4 días · envió albaranes',
     docs: {
       V: ['Facturas a tiendas, semana 1|2 oct', 'Facturas a tiendas, semana 2|7 oct'],
@@ -532,6 +726,7 @@ const RAW = [
       B: ['Extracto de septiembre|1 oct']
     } },
   { id: 'academia', name: 'Academia de Idiomas Babel', kind: 'S.L. · formación', nif: 'B-99000109', gestor: 'Lucía', ob: 'Nóminas de octubre', due: [10, 31], q: '4T',
+    exp: 'matrículas y cuotas, facturas de material, nóminas y extracto del banco',
     act: 'Hace 6 días · sin novedades',
     docs: {
       V: ['Matrículas de septiembre|1 oct', 'Cuotas mensuales de septiembre|1 oct'],
@@ -540,6 +735,7 @@ const RAW = [
       B: ['Extracto de septiembre|1 oct']
     } },
   { id: 'floreria', name: 'Floristería Pétalo', kind: 'Autónoma · floristería', nif: '99000110-Q', gestor: 'Marta', ob: 'IVA 3T', due: [10, 20], q: '3T',
+    exp: 'resumen de ventas, facturas de proveedores, gastos del local y extracto del banco',
     act: 'Hoy 09:30 · envió una foto borrosa',
     docs: {
       V: ['Ventas de julio|1 ago', 'Ventas de agosto|1 sep', '!Ventas de septiembre|1 oct'],
@@ -548,6 +744,7 @@ const RAW = [
       B: ['!Extracto del 3T|1 oct']
     } },
   { id: 'optica', name: 'Óptica Visión Clara', kind: 'S.L. · óptica', nif: 'B-99000111', gestor: 'Lucía', ob: 'Nóminas de octubre', due: [10, 31], q: '4T',
+    exp: 'resumen de ventas, facturas de laboratorio y monturas, nóminas y altas, y extracto del banco',
     act: 'Hace 2 días · envió el extracto',
     docs: {
       V: ['Ventas de septiembre|1 oct'],
@@ -556,6 +753,7 @@ const RAW = [
       B: ['Extracto de septiembre|1 oct']
     } },
   { id: 'transp', name: 'Transportes Rápidos Sur S.L.', kind: 'S.L. · transporte', nif: 'B-99000112', gestor: 'Javier', ob: 'IVA de octubre', due: [11, 20], q: '4T',
+    exp: 'facturas a clientes, combustible, peajes y seguros, nóminas y extracto del banco',
     act: 'Ayer · todo en orden',
     docs: {
       V: ['Facturas a clientes de septiembre|1 oct'],
@@ -574,7 +772,11 @@ const MSG = {
 };
 const MISSING_ORDER = ['levante', 'luz', 'alquiler'];
 
+/* Canal por el que llegaron algunos papeles ya recibidos (para que el panel muestre los tres canales). */
+const CH_SEED = { 'ferre|Extracto de septiembre': 'mano', 'grafico|Extracto del 3T': 'em', 'clinica|Nóminas de septiembre': 'wa', 'transp|Seguro de flota': 'em' };
+
 const sortKey = d => { const [dd, mm] = d.split(' '); return MONTHS.indexOf(mm) * 100 + (+dd); };
+const fileOf = d => { const [dd, mm] = d.date.split(' '); return `2026-${String(MONTHS.indexOf(mm) + 1).padStart(2, '0')}-${dd.padStart(2, '0')}_${TYPE_FILE[d.k]}_${slug(d.n)}.pdf`; };
 
 function parseDoc(k, s, cid, idx) {
   let got = true;
@@ -584,37 +786,96 @@ function parseDoc(k, s, cid, idx) {
   const date = d || ((1 + (h >>> 3) % 28) + ' ' + MONTHS[6 + h % 3]);
   let amt = a;
   if (!amt && 'VCG'.includes(k)) amt = (40 + ((h >>> 5) % 86000) / 100).toFixed(2).replace('.', ',');
-  return { id: id || `${cid}-${k}${idx}`, k, n, got, date, amt: amt ? amt + NBSP + '€' : '' };
+  const ch = !got ? '' : (CH_SEED[`${cid}|${n}`] || (k === 'B' || k === 'N' ? 'em' : ['wa', 'wa', 'wa', 'em', 'em', 'mano'][h % 6]));
+  return { id: id || `${cid}-${k}${idx}`, k, n, got, date, ch, amt: amt ? amt + NBSP + '€' : '' };
 }
 
 const dueText = c => `vence el ${c.due[1]} de ${MONTHS_LONG[c.due[0] - 1]}`;
-const daysLeft = c => Math.round((new Date(2026, c.due[0] - 1, c.due[1]) - TODAY) / 86400000);
+const dleft = ([m, d]) => Math.round((new Date(2026, m - 1, d) - TODAY) / 86400000);
+const fmtDue = ([m, d]) => `${d} de ${MONTHS_LONG[m - 1]}`;
+const daysLeft = c => dleft(c.due);
 const ratio = c => ({ got: c.docs.filter(d => d.got).length, total: c.docs.length });
 /* Semáforo: verde = lo tiene todo · rojo = faltan papeles y el plazo está a 14 días o menos · amarillo = faltan papeles, con tiempo. */
 const statusOf = c => c.docs.every(d => d.got) ? 'ok' : (daysLeft(c) <= 14 ? 'bad' : 'warn');
+
+/* Recordatorios automáticos: cada 4 días hasta que esté todo. */
+const nextRem = c => {
+  if (c.docs.every(d => d.got)) return null;
+  const [dd, mm] = c.rem[c.rem.length - 1].d.split(' ');
+  const dt = new Date(2026, MONTHS.indexOf(mm), +dd + 4);
+  return dt.getTime() <= TODAY.getTime() ? 'hoy' : `el ${dt.getDate()} de ${MONTHS_LONG[dt.getMonth()]}`;
+};
 
 function buildClient(r) {
   let i = 0;
   const docs = [];
   Object.keys(TYPES).forEach(k => (r.docs[k] || []).forEach(s => docs.push(parseDoc(k, s, r.id, i++))));
-  const c = { id: r.id, name: r.name, kind: r.kind, nif: r.nif, gestor: r.gestor, ob: r.ob, due: r.due, q: r.q, act: r.act, docs, prev: 4 + hash(r.id) % 7, rem: [] };
+  const c = { id: r.id, name: r.name, kind: r.kind, nif: r.nif, gestor: r.gestor, ob: r.ob, due: r.due, q: r.q, exp: r.exp, act: r.act, docs, prev: 4 + hash(r.id) % 7, rem: [] };
   const n = docs.filter(d => !d.got).length;
   const st = statusOf(c);
-  if (st === 'bad') c.rem = [{ d: '29 sep', t: `Recordatorio por WhatsApp: ${faltan(n + 2)}.` }, { d: '3 oct', t: `Recordatorio por WhatsApp: ${faltan(n)}.` }];
-  else if (st === 'warn') c.rem = [{ d: '4 oct', t: `Recordatorio por WhatsApp: ${faltan(n)}.` }];
-  else c.rem = [{ d: '1 oct', t: `Aviso de plazo por WhatsApp: ${c.ob} ${dueText(c)}.` }];
+  const via = r.id === 'bar' || hash(r.id) % 2 ? 'WhatsApp' : 'email';
+  const k = r.id === 'bar' ? 0 : hash(r.id) % 3;
+  if (st === 'bad') c.rem = [{ d: ['30 sep', '1 oct', '2 oct'][k], t: `Recordatorio por ${via}: ${faltan(n + 2)}.` }, { d: ['4 oct', '5 oct', '6 oct'][k], t: `Recordatorio por ${via}: ${faltan(n)}.` }];
+  else if (st === 'warn') c.rem = [{ d: ['5 oct', '6 oct'][k % 2], t: `Recordatorio por ${via}: ${faltan(n)}.` }];
+  else c.rem = [{ d: '1 oct', t: `Aviso de plazo por ${via}: ${c.ob} ${dueText(c)}.` }];
   return c;
 }
 
-const freshState = () => ({
-  clients: RAW.map(buildClient),
-  tasks: [
-    { client: 'Taller Hermanos Vidal', text: 'Pregunta si puede aplazar el pago del IVA.', gestor: 'Lucía', when: 'hace 2 h' },
-    { client: 'Floristería Pétalo', text: 'Ha enviado una factura borrosa y no se lee el importe.', gestor: 'Marta', when: 'hace 5 h' }
-  ],
-  clock: 20,           // minutos desde las 10:00
-  last: '10:20'
-});
+/* Papeles que ya han llegado hoy al despacho, por cada canal. */
+const feedOf = (cl, cid, n, t) => {
+  const c = cl.find(x => x.id === cid), d = c.docs.find(x => x.n === n);
+  return { id: `f-${cid}`, t, client: c.name, ch: d.ch, file: fileOf(d), path: `${c.q} 2026 › ${TYPES[d.k]}`, prog: 4 };
+};
+
+const freshState = () => {
+  const clients = RAW.map(buildClient);
+  return {
+    clients,
+    tasks: [
+      { id: 't-n-vidal', type: 'Notificación', client: 'Taller Hermanos Vidal', text: 'Requerimiento de la AEAT: hay que responder antes del 14 de octubre.', gestor: 'Lucía', when: 'hace 2 días', tab: 'avisos', ref: 'n-vidal' },
+      { id: 't-q-vidal', type: 'Consulta', client: 'Taller Hermanos Vidal', text: 'Pregunta si puede aplazar el pago del IVA.', gestor: 'Lucía', when: 'hace 2 h', tab: 'consultas', ref: 'q-vidal' },
+      { id: 't-f-petalo', type: 'Documento', client: 'Floristería Pétalo', text: 'Ha enviado una factura borrosa y no se lee el importe.', gestor: 'Marta', when: 'hace 5 h', tab: 'docs', ref: 'f-petalo' }
+    ],
+    feed: [
+      { ...feedOf(clients, 'grafico', 'Extracto del 3T', '09:42'), id: 'f-grafico' },
+      { id: 'f-petalo', t: '09:30', client: 'Floristería Pétalo', ch: 'wa', file: 'IMG_4471.jpg', path: 'Sin clasificar', issue: 'No se lee el importe: se le ha pedido otra foto' },
+      { ...feedOf(clients, 'clinica', 'Nóminas de septiembre', '09:05'), id: 'f-clinica' },
+      { ...feedOf(clients, 'ferre', 'Extracto de septiembre', '08:20'), id: 'f-ferre' },
+      { ...feedOf(clients, 'transp', 'Seguro de flota', '08:10'), id: 'f-transp' }
+    ],
+    notifs: [
+      { id: 'n-vidal', org: 'AEAT', client: 'Taller Hermanos Vidal', tipo: 'Requerimiento de documentación', recv: '29 sep',
+        sum: 'Hacienda pide justificar los gastos de recambios del primer trimestre: las facturas y los pagos de las compras grandes.',
+        todo: 'Reunir las facturas y los justificantes de pago y subirlos a la sede electrónica.',
+        due: [10, 14], who: 'Lucía', told: '29 sep · WhatsApp', ref: 'DEMO-0001', mark: '10 días hábiles', prog: 5,
+        orig: 'Se le requiere para que, en el plazo de 10 días hábiles contados desde el día siguiente a la recepción de esta comunicación, aporte la documentación que justifique los gastos de aprovisionamiento declarados en el primer trimestre del ejercicio…' },
+      { id: 'n-huerta', org: 'Seguridad Social', client: 'Frutas Huerta Viva S.L.', tipo: 'Diferencias en cotizaciones', recv: '7 oct',
+        sum: 'La Seguridad Social indica que faltan por ingresar 312,50 € de las cotizaciones de agosto.',
+        todo: 'Comprobar el cálculo y, si es correcto, hacer el pago; si no, presentar alegaciones.',
+        due: [10, 22], who: 'Javier', told: '7 oct · email', ref: 'DEMO-0002', mark: '15 días naturales', prog: 5,
+        orig: 'Se comunica que, tras la revisión de las cotizaciones del período de agosto, existen diferencias a su cargo por importe de 312,50 euros. Dispone de 15 días naturales para regularizar la situación o presentar alegaciones…' }
+    ],
+    queries: [
+      { id: 'q-vidal', client: 'Taller Hermanos Vidal', ch: 'em', topic: 'IVA', msg: 'Este trimestre vamos justos de caja. ¿Podemos aplazar el pago del IVA?', who: 'Lucía', state: 'pending', open: false,
+        draft: 'Hola. Sí, se puede pedir a Hacienda un aplazamiento del pago, aunque tiene condiciones y no siempre se concede. Para valorarlo necesito saber el importe aproximado y para cuándo lo necesitaríais. Si os viene bien, os llamo mañana.' },
+      { id: 'q-pelu', client: 'Peluquería Mar y Sol', ch: 'em', topic: 'Deducciones', msg: 'Hemos pagado un curso de formación a una empleada. ¿Se puede deducir?', who: 'Javier', state: 'pending', open: false,
+        draft: 'Hola. Los cursos relacionados con la actividad suelen contar como gasto del negocio, pero necesito ver la factura y saber a nombre de quién está. Mándamela por aquí y te lo confirmo.' },
+      { id: 'q-babel', client: 'Academia de Idiomas Babel', ch: 'wa', topic: 'Altas y bajas', msg: '¿Qué necesito para dar de alta a un profesor nuevo?', who: 'Lucía', state: 'pending', open: false,
+        draft: 'Hola. Para dar de alta a una persona necesitamos su DNI, su número de la Seguridad Social, su cuenta bancaria y las condiciones del contrato (fecha de inicio, jornada y sueldo). Mándamelo por aquí y lo preparamos.' },
+      { id: 'q-clinica', client: 'Clínica Dental Sonrisa Norte', ch: 'em', topic: 'Documentos', msg: '¿Me podéis mandar el resumen de septiembre?', who: 'Marta', state: 'sent', sentBy: 'Marta', when: 'ayer', open: false,
+        draft: 'Hola. Te adjunto el resumen de septiembre. Si necesitas algo más, dímelo.', reply: 'Hola. Te adjunto el resumen de septiembre. Si necesitas algo más, dímelo.' }
+    ],
+    payroll: [
+      { id: 'p-clinica', client: 'Clínica Dental Sonrisa Norte', ch: 'em', period: 'Octubre 2026', file: 'variables-octubre.xlsx · 3 filas', text: '',
+        rows: [['Irene', '6 h', '—', '—'], ['Pablo', '—', '—', '—'], ['Sofía', '—', '—', '120,00 €']], flags: [], status: 'ok', prog: 3 },
+      { id: 'p-babel', client: 'Academia de Idiomas Babel', ch: 'wa', period: 'Octubre 2026', file: '', text: 'Este mes Carla hizo 8 horas extra, a Diego le toca el plus de 90 euros y Elena empieza la baja el día 15.',
+        rows: [['Carla', '8 h', '—', '—'], ['Diego', '—', '—', '90,00 €'], ['Elena', '—', 'desde el 15 oct', '—']],
+        flags: ['Falta el parte de baja de Elena.', 'No queda claro si el plus de Diego es solo de este mes.'], status: 'rev', prog: 3 }
+    ],
+    flags: {},
+    clock: 20, last: '10:20'
+  };
+};
 
 let S = freshState();
 const byId = id => S.clients.find(c => c.id === id);
@@ -627,9 +888,11 @@ const missingIds = c => MISSING_ORDER.filter(id => !c.docs.find(d => d.id === id
 const stage = $('#stage'), chat = $('#chat'), tbody = $('#tbody'), tasksEl = $('#tasks'), taskCount = $('#taskCount');
 const ficha = $('#ficha'), fBody = $('#fBody'), fName = $('#fName'), fSub = $('#fSub'), scrim = $('#scrim');
 const tabChat = $('#tabChat'), tabPanel = $('#tabPanel');
-const tourBar = $('#tourBar'), tCap = $('#tCap'), tStep = $('#tStep'), tDots = $$('#tDots i'), btnNext = $('#btnNext');
-const sum = $('#sum'), quickHint = $('#quickHint'), chips = $$('.chip');
+const tourBar = $('#tourBar'), tCap = $('#tCap'), tStep = $('#tStep'), tDotsEl = $('#tDots'), btnNext = $('#btnNext');
+const sum = $('#sum'), quickHint = $('#quickHint'), chips = $$('.chip'), btnSim = $('#btnSimNotif');
 const cn = { ok: $('#nOk'), pend: $('#nPend'), near: $('#nNear') };
+const panes = { clientes: $('#pane-clientes'), docs: $('#pane-docs'), avisos: $('#pane-avisos'), consultas: $('#pane-consultas'), nominas: $('#pane-nominas') };
+const ptabs = $$('.ptab');
 const rows = {};
 
 /* =====================================================================
@@ -697,7 +960,211 @@ function invoiceSVG(m) {
 const addPhoto = id => addMsg('me', `<div class="photo-frame">${invoiceSVG(MSG[id])}</div>`, { photo: true });
 
 /* =====================================================================
-   Panel: tabla, contadores, tareas, ficha
+   Panel · secciones
+   ===================================================================== */
+let curPane = 'clientes';
+function showPane(name, opts = {}) {
+  if (name !== 'clientes' && openId) closeFicha(false);
+  curPane = name;
+  ptabs.forEach(b => {
+    const on = b.dataset.pane === name;
+    b.setAttribute('aria-selected', String(on));
+    b.tabIndex = on ? 0 : -1;
+    if (on) { const d = $('.pdot', b); if (d) d.hidden = true; }
+  });
+  Object.keys(panes).forEach(k => { panes[k].hidden = k !== name; });
+  if (opts.focusId) {
+    const el = $(`[data-id="${opts.focusId}"]`, panes[name]);
+    if (el) {
+      const det = $('details', el);
+      if (det && !det.open) det.open = true;
+      if (el.offsetParent === null) { pendingFocus = el; return; }
+      pendingFocus = null;
+      el.scrollIntoView({ block: 'nearest', behavior: reduced() ? 'auto' : 'smooth' });
+      pulse(el, 'spot');
+    }
+  }
+}
+let pendingFocus = null;
+function setDot(name) {
+  if (curPane === name) return;
+  const d = $('.pdot', $(`.ptab[data-pane="${name}"]`));
+  if (d) d.hidden = false;
+}
+function updateBadges(animate) {
+  const v = {
+    avisos: S.notifs.length,
+    consultas: S.queries.filter(q => q.state === 'pending').length,
+    nominas: S.payroll.filter(p => p.status === 'rev').length
+  };
+  Object.keys(v).forEach(k => {
+    const el = $(`.pb[data-b="${k}"]`);
+    const was = el.textContent;
+    el.textContent = v[k];
+    el.hidden = !v[k];
+    if (animate && was !== String(v[k])) pulse(el, 'bump');
+  });
+}
+ptabs.forEach(b => b.addEventListener('click', () => showPane(b.dataset.pane)));
+$('.ptabs').addEventListener('keydown', e => {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  const i = ptabs.findIndex(b => b.dataset.pane === curPane);
+  const n = ptabs[(i + (e.key === 'ArrowRight' ? 1 : ptabs.length - 1)) % ptabs.length];
+  showPane(n.dataset.pane);
+  n.focus();
+});
+
+const stepsHTML = (steps, n) => `<ul class="steps">${steps.map((s, i) => `<li class="${i < n ? 'done' : ''}">${esc(s)}</li>`).join('')}</ul>`;
+
+/* --- Documentos recibidos --- */
+const FEED_STEPS = ['Recibida', 'Clasificada', 'Renombrada', 'Lista para el OCR'];
+function feedHTML(f, fresh) {
+  return `<li class="fd${fresh ? ' fresh' : ''}" data-id="${f.id}">
+    <div class="fd-t">${esc(f.t)}</div>
+    <div class="fd-main">
+      <div class="fd-top"><b>${esc(f.client)}</b><span class="chn">${CHANNELS[f.ch]}</span></div>
+      <div class="fd-file">${esc(f.file)}</div>
+      <div class="fd-path">${esc(f.path)}</div>
+      <div class="fd-steps">${f.issue ? `<span class="issue">${esc(f.issue)}</span>` : stepsHTML(FEED_STEPS, f.prog)}</div>
+    </div></li>`;
+}
+function renderFeed(freshId) {
+  $('#feedList').innerHTML = S.feed.map(f => feedHTML(f, f.id === freshId)).join('');
+}
+async function advanceFeed(f, ep) {
+  await quiet((async () => {
+    for (let n = f.prog + 1; n <= FEED_STEPS.length; n++) {
+      await wait(ep, 450);
+      f.prog = n;
+      const el = $(`.fd[data-id="${f.id}"] .fd-steps`, panes.docs);
+      if (el) el.innerHTML = stepsHTML(FEED_STEPS, n);
+    }
+  })());
+}
+
+/* --- Notificaciones de Hacienda y Seguridad Social --- */
+const NOTIF_STEPS = ['Recibida', 'Leída y resumida', 'Plazo detectado', 'Asignada', 'Cliente avisado'];
+function dueChip(due) {
+  const d = dleft(due);
+  return `<span class="due ${d <= 7 ? 'bad' : d <= 16 ? 'warn' : 'ok'}">Plazo: ${fmtDue(due)} · ${d} días</span>`;
+}
+function notifInner(n) {
+  const p = n.prog;
+  const sk = '<span class="sk"></span><span class="sk w60"></span>';
+  const orig = esc(n.orig).replace(esc(n.mark), m => `<mark>${m}</mark>`);
+  return `
+    <div class="nt-h"><span class="org">${esc(n.org)}</span><b>${esc(n.client)}</b><span class="nt-tipo">${esc(n.tipo)}</span></div>
+    <div class="nt-body">
+      <div><h5>Lo que dice, en sencillo</h5>${p >= 2 ? `<p${p === 2 ? ' class="reveal"' : ''}>${esc(n.sum)}</p>` : sk}</div>
+      <div><h5>Qué hay que hacer</h5>${p >= 2 ? `<p${p === 2 ? ' class="reveal"' : ''}>${esc(n.todo)}</p>` : sk}</div>
+    </div>
+    <div class="nt-meta">
+      <span>${p >= 3 ? dueChip(n.due) : '<span class="sk inl"></span>'}</span>
+      <span>Asignada a ${p >= 4 ? `<b>${esc(n.who)}</b>` : '…'}</span>
+      <span>${p >= 5 ? `Cliente avisado · ${esc(n.told)}` : 'Cliente sin avisar todavía'}</span>
+    </div>
+    <details class="orig"><summary>Ver el texto original (ejemplo ficticio · ${esc(n.ref)})</summary><blockquote>${orig}</blockquote></details>
+    ${n.live ? stepsHTML(NOTIF_STEPS, p) : ''}`;
+}
+function renderNotifs(freshId) {
+  $('#notifList').innerHTML = S.notifs.map(n => `<li class="nt${n.id === freshId ? ' fresh' : ''}" data-id="${n.id}">${notifInner(n)}</li>`).join('');
+}
+function refreshNotif(n) {
+  const el = $(`.nt[data-id="${n.id}"]`, panes.avisos);
+  if (el) el.innerHTML = notifInner(n);
+}
+
+/* --- Consultas con borrador --- */
+const QSTATE = q => q.state === 'pending' ? 'Borrador sin enviar' : q.state === 'sent' ? `Enviada por ${q.sentBy}` : 'Respondida con datos del calendario';
+function queryHTML(q, fresh) {
+  const body = q.state === 'pending'
+    ? `<label for="d-${q.id}">Borrador preparado por el asistente · no se envía solo</label>
+       <textarea id="d-${q.id}" data-qid="${q.id}" rows="5">${esc(q.draft)}</textarea>
+       <div class="qy-act"><button class="btn primary sm" type="button" data-act="send" data-qid="${q.id}">Aprobar y enviar</button><span>Lo revisa ${esc(q.who)} antes de que salga.</span></div>`
+    : `<label>${q.state === 'sent' ? `Respuesta enviada por ${esc(q.sentBy)} · ${esc(q.when)}` : `Respuesta del asistente · ${esc(q.when)}`}</label>
+       <p class="qy-sent">${esc(q.reply || q.draft)}</p>`;
+  return `<li class="qy-li${fresh ? ' fresh' : ''}" data-id="${q.id}">
+    <details class="qy"${q.open ? ' open' : ''}>
+      <summary>
+        <div class="qy-h"><b>${esc(q.client)}</b><span class="chn">${CHANNELS[q.ch]}</span><span class="tema">${esc(q.topic)}</span></div>
+        <div class="qy-sub"><span class="qy-msg">“${esc(q.msg)}”</span><span class="qs ${q.state}">${QSTATE(q)}</span></div>
+      </summary>
+      <div class="qy-body">${body}</div>
+    </details></li>`;
+}
+function renderQueries(freshId) {
+  $('#queryList').innerHTML = S.queries.map(q => queryHTML(q, q.id === freshId)).join('');
+}
+panes.consultas.addEventListener('click', e => {
+  const b = e.target.closest('[data-act="send"]');
+  if (b) approveQuery(b.dataset.qid);
+});
+panes.consultas.addEventListener('input', e => {
+  const t = e.target.closest('textarea[data-qid]');
+  const q = t && S.queries.find(x => x.id === t.dataset.qid);
+  if (q) q.draft = t.value;
+});
+panes.consultas.addEventListener('toggle', e => {
+  const li = e.target.closest && e.target.closest('.qy-li');
+  const q = li && S.queries.find(x => x.id === li.dataset.id);
+  if (q) q.open = e.target.open;
+}, true);
+
+function logAuto(id, topic, msg, reply) {
+  if (S.queries.some(q => q.id === id)) return;
+  S.queries.unshift({ id, client: 'Bar La Esquina', ch: 'wa', topic, msg, state: 'auto', when: `hoy ${S.last}`, reply, draft: reply, who: 'Marta', open: false });
+  renderQueries(id);
+  setDot('consultas');
+  news('panel');
+}
+function approveQuery(id) {
+  const q = S.queries.find(x => x.id === id);
+  if (!q || q.state !== 'pending') return;
+  q.state = 'sent'; q.sentBy = q.who; q.when = `hoy ${S.last}`; q.reply = q.draft;
+  S.tasks = S.tasks.filter(t => t.ref !== id);
+  renderQueries();
+  renderTasks();
+  updateBadges(true);
+  news('panel');
+  if (id === 'q-coche') {
+    S.flags.cocheSent = true;
+    addMsg('bot', `<span class="from">${esc(q.who)} · Gestoría Ribera</span><p>${esc(q.draft)}</p>`);
+    const c = bar();
+    setAct(c, 'Marta respondió la consulta');
+    refreshClient(c);
+  }
+}
+
+/* --- Datos de nómina --- */
+const PAY_STEPS = ['Mensaje recibido', 'Datos extraídos', 'Revisar lo dudoso'];
+const ICON_FILE = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 1.8h5l3 3V14H4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M6 8.5h4M6 11h4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
+function payInner(p) {
+  const n = p.prog;
+  const st = n >= 3 ? (p.status === 'ok' ? '<span class="pst ok">Listo para la nómina</span>' : '<span class="pst rev">Hay que revisar</span>') : '<span class="pst wait">Leyendo…</span>';
+  const src = p.file ? `<div class="fileic">${ICON_FILE}<span>${esc(p.file)}</span></div>` : `<blockquote class="src">“${esc(p.text)}”</blockquote>`;
+  const out = n >= 2
+    ? `<table class="pt${n === 2 ? ' reveal' : ''}"><thead><tr><th>Empleado</th><th>Horas extra</th><th>Baja</th><th>Incentivo</th></tr></thead><tbody>${p.rows.map(r => `<tr>${r.map(c => `<td>${esc(c)}</td>`).join('')}</tr>`).join('')}</tbody></table>
+       ${n >= 3 && p.flags.length ? `<ul class="flags reveal">${p.flags.map(f => `<li>${esc(f)}</li>`).join('')}</ul>` : ''}`
+    : '<span class="sk"></span><span class="sk w60"></span><span class="sk"></span>';
+  return `
+    <div class="pn-h"><b>${esc(p.client)}</b><span class="chn">${CHANNELS[p.ch]}</span><span class="per">${esc(p.period)}</span>${st}</div>
+    <div class="pn-grid">
+      <div><h5>Lo que envió el cliente</h5>${src}</div>
+      <div class="pn-arrow" aria-hidden="true">→</div>
+      <div><h5>Lo que ha entendido el asistente</h5>${out}</div>
+    </div>
+    ${p.live ? stepsHTML(PAY_STEPS, n) : ''}`;
+}
+function renderPayroll(freshId) {
+  $('#payList').innerHTML = S.payroll.map(p => `<li class="pn${p.id === freshId ? ' fresh' : ''}" data-id="${p.id}">${payInner(p)}</li>`).join('');
+}
+function refreshPay(p) {
+  const el = $(`.pn[data-id="${p.id}"]`, panes.nominas);
+  if (el) el.innerHTML = payInner(p);
+}
+
+/* =====================================================================
+   Panel · clientes, contadores, tareas, ficha
    ===================================================================== */
 const ICON_PHONE = '<svg class="me-ic" viewBox="0 0 16 16" role="img" aria-label="Es el cliente del móvil"><title>Es el cliente del móvil</title><rect x="4" y="1.5" width="8" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="8" cy="12" r=".9" fill="currentColor"/></svg>';
 
@@ -712,7 +1179,7 @@ function buildRows() {
       <div class="c-name" role="cell"><div class="nm"><button class="rb" type="button" aria-label="Abrir la ficha de ${esc(c.name)}">${esc(c.name)}</button>${c.id === 'bar' ? ICON_PHONE : ''}</div><span class="act"></span></div>
       <div class="c-st" role="cell"><span class="badge"><i></i><span class="bt"></span></span></div>
       <div class="c-dc" role="cell"><span class="ratio"></span><span class="meter" aria-hidden="true"><i></i></span></div>
-      <div class="c-ob" role="cell"><b>${esc(c.ob)}</b><span>${esc(dueText(c))}</span></div>
+      <div class="c-ob" role="cell"><b title="${esc(c.ob)}">${esc(c.ob)}</b><span>${esc(dueText(c))}</span></div>
       <div class="c-ge" role="cell">${esc(c.gestor)}</div>`;
     rows[c.id] = { el, badge: $('.badge', el), bt: $('.bt', el), ratio: $('.ratio', el), fill: $('.meter i', el), act: $('.act', el), st: null };
     el.addEventListener('click', () => openFicha(c.id, true));
@@ -755,17 +1222,26 @@ function updateCounters(animate) {
   });
 }
 
-function renderTasks(freshIdx = -1) {
-  tasksEl.innerHTML = S.tasks.map((t, i) => `
-    <li class="item${i === freshIdx ? ' fresh' : ''}">
-      <div class="it-top"><b>${esc(t.client)}</b>${i === freshIdx ? '<em class="nuevo">Nueva</em>' : ''}</div>
+/* Para revisar */
+function renderTasks(freshId) {
+  tasksEl.innerHTML = S.tasks.map(t => `
+    <li class="item${t.id === freshId ? ' fresh' : ''}" data-tab="${t.tab}" data-ref="${t.ref}" tabindex="0" role="button" aria-label="Abrir: ${esc(t.type)} de ${esc(t.client)}">
+      <div class="it-top"><span class="ttype">${esc(t.type)}</span><b>${esc(t.client)}</b>${t.id === freshId ? '<em class="nuevo">Nueva</em>' : ''}</div>
       <p>${esc(t.text)}</p>
       <div class="meta"><span class="who2">Para ${esc(t.gestor)}</span><span>${esc(t.when)}</span></div>
     </li>`).join('');
   const prev = taskCount.textContent;
   taskCount.textContent = S.tasks.length;
-  if (prev !== String(S.tasks.length) && freshIdx >= 0) pulse(taskCount, 'bump');
+  if (prev !== String(S.tasks.length) && prev !== '0') pulse(taskCount, 'bump');
 }
+function addTask(t) {
+  S.tasks.unshift({ id: `t-${t.ref}`, when: 'ahora mismo', ...t });
+  renderTasks(`t-${t.ref}`);
+  news('panel');
+}
+const openTask = li => { if (li) showPane(li.dataset.tab, { focusId: li.dataset.ref }); };
+tasksEl.addEventListener('click', e => openTask(e.target.closest('.item')));
+tasksEl.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openTask(e.target.closest('.item')); } });
 
 /* Ficha del cliente */
 let openId = null;
@@ -786,21 +1262,26 @@ function renderFicha(c, hl = []) {
         <li class="doc${d.got ? '' : ' miss'}${hl.includes(d.id) ? ' hl' : ''}">
           <span class="ic" aria-hidden="true">${d.got ? ICON_OK : ''}</span>
           <span class="dn">${esc(d.n)}</span>
-          <span class="dm">${d.got ? esc(d.date + (d.amt ? ' · ' + d.amt : '')) : 'Falta'}</span>
-          ${hl.includes(d.id) ? '<em>Recién recibida y clasificada</em>' : ''}
+          <span class="dm">${d.got ? chIcon(d.ch) + esc(d.date + (d.amt ? ' · ' + d.amt : '')) : 'Falta'}</span>
+          ${hl.includes(d.id) ? `<em>Recién recibida · guardada como ${esc(fileOf(d))} · lista para el OCR</em>` : ''}
         </li>`).join('')}</ul>
       <div class="archived">${c.q === '3T' ? '2T' : '3T'} 2026 · ${c.prev - (k.charCodeAt(0) % 3)} documentos archivados</div></div>`;
   }).join('');
 
+  const nr = nextRem(c);
   fBody.innerHTML = `
     <div class="f-sum"><span class="badge ${st}"><i></i>${LABEL[st]}</span><span><b>${got} de ${total}</b> documentos</span><span>Lo lleva ${esc(c.gestor)}</span></div>
     <div class="f-sec"><h3>Lo que falta</h3>
       ${missing.length
         ? `<div class="miss-box${st === 'bad' ? '' : ' warn'}"><ul>${missing.map(d => `<li>${esc(d.n)}</li>`).join('')}</ul></div>`
         : '<div class="miss-box none">Nada pendiente: está todo recibido y ordenado.</div>'}
+      <p class="expect">Según el tipo de cliente (${esc(c.kind.split(' · ')[1])}), el asistente espera: ${esc(c.exp)}.</p>
     </div>
-    <div class="f-sec"><h3>Documentos<span class="q-tag">${c.q} 2026</span></h3>${groups}</div>
+    <div class="f-sec"><h3>Documentos<span class="q-tag">${c.q} 2026</span></h3>
+      <div class="legend-ch" aria-hidden="true"><span>${CH_ICON.wa} WhatsApp</span><span>${CH_ICON.em} Email</span><span>${CH_ICON.mano} En mano</span></div>
+      ${groups}</div>
     <div class="f-sec"><h3>Recordatorios enviados</h3>
+      <p class="nextrem">${nr ? `Próximo recordatorio automático: <b>${nr}</b> (cada 4 días hasta que esté todo).` : 'Sin recordatorios pendientes: no falta nada.'}</p>
       <ul class="rem">${[...c.rem].reverse().map(r => `<li${r.fresh ? ' class="fresh"' : ''}><time>${esc(r.d)}</time><span>${esc(r.t)}</span></li>`).join('')}</ul>
     </div>`;
   fBody.scrollTop = keep;
@@ -808,6 +1289,7 @@ function renderFicha(c, hl = []) {
 }
 
 function openFicha(id, user) {
+  if (curPane !== 'clientes') showPane('clientes');
   openId = id;
   Object.keys(rows).forEach(k => rows[k].el.classList.toggle('active', k === id));
   renderFicha(byId(id));
@@ -835,15 +1317,26 @@ function refreshClient(c, opts = {}) {
   news('panel');
 }
 function setAct(c, txt) { c.act = `Hoy ${S.last} · ${txt}`; }
-function receive(ids) {
+
+/* Documentos de Bar La Esquina que llegan por el chat (o por email) */
+function receive(ids, ch = 'wa') {
   const c = bar();
-  ids.forEach(id => { c.docs.find(d => d.id === id).got = true; });
+  const chOf = id => typeof ch === 'string' ? ch : (ch[id] || 'wa');
+  const entries = ids.map(id => {
+    const d = c.docs.find(x => x.id === id);
+    d.got = true; d.ch = chOf(id);
+    const f = { id: `f-${id}`, t: S.last, client: c.name, ch: d.ch, file: fileOf(d), path: `${c.q} 2026 › ${TYPES[d.k]}`, prog: 1 };
+    S.feed.unshift(f);
+    return f;
+  });
+  renderFeed(entries[entries.length - 1].id);
+  setDot('docs');
   setAct(c, ids.length > 1 ? 'documentación completa' : 'factura clasificada');
   refreshClient(c, { hl: ids });
+  const ep = epoch;
+  entries.forEach(f => advanceFeed(f, ep));
 }
-function addReminder(c, text) {
-  c.rem.push({ d: '8 oct', t: text, fresh: true });
-}
+function addReminder(c, text) { c.rem.push({ d: '8 oct', t: text, fresh: true }); }
 
 /* =====================================================================
    Pestañas del móvil
@@ -855,6 +1348,11 @@ function setTab(t) {
     if (k === t) $('.news', el).hidden = true;
   });
   if (t === 'chat') requestAnimationFrame(() => { chat.scrollTop = chat.scrollHeight; });
+  if (t === 'panel' && pendingFocus) {
+    const el = pendingFocus;
+    pendingFocus = null;
+    requestAnimationFrame(() => { el.scrollIntoView({ block: 'start', behavior: 'auto' }); pulse(el, 'spot'); });
+  }
 }
 function news(which) {
   if (!tabbed() || stage.dataset.tab === which) return;
@@ -864,20 +1362,105 @@ tabChat.addEventListener('click', () => setTab('chat'));
 tabPanel.addEventListener('click', () => setTab('panel'));
 
 /* =====================================================================
-   Modo libre: respuestas rápidas
+   Escenas (las usan el recorrido y el modo libre)
    ===================================================================== */
-let freeBusy = false;
 const T = { on: false, step: 0, busy: false };
+let freeBusy = false;
 
+async function runFree(fn) {
+  if (T.on || freeBusy) return;
+  const ep = epoch;
+  freeBusy = true; syncChips();
+  try { await fn(ep); }
+  catch (e) { if (!(e instanceof Cancelled)) throw e; }
+  finally { if (ep === epoch) { freeBusy = false; syncChips(); } }
+}
 function syncChips() {
   const off = T.on || freeBusy;
   chips.forEach(b => { b.disabled = off; });
+  btnSim.disabled = off || !!S.flags.aeat;
   quickHint.textContent = T.on ? 'Se activan al terminar la demostración' : 'Pruébalo tú mismo o pulsa «Ver demostración»:';
 }
 
 const leftText = (left, total) => left.length
   ? `Te ${left.length === 1 ? 'falta' : 'faltan'} ${left.length}: ${joinEs(left.map(id => MSG[id].short))}.`
   : `Ya está todo: ${total} de ${total}.`;
+
+/* Pregunta ya contestada antes: el asistente no duplica nada. */
+async function repeatAnswer(ep, question, answer) {
+  clientSays(question);
+  await wait(ep, 450);
+  await botSay(ep, answer);
+}
+
+async function scnCoche(ep) {
+  const c = bar();
+  clientSays('¿Puedo deducirme el coche?');
+  await wait(ep, 500);
+  await botSay(ep, 'Eso depende de cómo uses el coche y no quiero equivocarme. Se lo paso a Marta y te contestará ella personalmente. Yo te aviso en cuanto lo haga.', () => {
+    S.flags.coche = true;
+    S.queries.unshift({ id: 'q-coche', client: 'Bar La Esquina', ch: 'wa', topic: 'Deducciones', msg: '¿Puedo deducirme el coche?', who: 'Marta', state: 'pending', open: true,
+      draft: 'Hola, Bar La Esquina. Para saber si puedes deducirte el coche necesito que me cuentes cómo lo usas: ¿solo para el bar (compras, reparto) o también para uso personal? Con ese dato te digo qué se puede hacer.' });
+    renderQueries('q-coche');
+    updateBadges(true);
+    setDot('consultas');
+    addTask({ id: 't-q-coche', type: 'Consulta', client: 'Bar La Esquina', text: 'Pregunta si puede deducirse el coche. El asistente ha dejado un borrador de respuesta.', gestor: 'Marta', tab: 'consultas', ref: 'q-coche' });
+    setAct(c, 'consulta pasada a Marta');
+    refreshClient(c);
+    showPane('consultas', { focusId: 'q-coche' });
+  });
+}
+
+async function scnNotif(ep) {
+  S.flags.aeat = true;
+  syncChips();
+  const c = bar();
+  const n = { id: 'n-bar', org: 'AEAT', client: 'Bar La Esquina', tipo: 'Requerimiento de información', recv: 'hoy', live: true, prog: 1,
+    sum: 'Hacienda pide justificar los gastos de reparaciones del segundo trimestre: las facturas y los justificantes de pago.',
+    todo: 'Reunir las facturas de reparaciones y los pagos, y subirlos a la sede electrónica antes del plazo.',
+    due: [10, 23], who: 'Marta', told: '', ref: 'DEMO-0003', mark: '10 días hábiles',
+    orig: 'Se le requiere para que, en el plazo de 10 días hábiles contados desde el día siguiente a la recepción de esta comunicación, aporte las facturas y justificantes de pago de los gastos de reparación y conservación declarados en el segundo trimestre…' };
+  S.notifs.unshift(n);
+  renderNotifs('n-bar');
+  updateBadges(true);
+  setDot('avisos');
+  news('panel');
+  await wait(ep, 800); n.prog = 2; refreshNotif(n);
+  await wait(ep, 800); n.prog = 3; refreshNotif(n);
+  await wait(ep, 700); n.prog = 4; refreshNotif(n);
+  addTask({ id: 't-n-bar', type: 'Notificación', client: 'Bar La Esquina', text: 'Requerimiento de la AEAT: hay que responder antes del 23 de octubre.', gestor: 'Marta', tab: 'avisos', ref: 'n-bar' });
+  await wait(ep, 600);
+  await botSay(ep, 'Te aviso de algo importante: ha llegado una notificación de Hacienda a nombre del bar. Piden justificar los gastos de reparaciones del segundo trimestre y el plazo acaba el 23 de octubre. Marta ya la tiene y se pondrá en contacto contigo. Ahora no tienes que hacer nada.', () => {
+    n.prog = 5; n.told = `hoy ${S.last} · WhatsApp`;
+    refreshNotif(n);
+    setAct(c, 'notificación de la AEAT recibida');
+    refreshClient(c);
+  });
+}
+
+async function scnPayroll(ep) {
+  S.flags.nomina = true;
+  const c = bar();
+  clientSays('Este mes María hizo 10 horas extra, a Luis hay que darle un incentivo de 150 € y Ana está de baja desde el día 2.');
+  await wait(ep, 600);
+  const p = { id: 'p-bar', client: 'Bar La Esquina', ch: 'wa', period: 'Octubre 2026', file: '', live: true, prog: 1,
+    text: 'Este mes María hizo 10 horas extra, a Luis hay que darle un incentivo de 150 € y Ana está de baja desde el día 2.',
+    rows: [['María', '10 h', '—', '—'], ['Luis', '—', '—', '150,00 €'], ['Ana', '—', 'desde el 2 oct', '—']],
+    flags: ['Falta el parte de baja de Ana: se lo ha pedido el asistente al cliente.'], status: 'rev' };
+  S.payroll.unshift(p);
+  renderPayroll('p-bar');
+  updateBadges(true);
+  setDot('nominas');
+  news('panel');
+  await wait(ep, 900); p.prog = 2; refreshPay(p);
+  await botSay(ep, 'Anotado para la nómina de octubre: María, 10 horas extra; Luis, incentivo de 150 €; Ana, de baja desde el 2 de octubre. Para la baja de Ana me falta el parte médico: mándame una foto cuando lo tengas. Marta lo revisará antes de preparar las nóminas.', () => {
+    p.prog = 3; refreshPay(p);
+    updateBadges(true);
+    addTask({ id: 't-p-bar', type: 'Nómina', client: 'Bar La Esquina', text: 'Variables de octubre recibidas. Falta el parte de baja de Ana.', gestor: 'Marta', tab: 'nominas', ref: 'p-bar' });
+    setAct(c, 'variables de nómina recibidas');
+    refreshClient(c);
+  });
+}
 
 const QUICK = {
   async foto(ep) {
@@ -904,7 +1487,7 @@ const QUICK = {
     const txt = left.length
       ? `Te ${left.length === 1 ? 'falta' : 'faltan'} ${left.length}: ${joinEs(left.map(id => MSG[id].lbl))}. Mándame una foto de cada una por aquí.`
       : `No te falta nada: tengo los ${c.docs.length} documentos de este trimestre.`;
-    await botSay(ep, txt, () => { setAct(c, 'preguntó qué le falta'); refreshClient(c); });
+    await botSay(ep, txt, () => { setAct(c, 'preguntó qué le falta'); logAuto('q-falta', 'Documentos', '¿Qué me falta?', txt); refreshClient(c); });
   },
   async vence(ep) {
     const c = bar();
@@ -915,25 +1498,27 @@ const QUICK = {
     const txt = left.length
       ? `${base} Aún ${faltan(left.length)}; mándamelos esta semana y Marta llega con tiempo.`
       : `${base} Ya lo tengo todo, así que Marta lo presentará antes de esa fecha.`;
-    await botSay(ep, txt, () => { setAct(c, 'preguntó por el vencimiento'); refreshClient(c); });
+    await botSay(ep, txt, () => { setAct(c, 'preguntó por el vencimiento'); logAuto('q-vence', 'Plazos', '¿Cuándo vence?', txt); refreshClient(c); });
+  },
+  async coche(ep) {
+    if (S.flags.cocheSent) return repeatAnswer(ep, '¿Puedo deducirme el coche?', 'Marta ya te contestó: tienes su mensaje más arriba, en esta misma conversación.');
+    if (S.flags.coche) return repeatAnswer(ep, '¿Puedo deducirme el coche?', 'Ya se lo pasé a Marta. En cuanto lo revise, te contesta ella personalmente.');
+    return scnCoche(ep);
+  },
+  async nomina(ep) {
+    if (S.flags.nomina) return repeatAnswer(ep, 'Quiero mandar los datos de la nómina', 'Ya tengo anotados los datos de octubre. Si cambia algo, dímelo y lo actualizo.');
+    return scnPayroll(ep);
   }
 };
-
-async function quick(kind) {
-  if (T.on || freeBusy) return;
-  const ep = epoch;
-  freeBusy = true; syncChips();
-  try { await QUICK[kind](ep); }
-  catch (e) { if (!(e instanceof Cancelled)) throw e; }
-  finally { if (ep === epoch) { freeBusy = false; syncChips(); } }
-}
-chips.forEach(b => b.addEventListener('click', () => quick(b.dataset.q)));
+chips.forEach(b => b.addEventListener('click', () => runFree(QUICK[b.dataset.q])));
+btnSim.addEventListener('click', () => { if (!S.flags.aeat) runFree(scnNotif); });
 
 /* =====================================================================
-   Recorrido guiado (6 pasos)
+   Recorrido guiado
    ===================================================================== */
 const STEPS = [
-  { cap: 'El asistente avisa al cliente del plazo del IVA y le reclama las 3 facturas que faltan: en el panel, Bar La Esquina está en rojo con 7 de 10.',
+  { pane: 'clientes',
+    cap: 'El asistente avisa al cliente del plazo del IVA y le reclama las 3 facturas que faltan: en el panel, Bar La Esquina está en rojo con 7 de 10.',
     async run(ep) {
       const c = bar();
       await wait(ep, 250);
@@ -943,55 +1528,70 @@ const STEPS = [
         refreshClient(c);
       });
     } },
-  { cap: 'El cliente hace una foto a una factura: el asistente la lee, la clasifica y le dice cuántas le quedan. En el panel pasa a 8 de 10.',
+  { pane: 'clientes',
+    cap: 'El cliente hace una foto a una factura: el asistente la clasifica, la renombra y la deja lista para el OCR. En el panel pasa a 8 de 10.',
     async run(ep) {
       openFicha('bar', false);
       await wait(ep, 450);
       addPhoto('levante');
       await wait(ep, 650);
-      await botSay(ep, 'Recibida: factura de Distribuciones Levante, 14 de septiembre, 342,10 €. Te faltan 2: luz y alquiler.', () => receive(['levante']));
+      await botSay(ep, 'Recibida: factura de Distribuciones Levante, 14 de septiembre, 342,10 €. Te faltan 2: luz y alquiler.', () => receive(['levante'], 'wa'));
     } },
-  { cap: 'El cliente envía las otras dos y el asistente confirma que ya está todo: el semáforo pasa a verde y sube el contador de clientes al día.',
+  { pane: 'clientes',
+    cap: 'El cliente envía las otras dos, una por WhatsApp y otra por email: ya está todo, el semáforo pasa a verde y sube el contador de clientes al día.',
     async run(ep) {
-      addPhoto('luz');
+      clientSays('Te mando la de la luz por aquí. La del alquiler te la envío por correo.');
       await wait(ep, 650);
-      addPhoto('alquiler');
-      await wait(ep, 550);
-      await botSay(ep, 'Recibidas las dos: luz (187,45 €) y alquiler (850,00 €). Ya tengo todo: 10 de 10 documentos. Marta ya puede preparar tu IVA. ¡Gracias!', () => {
-        receive(['luz', 'alquiler']);
+      addPhoto('luz');
+      await wait(ep, 700);
+      await botSay(ep, 'Recibidas las dos: la luz por aquí y el alquiler por correo (187,45 € y 850,00 €). Ya tengo todo: 10 de 10 documentos. Marta ya puede preparar tu IVA. ¡Gracias!', () => {
+        receive(['luz', 'alquiler'], { luz: 'wa', alquiler: 'em' });
         if (!wide()) closeFicha(false);
       });
     } },
-  { cap: 'El cliente pregunta una fecha y el asistente responde al momento, sin que nadie del despacho tenga que parar lo que está haciendo.',
+  { pane: 'consultas',
+    cap: 'El cliente pregunta una fecha y el asistente responde al momento con datos del propio despacho, sin que nadie tenga que parar lo que está haciendo.',
     async run(ep) {
       clientSays('¿Cuándo tengo que pagar el IVA?');
       await wait(ep, 500);
-      await botSay(ep, 'Tienes hasta el 20 de octubre para pagar el IVA del tercer trimestre. Como ya lo tengo todo, Marta lo presentará antes de esa fecha y yo te aviso del importe en cuanto lo tenga calculado.', () => {
+      const txt = 'Tienes hasta el 20 de octubre para pagar el IVA del tercer trimestre. Como ya lo tengo todo, Marta lo presentará antes de esa fecha y yo te aviso del importe en cuanto lo tenga calculado.';
+      await botSay(ep, txt, () => {
         const c = bar();
         setAct(c, 'duda resuelta (fecha del IVA)');
+        logAuto('q-fecha', 'Plazos', '¿Cuándo tengo que pagar el IVA?', txt);
         refreshClient(c);
+        showPane('consultas', { focusId: 'q-fecha' });
       });
     } },
-  { cap: 'Si la duda necesita criterio profesional, el asistente no se la inventa: se la pasa a Marta y aparece en «Para revisar».',
+  { pane: 'consultas',
+    cap: 'Si la duda necesita criterio profesional, el asistente no contesta: prepara un borrador y se lo pasa a Marta en «Para revisar».',
+    async run(ep) { await scnCoche(ep); } },
+  { pane: 'consultas',
+    cap: 'Marta revisa el borrador, lo aprueba y es ella quien lo envía: el cliente lo recibe como un mensaje de Marta.',
     async run(ep) {
-      closeFicha(false);
-      clientSays('¿Puedo deducirme el coche?');
-      await wait(ep, 500);
-      await botSay(ep, 'Eso depende de cómo uses el coche y no quiero equivocarme. Se lo paso a Marta y te contestará ella personalmente. Yo te aviso en cuanto lo haga.', () => {
-        const c = bar();
-        S.tasks.unshift({ client: 'Bar La Esquina', text: 'Pregunta si puede deducirse el coche. El asistente no lo responde solo.', gestor: 'Marta', when: 'ahora mismo' });
-        renderTasks(0);
-        setAct(c, 'consulta pasada a Marta');
-        refreshClient(c);
-      });
-    } }
+      showPane('consultas', { focusId: 'q-coche' });
+      await wait(ep, 1500);
+      const b = $('[data-act="send"][data-qid="q-coche"]');
+      if (b) pulse(b, 'press');
+      await wait(ep, 700);
+      approveQuery('q-coche');
+    } },
+  { pane: 'avisos',
+    cap: 'Llega una notificación de Hacienda: el asistente la lee, la resume, saca el plazo, se la asigna a Marta y avisa al cliente.',
+    async run(ep) { await wait(ep, 400); await scnNotif(ep); } },
+  { pane: 'nominas',
+    cap: 'El cliente cuenta con sus palabras las variables de la nómina del mes: el asistente las convierte en una ficha ordenada y avisa de lo que falta.',
+    async run(ep) { await scnPayroll(ep); } }
 ];
+const TOTAL = STEPS.length + 1;
+tDotsEl.innerHTML = Array.from({ length: TOTAL }, () => '<i></i>').join('');
+const tDots = $$('i', tDotsEl);
 
 function setBarVar() {
-  document.documentElement.style.setProperty('--barh', T.on && T.step < 6 ? `${tourBar.offsetHeight}px` : '0px');
+  document.documentElement.style.setProperty('--barh', T.on && T.step <= STEPS.length ? `${tourBar.offsetHeight}px` : '0px');
 }
 function renderBar() {
-  tStep.textContent = `Paso ${T.step} de 6`;
+  tStep.textContent = `Paso ${T.step} de ${TOTAL}`;
   tDots.forEach((d, i) => d.classList.toggle('done', i < T.step));
   btnNext.disabled = T.busy;
   btnNext.setAttribute('aria-busy', String(T.busy));
@@ -1009,11 +1609,12 @@ function startTour() {
   goStep(1);
 }
 async function goStep(n) {
-  if (n > 5) { showSummary(); return; }
+  if (n > STEPS.length) { showSummary(); return; }
   const ep = epoch;
   T.step = n; T.busy = true;
   showCaption(STEPS[n - 1].cap);
   renderBar();
+  showPane(STEPS[n - 1].pane);
   try { await STEPS[n - 1].run(ep); }
   catch (e) { if (e instanceof Cancelled) return; throw e; }
   if (ep !== epoch) return;
@@ -1021,10 +1622,11 @@ async function goStep(n) {
   renderBar();
 }
 function showSummary() {
-  T.step = 6;
+  T.step = TOTAL;
   tDots.forEach(d => d.classList.add('done'));
   tourBar.classList.remove('on');
   setBarVar();
+  $('#sumEyebrow').textContent = `Paso ${TOTAL} de ${TOTAL} · Resumen`;
   sum.classList.add('on');
   sum.setAttribute('aria-hidden', 'false');
   $('#sumFree').focus({ preventScroll: true });
@@ -1056,9 +1658,16 @@ function resetAll() {
   buildRows();
   updateCounters(false);
   renderTasks();
+  renderFeed();
+  renderNotifs();
+  renderQueries();
+  renderPayroll();
+  updateBadges(false);
+  showPane('clientes');
   hideSummary();
   endTour();
   [tabChat, tabPanel].forEach(t => { $('.news', t).hidden = true; });
+  $$('.pdot').forEach(d => { d.hidden = true; });
 }
 
 $('#btnReset').addEventListener('click', () => { resetAll(); setTab(stage.dataset.tab); });
