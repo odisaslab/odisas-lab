@@ -18,7 +18,7 @@ export default function PrivacidadPage() {
             <strong>Responsable:</strong> {company.legalName} (CIF {company.taxId})
           </li>
           <li>
-            <strong>Dirección:</strong> {company.address.street}, {company.address.postalCode} {company.address.city} ({company.address.region})
+            <strong>Dirección:</strong> {company.address.street}, {company.address.area}, {company.address.postalCode} {company.address.city} ({company.address.region})
           </li>
           <li>
             <strong>Contacto para cuestiones de privacidad:</strong> {contact.email.address}

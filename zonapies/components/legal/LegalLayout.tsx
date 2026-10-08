@@ -19,7 +19,7 @@ export function LegalLayout({ title, updated, children }: LegalLayoutProps) {
         </h1>
         <p className="mt-6 text-sm text-muted">Última actualización: {updated}</p>
         <p className="mt-6 rounded-2xl border border-line-strong p-4 text-sm">
-          <PendingText>Texto orientativo basado en los datos mercantiles localizados por búsqueda. Debe revisarlo y validarlo la asesoría legal de Zona Pies antes de publicarse</PendingText>
+          <PendingText>Texto orientativo. Dirección, teléfono y email proceden de la web actual; el CIF está por confirmar. Debe revisarlo y validarlo la asesoría legal de Zona Pies antes de publicarse</PendingText>
         </p>
         <div className="legal mt-12">{children}</div>
       </div>

@@ -9,22 +9,20 @@ Los ocho pasos previos al código que pide el briefing (§34). Este documento ma
 
 ## 1. Análisis de la web actual
 
-**Limitación honesta.** El entorno de trabajo bloqueó el acceso directo a `zonapies.es` (el proxy de red deniega el dominio; también `youtube.com` y directorios). **No he podido leer la web real.** Lo que sí se obtuvo es lo que devuelven los buscadores sobre ella (fragmentos de sus propias páginas y directorios mercantiles). El análisis se apoya en eso, en el *documento funcional* y en el briefing. Todo dato obtenido por búsqueda está marcado como **por confirmar**; nada se ha inventado.
+**Alcance real del análisis.** El acceso a `zonapies.es` desde el entorno de desarrollo fue intermitente: se pudo leer la **home** completa, `robots.txt` y los sitemaps (WordPress + Yoast + Elementor, tema Astra); las seis páginas interiores y las imágenes volvieron a dar 403. El análisis combina esa lectura directa, el *documento funcional* y el briefing. Lo no verificado está marcado como **por confirmar** en `README.md`.
 
-**Datos reales localizados por búsqueda (sin verificar en directo)**
+**Verificado en la home real (08/10/2026)**
 
-| Dato | Valor | Fuente |
-|---|---|---|
-| Razón social / CIF | ZONAPIES SL · B88280821 | Aviso legal de la web (fragmento) |
-| Domicilio | Calle Zarzuela, 10 · 28942 Fuenlabrada (Madrid) | Aviso legal, páginas amarillas |
-| Teléfonos | 91 606 23 73 · 640 203 750 | Home y directorios |
-| Email | zonapiesfuenlabrada@gmail.com | Home (un directorio cita otro: confirmar) |
-| Instagram | @zonapies_ | Búsqueda |
-| Propuesta | «Sistema integral de escáner 3D, software de prescripción y fabricación avanzada» · «Escanea el pie, automatiza el diseño y fabrica ortesis plantares a medida sin depender de procesos manuales ni espumas» | Home |
-| Experiencia | «más de 30 años» (otras fuentes dicen 40 y 50: confirmar) | Datos estructurados de la home |
-| Materiales citados | Resina, composite, fibra de carbono, EVA, polipropileno, amortiguación, forros | Canal de YouTube / directorios |
-| URLs antiguas | `/quienes-somos/`, `/productos/`, `/condiciones-de-uso/` | Búsqueda → se redirigen (301) |
-| Otros dominios | `zonapiessl.com`, un login en `zonapiesweb.azurewebsites.net` (posible acceso de clientes: confirmar) | Búsqueda |
+| Dato | Valor |
+|---|---|
+| Estructura (nav) | Inicio · Sobre nosotros · Plantillas y Materiales · Sistemas de Fabricación · Franquiciados · Formación · Contacto · **Acceso clientes** (`zonapies.azurewebsites.net`) · «Llámanos» |
+| Mensaje | H1 «Ingeniería digital aplicada a la ortesis plantar» · «Sistema integral de escáner 3D, software de prescripción y fabricación avanzada» · H2 «Digitaliza tu consulta con plantillas 3D de alta precisión» |
+| Valores | Calidad · Precisión 3D · Experiencia técnica («más de tres décadas») · Asesoría profesional · Entrega ágil |
+| ¿Qué necesitas? | Te fabricamos tus plantillas · Te fabricamos solo el shell · ¿Quieres fabricar tus propias plantillas? (con tarjetas PA11, EVA y resina) |
+| Contacto | 91 606 23 73 · WhatsApp 640 20 37 50 · zonapiesfuenlabrada@gmail.com · Calle Zarzuela, 10, Pol. Ind. Cordel de la Carrera, 28942 Fuenlabrada |
+| Procesos (por vídeos) | Escáner portátil 3D · impresora 3D · PA11 (elasticidad) · fresado de EVA · EVA en 3 densidades · termoconformado de resina · «Sistema DUO» |
+| Conversión actual | Formulario en el hero («¡Consigue tu presupuesto gratuito!»), «Quiero mi presupuesto ahora» (enlaza a `tel:`), llamada y WhatsApp |
+| Debilidades | `<title>` con lista de ciudades (Navarra, Burgos…) sin relación con la sede; solo un H1 genérico «Home»; el CTA principal es un `tel:`; imágenes sin `alt`; el `robots.txt` bloquea a todos los rastreadores salvo Google, Bing y MSN con `Crawl-delay: 300` |
 
 Lo que sí se sabe de la web actual:
 
@@ -51,7 +49,7 @@ Lo que sí se sabe de la web actual:
 - Experiencia acumulada (sin cifras: no constan).
 
 **Pendiente de proporcionar por Zona Pies** (la web lo muestra con un marcador `PLACEHOLDER` visible hasta que se sustituya)
-- Confirmar teléfono, email, dirección y que 640 203 750 sea el WhatsApp de empresa; URL del acceso de clientes.
+- (Resuelto) Teléfonos, email, dirección, WhatsApp y acceso de clientes ya verificados en la home real.
 - Testimonios reales (texto, nombre, clínica, consentimiento).
 - Casos reales con fotos y material usado.
 - Fotografías y vídeo del laboratorio, maquinaria y equipo.

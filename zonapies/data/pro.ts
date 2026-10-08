@@ -1,4 +1,4 @@
-import { EXPERIENCE, LEAD_TIME } from "@/data/site";
+import { LEAD_TIME } from "@/data/site";
 
 /** Zona Profesional: «Tu laboratorio. A un click.» (briefing §13). */
 export interface Benefit {
@@ -8,14 +8,14 @@ export interface Benefit {
 }
 
 export const benefits: Benefit[] = [
-  { id: "fabricacion", title: "Fabricación especializada", body: "Ortesis plantares y plantillas a medida, fabricadas para profesionales." },
-  { id: "precision", title: "Precisión", body: "Del escaneo 3D al diseño digital, sin pasos manuales innecesarios." },
-  { id: "materiales", title: "Materiales", body: "Resina, composite, fibra de carbono, EVA, PA11 y más." },
-  { id: "soporte", title: "Soporte", body: "Un equipo que te acompaña durante todo el proceso." },
+  { id: "fabricacion", title: "Fabricación especializada", body: "Plantillas anatómicas y ortopédicas adaptadas a cada caso, fabricadas para profesionales." },
+  { id: "precision", title: "Precisión 3D", body: "Cada par se diseña mediante escaneo 3D, logrando un ajuste exacto y totalmente personalizado." },
+  { id: "materiales", title: "Materiales técnicos", body: "Materiales de alto rendimiento que aportan durabilidad, confort y eficacia: resina, composite, fibra de carbono, EVA, PA11." },
+  { id: "soporte", title: "Asesoría profesional", body: "Te acompañamos en todo el proceso con soporte especializado para elegir la mejor solución." },
   { id: "personalizacion", title: "Personalización", body: "Material, dureza y estructura según cada prescripción." },
-  { id: "rapidez", title: "Rapidez", body: `Fabricación en aproximadamente ${LEAD_TIME.replace("3 días hábiles", "tres días hábiles")} desde la recepción del pedido.` },
-  { id: "experiencia", title: "Experiencia", body: `${EXPERIENCE[0].toUpperCase()}${EXPERIENCE.slice(1)} fabricando plantillas y prótesis plantares a medida.` },
-  { id: "cobertura", title: "Cobertura nacional", body: "Envíos a toda España, también a Madrid y su área." },
+  { id: "rapidez", title: "Entrega ágil", body: `Fabricación eficiente y servicio postventa eficaz, sin esperas innecesarias. Plazo aproximado: ${LEAD_TIME.replace("3 días hábiles", "tres días hábiles")}.` },
+  { id: "experiencia", title: "Experiencia técnica", body: "Más de tres décadas perfeccionando la fabricación de plantillas anatómicas y ortopédicas." },
+  { id: "cobertura", title: "Cobertura nacional", body: "Fabricamos y enviamos a toda España, también a Madrid y su área." },
 ];
 
 export const collaboration = [

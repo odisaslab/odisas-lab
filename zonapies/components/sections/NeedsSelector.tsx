@@ -1,11 +1,13 @@
 "use client";
 
+import Image from "next/image";
 import { useId, useState } from "react";
 import { QuoteButton } from "@/components/forms/QuoteProvider";
 import { Reveal } from "@/components/motion/Reveal";
 import { SplitHeading } from "@/components/motion/SplitHeading";
 import { PendingText } from "@/components/ui/Placeholder";
 import { needDetails } from "@/data/needs";
+import { media } from "@/data/media";
 import { needs } from "@/data/quote";
 import { track } from "@/lib/analytics";
 
@@ -23,6 +25,8 @@ export function NeedsSelector({ headingAs = "h2", title = "¿Qué *necesitas*?",
   const [value, setValue] = useState<(typeof needDetails)[number]["value"]>("fabricacion");
   const groupId = useId();
   const detail = needDetails.find((d) => d.value === value) ?? needDetails[0];
+  // Fotografía real de la opción (si se ha descargado con `npm run assets`)
+  const photo = media(`necesidad-${detail.value}`);
 
   const choose = (next: typeof value) => {
     setValue(next);
@@ -93,7 +97,13 @@ export function NeedsSelector({ headingAs = "h2", title = "¿Qué *necesitas*?",
             ) : null}
           </div>
 
-          <ol className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line lg:col-span-7">
+          <div className="lg:col-span-7">
+            {photo ? (
+              <figure className="relative mb-4 aspect-[3/2] overflow-hidden rounded-2xl border border-line">
+                <Image src={photo.src} alt={photo.alt} fill sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" loading="lazy" />
+              </figure>
+            ) : null}
+          <ol className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line">
             {[
               { k: "Tú", v: detail.you },
               { k: "Nosotros", v: detail.us },
@@ -108,6 +118,7 @@ export function NeedsSelector({ headingAs = "h2", title = "¿Qué *necesitas*?",
               </li>
             ))}
           </ol>
+          </div>
         </div>
       </div>
     </div>

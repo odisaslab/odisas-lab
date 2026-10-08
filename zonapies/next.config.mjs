@@ -11,19 +11,20 @@ const nextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
   },
-  // URLs de la web anterior que se han podido identificar (búsqueda web). Conservan el SEO.
-  // PENDIENTE: completar con el resto de URLs antiguas (plantillas y materiales, sistemas de
-  // fabricación, franquiciados, formación, contacto, acceso de clientes) cuando se pueda
-  // rastrear zonapies.es o su sitemap.xml.
+  // URLs de la web anterior (WordPress). Las 7 primeras son las de su page-sitemap.xml (08/10/2026);
+  // las 3 últimas aparecían en buscadores. Conservan el SEO. «sistema-de-fabricacion» se envía a
+  // /tecnologia; si su contenido encaja mejor en /plantillas, cambiar el destino aquí.
   async redirects() {
-    return [
-      { source: '/quienes-somos', destination: '/nosotros', permanent: true },
-      { source: '/quienes-somos/', destination: '/nosotros', permanent: true },
-      { source: '/productos', destination: '/plantillas', permanent: true },
-      { source: '/productos/', destination: '/plantillas', permanent: true },
-      { source: '/condiciones-de-uso', destination: '/aviso-legal', permanent: true },
-      { source: '/condiciones-de-uso/', destination: '/aviso-legal', permanent: true },
+    const moved = [
+      ['/sobre-nosotros', '/nosotros'],
+      ['/plantillas-ortopedicas-a-medida', '/plantillas'],
+      ['/sistema-de-fabricacion', '/tecnologia'],
+      ['/franciciados', '/franquicias'], // sic: así está escrita la URL original
+      ['/quienes-somos', '/nosotros'],
+      ['/productos', '/plantillas'],
+      ['/condiciones-de-uso', '/aviso-legal'],
     ];
+    return moved.map(([source, destination]) => ({ source, destination, permanent: true }));
   },
   async headers() {
     return [

@@ -25,7 +25,7 @@ export default function AvisoLegalPage() {
             <strong>CIF:</strong> {company.taxId}
           </li>
           <li>
-            <strong>Domicilio social:</strong> {company.address.street}, {company.address.postalCode} {company.address.city} ({company.address.region})
+            <strong>Domicilio social:</strong> {company.address.street}, {company.address.area}, {company.address.postalCode} {company.address.city} ({company.address.region})
           </li>
           <li>
             <strong>Teléfono:</strong> {contact.phone.display}

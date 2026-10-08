@@ -32,7 +32,7 @@ export default function AccesoProfesionalPage() {
 
       <Section name="access" theme="light" label="Entrar al área de clientes" className="!pt-16 md:!pt-24">
         <div className="wrap grid gap-10 lg:grid-cols-12 lg:gap-16">
-          <div className="reg relative rounded-3xl border border-line-strong p-8 md:p-12 lg:col-span-7">
+          <div className="reg relative min-w-0 rounded-3xl border border-line-strong p-8 md:p-12 lg:col-span-7">
             <span className="reg-b" />
             <span className="grid size-14 place-items-center rounded-full bg-accent text-accent-fg">
               <Lock className="size-6" />
@@ -41,7 +41,7 @@ export default function AccesoProfesionalPage() {
             <p className="t-lead mt-5 max-w-[30rem]">Accede con tus credenciales habituales.</p>
 
             {portal.url ? (
-              <a href={portal.url} target="_blank" rel="noopener noreferrer" data-pro data-cta="access-enter" className="btn btn-primary btn-lg mt-9">
+              <a href={portal.url} target="_blank" rel="noopener noreferrer" data-pro data-cta="access-enter" className="btn btn-primary btn-lg mt-9 w-full justify-center sm:w-auto">
                 Entrar al área de clientes <ArrowUpRight className="size-4" />
               </a>
             ) : (

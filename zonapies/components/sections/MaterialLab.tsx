@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { QuoteButton } from "@/components/forms/QuoteProvider";
@@ -9,6 +10,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { PendingText } from "@/components/ui/Placeholder";
 import { ArrowRight } from "@/components/ui/Icons";
 import { MacroSwatch } from "@/components/visuals/MacroSwatch";
+import { media } from "@/data/media";
 import { levelLabels, materials, type MaterialInfo } from "@/data/materials";
 import { SWATCH } from "@/data/story";
 import { track } from "@/lib/analytics";
@@ -28,6 +30,20 @@ interface MaterialLabProps {
  * Al elegir un material cambian: el modelo 3D (textura, brillo), la vista macro, las
  * propiedades, las ventajas y las aplicaciones.
  */
+/** Fotografía real del material terminado (si existe y se ha descargado). */
+function RealPhoto({ materialId }: { materialId: string }) {
+  const photo = media(`material-${materialId}`);
+  if (!photo) return null;
+  return (
+    <figure className="mt-3">
+      <div className="relative overflow-hidden rounded-2xl border border-line" style={{ aspectRatio: `${photo.width} / ${photo.height}` }}>
+        <Image src={photo.src} alt={photo.alt} fill sizes="(min-width: 1024px) 30vw, 100vw" className="object-cover" loading="lazy" />
+      </div>
+      <figcaption className="hud mt-2 text-muted">Foto real · {photo.alt}</figcaption>
+    </figure>
+  );
+}
+
 export function MaterialLab({
   headingAs = "h2",
   title = "El material también es *tecnología*.",
@@ -162,9 +178,15 @@ export function MaterialLab({
             return (
               <div key={material.id} role="tabpanel" id={`panel-${material.id}`} aria-labelledby={`tab-${material.id}`} hidden={!selected} className="panel-in">
                 {selected ? <MacroSwatch id={material.id} label={material.name} ratio="16 / 8" /> : null}
+                {selected ? <RealPhoto materialId={material.id} /> : null}
 
                 <Item className="t-h3 mt-6">{material.name}</Item>
                 <p className="t-body mt-2">{material.summary}</p>
+                {material.process ? (
+                  <p className="hud mt-4 text-muted">
+                    Fabricación · <span className="text-fg">{material.process}</span>
+                  </p>
+                ) : null}
 
                 <ul className="mt-6 space-y-4" aria-label="Propiedades">
                   {(Object.keys(levelLabels) as (keyof MaterialInfo["levels"])[]).map((key) => (

@@ -20,6 +20,11 @@ export interface MaterialInfo {
   levels: { flexibility: number; resistance: number; comfort: number; lightness: number };
   advantages: string[];
   applications: string[];
+  /**
+   * Cómo se fabrica. Deducido de los nombres de los vídeos de la web real (impresora-3D, PA11-ELASTICIDAD,
+   * FRESADO-EVA, EVA-3-DENSIDADES, termoconformado-resina): CONFIRMAR con Zona Pies.
+   */
+  process?: string;
   validated: boolean;
 }
 
@@ -44,6 +49,7 @@ export const materials: MaterialInfo[] = [
     levels: { flexibility: 5, resistance: 2, comfort: 5, lightness: 5 },
     advantages: ["Amortiguación", "Ligereza", "Confort"],
     applications: ["Uso diario", "Soluciones de amortiguación"],
+    process: "Fresado · disponible en 3 densidades",
     validated: false,
   },
   {
@@ -55,6 +61,7 @@ export const materials: MaterialInfo[] = [
     levels: { flexibility: 3, resistance: 4, comfort: 3, lightness: 4 },
     advantages: ["Flexibilidad y resistencia", "Durabilidad", "Ligera"],
     applications: ["Uso diario", "Uso intensivo"],
+    process: "Impresión 3D",
     validated: false,
   },
   {
@@ -66,6 +73,7 @@ export const materials: MaterialInfo[] = [
     levels: { flexibility: 2, resistance: 4, comfort: 3, lightness: 3 },
     advantages: ["Acabado liso", "Buena rigidez", "Fiel al diseño"],
     applications: ["Uso diario", "Calzado cerrado"],
+    process: "Termoconformado",
     validated: false,
   },
   {

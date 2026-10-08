@@ -62,12 +62,17 @@ export function Footer() {
                 <li className="mt-2 text-muted">
                   {company.address.street}
                   <br />
+                  {company.address.area}
+                  <br />
                   {company.address.postalCode} {company.address.city} ({company.address.region})
                 </li>
                 <li className="mt-1 text-muted">Envíos a toda España.</li>
-                <li>
+                <li className="flex flex-wrap gap-x-5">
                   <a href={contact.instagram} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center hover:text-accent-text" data-cta="footer-instagram">
                     Instagram
+                  </a>
+                  <a href={contact.facebook} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center hover:text-accent-text" data-cta="footer-facebook">
+                    Facebook
                   </a>
                 </li>
               </ul>

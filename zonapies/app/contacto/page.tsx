@@ -16,10 +16,6 @@ export const metadata = pageMetadata({
   path: "/contacto",
 });
 
-const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  `${company.address.street}, ${company.address.postalCode} ${company.address.city}`,
-)}`;
-
 export default function ContactoPage() {
   const channels = [
     {
@@ -99,9 +95,11 @@ export default function ContactoPage() {
                   <br />
                   {company.address.street}
                   <br />
+                  {company.address.area}
+                  <br />
                   {company.address.postalCode} {company.address.city} ({company.address.region})
                 </span>
-                <a href={mapsUrl} target="_blank" rel="noopener noreferrer" className="link-arrow mt-2" data-cta="contact-map">
+                <a href={contact.mapsUrl} target="_blank" rel="noopener noreferrer" className="link-arrow mt-2" data-cta="contact-map">
                   Cómo llegar ↗
                 </a>
               </address>

@@ -19,44 +19,68 @@ npm run build && npm start
 
 Para probar niveles de la escena 3D: `?scene=full`, `?scene=lite` o `?scene=none` en cualquier URL (fuerza el nivel y desactiva el monitor de FPS).
 
-## ⚠️ Lo primero que hay que saber
+## Estado de los datos (08/10/2026)
 
-**No se pudo leer `zonapies.es`**: el proxy del entorno de desarrollo bloqueó el dominio. El contenido se ha construido a partir del *documento funcional*, del briefing y de lo que devuelven los buscadores sobre la web (fragmentos de sus propias páginas y directorios mercantiles). **Todo lo obtenido por búsqueda está sin verificar.** Detalle en `DISENO.md` §1.
+El acceso a `zonapies.es` desde el entorno de desarrollo fue **intermitente**: solo se pudo leer la **home**, el `robots.txt` y los sitemaps; después volvió a bloquearse (403) y las 6 páginas interiores y las imágenes no llegaron a descargarse. Lo que sigue distingue lo verificado de lo que no.
 
-### Datos reales localizados (CONFIRMAR antes de publicar)
+### ✅ Verificado contra la web real
 
-| Dato | Valor usado | Dónde se cambia |
+| Dato | Valor | Dónde vive |
 |---|---|---|
-| Razón social / CIF | ZONAPIES SL · B88280821 | `data/site.ts` (`company`) |
-| Domicilio | Calle Zarzuela, 10 · 28942 Fuenlabrada (Madrid) | `data/site.ts` |
-| Teléfono | 91 606 23 73 | `NEXT_PUBLIC_PHONE(_DISPLAY)` |
-| WhatsApp | 640 203 750 (móvil de un directorio; **¿es el WhatsApp de empresa?**) | `NEXT_PUBLIC_WHATSAPP` |
-| Email | zonapiesfuenlabrada@gmail.com (otro directorio cita otro) | `NEXT_PUBLIC_CONTACT_EMAIL` |
-| Instagram | @zonapies_ | `NEXT_PUBLIC_INSTAGRAM_URL` |
-| Experiencia | «más de 30 años» (otras fuentes dicen 40 y 50) | `EXPERIENCE` en `data/site.ts` |
-| Plazo | ≈ 3 días hábiles (consta en la web actual) | `LEAD_TIME` en `data/site.ts` |
+| Teléfonos | 91 606 23 73 · 640 20 37 50 | `data/site.ts` |
+| WhatsApp | 34 640 203 750 (enlace `api.whatsapp.com/send?phone=34640203750`) | `data/site.ts` |
+| Email | zonapiesfuenlabrada@gmail.com | `data/site.ts` |
+| Dirección | Calle Zarzuela, 10, Pol. Ind. Cordel de la Carrera, 28942 Fuenlabrada (Madrid) | `data/site.ts` |
+| Acceso de clientes | https://zonapies.azurewebsites.net/ | `data/site.ts` |
+| Redes | Instagram @zonapies_ · Facebook · enlace de Google Maps | `data/site.ts` |
+| Razón social | ZONAPIES SL | `data/site.ts` |
+| Experiencia | «más de tres décadas» | `EXPERIENCE` |
+| Valores | Calidad, Precisión 3D, Experiencia técnica, Asesoría profesional, Entrega ágil (textos literales) | `data/pro.ts` |
+| FAQs | Las 6 de la home, literales (con PA11 añadido) | `data/faq.ts` |
+| Estructura | Nav real: Sobre nosotros · Plantillas y Materiales · Sistemas de Fabricación · Franquiciados · Formación · Contacto · Acceso clientes | `DISENO.md` |
+| URLs reales (sitemap) | `/sobre-nosotros`, `/plantillas-ortopedicas-a-medida`, `/sistema-de-fabricacion`, `/franciciados` (sic), `/formacion`, `/contacto` | `next.config.mjs` (301) |
 
-### Contenido que falta (marcado en pantalla en ámbar: `PLACEHOLDER` / `[…]`)
+Mensaje de la web real que la nueva respeta: *«Digitaliza tu consulta con plantillas 3D de alta precisión. Escanea el pie, automatiza el diseño y fabrica ortesis plantares a medida sin depender de procesos manuales ni espumas»* → **escanea el profesional en su consulta** (hay un vídeo de «escáner portátil 3D»).
 
-Cada hueco se ve en la propia web, así que no puede pasar a producción sin que nadie lo note. Al sustituirlo por el dato real, la marca desaparece.
+### ⚠️ Por confirmar
+
+| Qué | Por qué |
+|---|---|
+| **CIF B88280821** | Viene de un fragmento de buscador del aviso legal; la web real solo muestra la razón social |
+| **Plazo «≈ 3 días hábiles»** | El documento funcional y el buscador dicen 3; la home dice «unos pocos días hábiles» (`LEAD_TIME`) |
+| **Proceso por material** (PA11 → impresión 3D, EVA → fresado en 3 densidades, resina → termoconformado) | Deducido de los **nombres de los vídeos** de la web (`impresora-3D-ortoprotesicos`, `FRESADO-EVA`, `EVA-3-DENSIDADES`, `termoconformado-resina`, `PA11-ELASTICIDAD`); `data/materials.ts` |
+| Niveles 1–5 de cada material e «indicaciones» | Comparativa orientativa mía, no datos del catálogo |
+| Destino del 301 de `/sistema-de-fabricacion` | Va a `/tecnologia`; encajará mejor en `/plantillas` si esa página trata de sistemas para fabricar plantillas |
+| Paleta de marca | La web usa los colores por defecto del tema Astra (azul `#046bd2`); no hay identidad cromática propia visible. Falta ver el **logotipo** |
+
+### 📭 Falta (se ve en pantalla en ámbar: `PLACEHOLDER` / `[…]`)
+
+La **home real no tiene testimonios** (el documento funcional dice que la web los tiene: estarán en alguna página interior, no leída).
 
 | Falta | Archivo |
 |---|---|
-| **Testimonios reales** (la web actual ya los tiene: copiar texto literal, autor y centro, con autorización) | `data/testimonials.ts` → `verified: true` |
-| **Casos reales** con fotos antes/después | `data/cases.ts` → `placeholder: false` |
-| Fotografías del laboratorio, maquinaria, equipo, vídeo de fabricación | `components/ui/Placeholder.tsx` (`PlaceholderBox`), `data/timeline.ts` |
-| Cronología real (años, hitos) y visión de futuro | `data/timeline.ts` |
-| Formaciones: catálogo, metodología, calendario, recursos | `data/training.ts` |
+| Testimonios reales (texto, autor, centro, autorización) | `data/testimonials.ts` → `verified: true` |
+| Casos reales con fotos antes/después | `data/cases.ts` → `placeholder: false` |
+| Fotos del laboratorio, maquinaria, equipo | `components/ui/Placeholder.tsx`, `data/timeline.ts` |
+| Cronología real y visión de futuro | `data/timeline.ts` |
+| Formaciones: catálogo, metodología, calendario | `data/training.ts` |
 | Franquicias: condiciones, perfil, territorios | `data/franchise.ts` |
-| Catálogo de sistemas para «fabricar mis propias plantillas» | `data/needs.ts` |
-| **Validación técnica** de los niveles de cada material y de sus indicaciones | `data/materials.ts` → `validated: true` |
-| Validación de los textos de tecnología (no constan equipos ni software) | `data/tech.ts` |
-| URL del **acceso de clientes** actual (en el buscador aparece un login en `zonapiesweb.azurewebsites.net`: confirmar) | `NEXT_PUBLIC_PORTAL_URL` |
-| **Logotipo y colores oficiales** (paleta y marca son provisionales) | `app/globals.css` (`--color-brand`, `--color-signal`), `components/ui/Logo.tsx`, `app/icon.tsx`, `app/opengraph-image.tsx` |
-| Textos legales revisados por asesoría (datos registrales) | `app/aviso-legal`, `app/politica-de-*` |
-| Resto de **URLs antiguas** para las redirecciones 301 | `next.config.mjs` (`redirects()`) |
+| Catálogo de sistemas (¿«Sistema DUO»?) | `data/needs.ts` |
+| Textos de «Sobre nosotros», «Plantillas y Materiales», «Sistemas de Fabricación», «Franquiciados», «Formación» y «Contacto» **reales** (páginas interiores sin leer) | varios `data/*` |
+| Logotipo vectorial y colores oficiales | `app/globals.css`, `components/ui/Logo.tsx`, `app/icon.tsx`, `app/opengraph-image.tsx` |
+| Textos legales revisados por asesoría | `app/aviso-legal`, `app/politica-de-*` |
 
-Ya redirigidas (localizadas por búsqueda): `/quienes-somos` → `/nosotros`, `/productos` → `/plantillas`, `/condiciones-de-uso` → `/aviso-legal`.
+### Fotografías reales (una orden)
+
+La web actual tiene fotos de producto propias (plantillas PA11, EVA y resina terminadas, shell, sistemas…). No se pudieron descargar. Desde una máquina con acceso a la web:
+
+```bash
+npm run assets      # descarga a public/media/ y actualiza data/media.generated.json (1 petición cada 2,5 s)
+```
+
+Hasta entonces no se muestra nada (no hay imágenes rotas). Al ejecutarlo aparecen: la foto de cada opción de «¿Qué necesitas?» y la foto real de PA11, EVA y resina en el Material Lab. Los vídeos de la web (`ESCANER-PORTATIL-3D.mp4`, `FRESADO-EVA.mp4`, `termoconformado-resina.mp4`…) están en `zonapies.es/wp-content/uploads/2026/03|04/`; no se han incorporado (peso) pero pueden usarse con póster y carga bajo demanda.
+
+> El `robots.txt` de la web actual desautoriza a los rastreadores genéricos y pide `Crawl-delay: 300`. Las lecturas hechas fueron mínimas y puntuales, a petición expresa del cliente.
 
 ## Estructura
 
