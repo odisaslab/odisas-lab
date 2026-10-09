@@ -1,0 +1,37 @@
+{
+  "name": "zonapies-casos-demo",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Demo navegable de la app «Casos» de Zona Pies (todo simulado salvo la geometría de la plantilla)",
+  "scripts": {
+    "dev": "next dev -p 3300",
+    "build": "next build",
+    "serve": "node scripts/serve-out.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test:e2e": "node scripts/e2e.mjs",
+    "verify:stl": "node scripts/verify-stl.mjs",
+    "check:geometry": "node scripts/check-geometry.mjs"
+  },
+  "dependencies": {
+    "geist": "^1.3.1",
+    "next": "15.5.25",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@eslint/eslintrc": "^3.0.0",
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/three": "^0.180.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "15.5.25",
+    "playwright-core": "^1.50.0",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.7.0"
+  }
+}
