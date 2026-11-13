@@ -148,7 +148,7 @@ table.t { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 .t td.c, .t th.c { text-align: center; }
 @media (max-width: 700px) {
   table.t.cards thead { display: none; }
-  table.t.cards tr { display: grid; grid-template-columns: auto 1fr auto; gap: 4px 10px; padding: 12px 0; border-bottom: 1px solid var(--line); align-items: center; }
+  table.t.cards tr { display: grid; grid-template-columns: auto auto 1fr; gap: 4px 10px; padding: 12px 0; border-bottom: 1px solid var(--line); align-items: center; }
   table.t.cards td { border: 0; padding: 0; }
   table.t.cards td.wide { grid-column: 1 / -1; }
   table.t.cards td.hide-m { display: none; }
@@ -204,7 +204,7 @@ ul.bul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; g
 .viz .tip { position: absolute; pointer-events: none; background: var(--ink); color: #fff; border-radius: 8px; padding: 6px 10px; font-size: 0.78rem; white-space: nowrap; transform: translate(-50%, -110%); z-index: 5; }
 .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.8rem; color: var(--mute); margin-bottom: 6px; }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
-.hbar { display: grid; grid-template-columns: minmax(90px, 34%) 1fr auto; gap: 10px; align-items: center; font-size: 0.86rem; padding: 4px 0; }
+.hbar { display: grid; grid-template-columns: minmax(110px, 42%) 1fr auto; gap: 10px; align-items: center; font-size: 0.86rem; padding: 4px 0; }
 .hbar .track { height: 14px; border-radius: 4px; background: var(--cream); overflow: hidden; }
 .hbar .track i { display: block; height: 100%; background: var(--series-1); border-radius: 0 4px 4px 0; min-width: 2px; }
 

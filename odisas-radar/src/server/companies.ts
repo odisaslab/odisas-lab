@@ -55,7 +55,7 @@ export async function addExclusion(type: string, value: string, reason: string) 
   if (!v) throw new HttpError(400, 'Valor de exclusión no válido.');
   await q('INSERT INTO exclusions (id, type, value, reason, created_at) VALUES ($1,$2,$3,$4,$5) ON CONFLICT (type, value) DO NOTHING', [nanoid(12), type, v, clip(reason, 200), nowIso()]);
   // Las empresas ya guardadas que coincidan dejan de poder contactarse.
-  if (type === 'dominio') await q('UPDATE companies SET do_not_contact = TRUE WHERE domain = $1', [v]);
+  if (type === 'dominio') await q("UPDATE companies SET do_not_contact = TRUE WHERE domain = $1 OR lower(email) LIKE '%@' || $1", [v]);
   if (type === 'empresa') await q('UPDATE companies SET do_not_contact = TRUE WHERE norm_name = $1', [v]);
   if (type === 'email') await q('UPDATE companies SET do_not_contact = TRUE WHERE lower(email) = $1', [v]);
   if (type === 'telefono') await q('UPDATE companies SET do_not_contact = TRUE WHERE phone_norm = $1', [v]);

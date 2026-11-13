@@ -32,7 +32,7 @@ export function WeekBars({ data, label }: { data: { week: string; value: number 
           return (
             <g key={d.week} onMouseEnter={() => setHover(i)} onMouseLeave={() => setHover(null)}>
               <rect x={pad.l + i * step} y={pad.t} width={step} height={H - pad.t - pad.b} fill="transparent" />
-              <path d={`M${x},${H - pad.b} v${-Math.max(0, h - 4)} q0,-4 4,-4 h${bw - 8} q4,0 4,4 v${Math.max(0, h - 4)} z`} fill="var(--series-1)" opacity={hover == null || hover === i ? 1 : 0.45} />
+              {d.value > 0 && <path d={`M${x},${H - pad.b} v${-Math.max(0, h - 4)} q0,-4 4,-4 h${bw - 8} q4,0 4,4 v${Math.max(0, h - 4)} z`} fill="var(--series-1)" opacity={hover == null || hover === i ? 1 : 0.45} />}
               {i % 2 === 1 && <text x={x + bw / 2} y={H - 6} textAnchor="middle">{fmtWeek(d.week)}</text>}
             </g>
           );
@@ -114,7 +114,7 @@ export function HBars({ rows, unit = '' }: { rows: { label: string; value: numbe
     <div>
       {rows.map((r) => (
         <div className="hbar" key={r.label} title={`${r.label}: ${r.value}${unit}${r.note ? ` · ${r.note}` : ''}`}>
-          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.label}</span>
+          <span style={{ overflowWrap: 'anywhere', lineHeight: 1.25 }}>{r.label}</span>
           <span className="track">
             <i style={{ width: `${(r.value / max) * 100}%` }} />
           </span>

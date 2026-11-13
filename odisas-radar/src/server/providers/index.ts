@@ -74,7 +74,7 @@ interface OsmElement {
   tags?: Record<string, string>;
 }
 
-const OSM_ACTIVITY: Record<string, string> = { wholesale: 'Venta al por mayor', logistics: 'Logística', works: 'Fábrica', company: 'Oficina de empresa', car_repair: 'Taller de automóviles', hairdresser_supply: 'Suministros de peluquería', estate_agent: 'Inmobiliaria', accountant: 'Asesoría contable', construction_company: 'Constructora', warehouse: 'Almacén', carpenter: 'Carpintería', metal_construction: 'Construcciones metálicas' };
+const OSM_ACTIVITY: Record<string, string> = { hairdresser_supply: 'productos de peluquería', trade: 'Suministros profesionales', wholesale: 'Venta al por mayor', logistics: 'Logística', works: 'Fábrica', company: 'Oficina de empresa', car_repair: 'Taller de automóviles', estate_agent: 'Inmobiliaria', accountant: 'Asesoría contable', construction_company: 'Constructora', warehouse: 'Almacén', carpenter: 'Carpintería', metal_construction: 'Construcciones metálicas' };
 
 export function osmToCandidate(el: OsmElement, q: SearchQuery): Candidate | null {
   const t = el.tags ?? {};
@@ -88,7 +88,7 @@ export function osmToCandidate(el: OsmElement, q: SearchQuery): Candidate | null
     legalName: t.operator && /S\.?[LA]\.?/.test(t.operator) ? t.operator : undefined,
     category,
     sector: sector?.id ?? '',
-    activity: [OSM_ACTIVITY[kind] ?? (kind && kind !== 'yes' ? kind.replace(/_/g, ' ') : ''), t.wholesale && t.wholesale !== 'yes' ? t.wholesale.replace(/_/g, ' ') : '', t.product?.replace(/[_;]/g, ' ') ?? ''].filter(Boolean).join(' · ') || q.activity || '',
+    activity: [OSM_ACTIVITY[kind] ?? (kind && kind !== 'yes' ? kind.replace(/_/g, ' ') : ''), t.wholesale && t.wholesale !== 'yes' ? (OSM_ACTIVITY[t.wholesale] ?? t.wholesale.replace(/_/g, ' ')) : '', t.product?.replace(/[_;]/g, ' ') ?? ''].filter(Boolean).join(' · ') || q.activity || '',
     description: t['description:es'] || t.description || '',
     address: [t['addr:street'], t['addr:housenumber']].filter(Boolean).join(', '),
     city: t['addr:city'] || q.city || '',
