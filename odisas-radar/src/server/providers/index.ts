@@ -1,6 +1,6 @@
 import 'server-only';
 import { z } from 'zod';
-import { SECTORS, sectorById } from '@/domain/catalog';
+import { PROVINCE_ISO, SECTORS, findProvince, sectorById } from '@/domain/catalog';
 import { fold } from '@/domain/text';
 import { CATEGORIES, type Candidate, type Category, type SearchQuery } from '@/domain/types';
 import { AiError, aiAvailable, extractJson, webResearch } from '../ai/client';
@@ -24,7 +24,6 @@ export interface SearchProvider {
 }
 
 // ——— OpenStreetMap (Overpass + Nominatim) ———
-const OVERPASS = () => process.env.OVERPASS_URL || 'https://overpass-api.de/api/interpreter';
 const NOMINATIM = () => process.env.NOMINATIM_URL || 'https://nominatim.openstreetmap.org';
 
 async function osmHeaders() {
@@ -32,19 +31,73 @@ async function osmHeaders() {
   return { 'user-agent': `OdisasRadar/1.0${contact ? ` (${contact})` : ''}`, accept: 'application/json', 'accept-language': 'es' };
 }
 
+const ES_AREA = 'area["ISO3166-1"="ES"][admin_level=2]';
+
+/**
+ * Zona de búsqueda en el lenguaje de Overpass. Las provincias se resuelven por su
+ * código ISO, sin llamar a ningún otro servicio; las ciudades, con Nominatim y, si
+ * este no responde, buscando el municipio por su nombre dentro de la provincia.
+ */
 async function areaClause(q: SearchQuery): Promise<{ clause: string; label: string }> {
-  const place = q.city || q.province || q.location || '';
-  if (!place || fold(place) === 'españa' || fold(place) === 'espana') return { clause: 'area["ISO3166-1"="ES"][admin_level=2]->.a;', label: 'España' };
-  const url = `${NOMINATIM()}/search?format=jsonv2&limit=1&countrycodes=es&q=${encodeURIComponent(q.city && q.province ? `${q.city}, ${q.province}` : place)}`;
-  const res = await fetch(url, { headers: await osmHeaders(), signal: AbortSignal.timeout(15000) }).catch(() => null);
-  if (!res?.ok) throw new HttpError(502, 'No se ha podido localizar la zona en OpenStreetMap. Inténtalo de nuevo en un momento.');
-  const hit = ((await res.json()) as { osm_type: string; osm_id: number; display_name: string; boundingbox?: string[] }[])[0];
-  if (!hit) throw new HttpError(400, `No se ha encontrado la zona «${place}».`);
-  if (hit.osm_type === 'relation') return { clause: `area(${3600000000 + hit.osm_id})->.a;`, label: hit.display_name };
-  if (hit.osm_type === 'way') return { clause: `area(${2400000000 + hit.osm_id})->.a;`, label: hit.display_name };
-  const [s, n, w, e] = hit.boundingbox ?? [];
-  if (!s) throw new HttpError(400, `La zona «${place}» no tiene un área definida.`);
-  return { clause: '', label: `${hit.display_name}|${s},${w},${n},${e}` };
+  const province = q.province ? findProvince(q.province) : null;
+  const iso = province ? PROVINCE_ISO[province] : '';
+  const provinceArea = iso ? `area["ISO3166-2"~"^ES-(${iso})$"]` : '';
+  const city = (q.city || (!province && q.location && !/^espa[nñ]a$/i.test(q.location.trim()) ? q.location : '') || (!iso ? q.province : '') || '').trim();
+  if (!city) return { clause: `${provinceArea || ES_AREA}->.a;`, label: province ?? 'España' };
+
+  const url = `${NOMINATIM()}/search?format=jsonv2&limit=1&countrycodes=es&q=${encodeURIComponent(province ? `${city}, ${province}` : city)}`;
+  try {
+    const res = await fetch(url, { headers: await osmHeaders(), signal: AbortSignal.timeout(12000) });
+    if (!res.ok) throw new Error(`Nominatim ${res.status}`);
+    const hit = ((await res.json()) as { osm_type: string; osm_id: number; display_name: string; boundingbox?: string[] }[])[0];
+    if (hit?.osm_type === 'relation') return { clause: `area(${3600000000 + hit.osm_id})->.a;`, label: hit.display_name };
+    if (hit?.osm_type === 'way') return { clause: `area(${2400000000 + hit.osm_id})->.a;`, label: hit.display_name };
+    const [s2, n, w, e] = hit?.boundingbox ?? [];
+    if (s2) return { clause: '', label: `${hit.display_name}|${s2},${w},${n},${e}` };
+  } catch (error) {
+    console.error('[osm] Nominatim no disponible; se busca el municipio por nombre', error instanceof Error ? error.message : error);
+  }
+  const name = city.replace(/["\\]/g, '').replace(/[.*+?^${}()|[\]]/g, '.');
+  return { clause: `${provinceArea || ES_AREA}->.p;rel(area.p)["boundary"="administrative"]["admin_level"~"^(7|8)$"]["name"~"^${name}$",i];map_to_area->.a;`, label: city };
+}
+
+const OVERPASS_MIRRORS = ['https://overpass-api.de/api/interpreter', 'https://overpass.private.coffee/api/interpreter', 'https://overpass.kumi.systems/api/interpreter'];
+
+/** Lanza la consulta en el servidor de Overpass y, si falla o está saturado, prueba con los espejos. */
+async function overpass(query: string): Promise<OsmElement[]> {
+  const endpoints = process.env.OVERPASS_URL ? process.env.OVERPASS_URL.split(',').map((u) => u.trim()) : OVERPASS_MIRRORS;
+  const headers = { ...(await osmHeaders()), 'content-type': 'application/x-www-form-urlencoded; charset=UTF-8' };
+  let reason = 'sin respuesta';
+  let busy = false;
+  for (const endpoint of endpoints) {
+    const host = new URL(endpoint).host;
+    try {
+      const res = await fetch(endpoint, { method: 'POST', headers, body: 'data=' + encodeURIComponent(query), signal: AbortSignal.timeout(45000) });
+      const text = await res.text();
+      if (!res.ok) {
+        busy ||= res.status === 429 || res.status === 504;
+        reason = `${host} respondió ${res.status}`;
+        console.error('[osm] Overpass', reason, text.slice(0, 300).replace(/\s+/g, ' '));
+        // Un 400 es un error de la consulta: repetirla en otro servidor no lo arregla.
+        if (res.status === 400) break;
+        continue;
+      }
+      const data = JSON.parse(text) as { elements?: OsmElement[]; remark?: string };
+      if (data.remark && /timed out|out of memory|runtime error/i.test(data.remark) && !data.elements?.length) {
+        busy = true;
+        reason = `${host}: ${data.remark.slice(0, 120)}`;
+        console.error('[osm] Overpass', reason);
+        continue;
+      }
+      return data.elements ?? [];
+    } catch (error) {
+      reason = `${host}: ${error instanceof Error ? (error.name === 'TimeoutError' ? 'tiempo de espera agotado' : error.message) : 'error de conexión'}`;
+      console.error('[osm] Overpass', reason);
+    }
+  }
+  console.error('[osm] consulta fallida:', query.slice(0, 600));
+  if (busy) throw new HttpError(503, `OpenStreetMap está saturado o la zona es demasiado grande (${reason}). Prueba con una provincia o una ciudad concretas, o inténtalo en unos minutos.`);
+  throw new HttpError(502, `No se ha podido consultar OpenStreetMap (${reason}).`);
 }
 
 const esc = (v: string) => v.replace(/["\\]/g, '');
@@ -62,7 +115,7 @@ export function overpassQuery(q: SearchQuery, area: { clause: string; label: str
   const words = !sector && q.activity ? q.activity.split(/\s+/).filter((w) => w.length >= 4).slice(0, 4) : [];
   const byWord = words.length ? `["name"~"${words.map((w) => esc(fold(w))).join('|')}",i]` : '';
   if (!sector && !q.category && !q.name && !words.length) throw new HttpError(400, 'Indica al menos un sector, un tipo de empresa, una actividad o un nombre.');
-  return `[out:json][timeout:50];${area.clause}(${tags.map((t) => `nwr${t}${extra}${byWord}${scope};`).join('')});out center tags ${limit};`;
+  return `[out:json][timeout:50];${area.clause}(${tags.map((t) => `nwr${t}${extra}${byWord}${scope};`).join('')});out tags center ${limit};`;
 }
 
 interface OsmElement {
@@ -117,13 +170,8 @@ const osm: SearchProvider = {
   available: async () => true,
   async search(q) {
     const limit = Math.max(1, Math.min(300, q.limit ?? 60));
-    const area = await areaClause(q);
-    const res = await fetch(OVERPASS(), { method: 'POST', headers: { ...(await osmHeaders()), 'content-type': 'application/x-www-form-urlencoded' }, body: 'data=' + encodeURIComponent(overpassQuery(q, area, limit * 3)), signal: AbortSignal.timeout(55000) }).catch(() => null);
-    if (!res) throw new HttpError(502, 'OpenStreetMap no responde. Inténtalo de nuevo en un momento.');
-    if (res.status === 429 || res.status === 504) throw new HttpError(503, 'OpenStreetMap está saturado ahora mismo. Reduce la zona o inténtalo en unos minutos.');
-    if (!res.ok) throw new HttpError(502, `OpenStreetMap ha devuelto un error (${res.status}).`);
-    const data = (await res.json()) as { elements?: OsmElement[] };
-    let list = (data.elements ?? []).map((e) => osmToCandidate(e, q)).filter((c): c is Candidate => !!c);
+    const elements = await overpass(overpassQuery(q, await areaClause(q), limit * 3));
+    let list = elements.map((e) => osmToCandidate(e, q)).filter((c): c is Candidate => !!c);
     if (q.web === 'con_web') list = list.filter((c) => c.website);
     if (q.minEmployees) list = list.filter((c) => (c.employees ?? 0) >= q.minEmployees!);
     return list.slice(0, limit);

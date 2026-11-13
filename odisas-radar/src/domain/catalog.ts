@@ -42,6 +42,14 @@ export const PROVINCES = [
   'Lleida', 'Lugo', 'Madrid', 'Málaga', 'Melilla', 'Murcia', 'Navarra', 'Ourense', 'Palencia', 'Pontevedra', 'Salamanca', 'Santa Cruz de Tenerife', 'Segovia', 'Sevilla',
   'Soria', 'Tarragona', 'Teruel', 'Toledo', 'Valencia', 'Valladolid', 'Zamora', 'Zaragoza',
 ];
+/** Códigos ISO 3166-2 de cada provincia (y de su comunidad, cuando es uniprovincial). */
+export const PROVINCE_ISO: Record<string, string> = {
+  'A Coruña': 'C', 'Álava': 'VI', Albacete: 'AB', Alicante: 'A', 'Almería': 'AL', Asturias: 'O|AS', 'Ávila': 'AV', Badajoz: 'BA', Barcelona: 'B', Bizkaia: 'BI', Burgos: 'BU', 'Cáceres': 'CC',
+  'Cádiz': 'CA', Cantabria: 'S|CB', 'Castellón': 'CS', Ceuta: 'CE', 'Ciudad Real': 'CR', 'Córdoba': 'CO', Cuenca: 'CU', Gipuzkoa: 'SS', Girona: 'GI', Granada: 'GR', Guadalajara: 'GU',
+  Huelva: 'H', Huesca: 'HU', 'Illes Balears': 'PM|IB', 'Jaén': 'J', 'La Rioja': 'LO|RI', 'Las Palmas': 'GC', 'León': 'LE', Lleida: 'L', Lugo: 'LU', Madrid: 'M|MD', 'Málaga': 'MA',
+  Melilla: 'ML', Murcia: 'MU|MC', Navarra: 'NA|NC', Ourense: 'OR', Palencia: 'P', Pontevedra: 'PO', Salamanca: 'SA', 'Santa Cruz de Tenerife': 'TF', Segovia: 'SG', Sevilla: 'SE',
+  Soria: 'SO', Tarragona: 'T', Teruel: 'TE', Toledo: 'TO', Valencia: 'V', Valladolid: 'VA', Zamora: 'ZA', Zaragoza: 'Z',
+};
 const PROVINCE_ALIASES: Record<string, string> = { vizcaya: 'Bizkaia', guipuzcoa: 'Gipuzkoa', 'la coruña': 'A Coruña', coruña: 'A Coruña', gerona: 'Girona', lerida: 'Lleida', orense: 'Ourense', baleares: 'Illes Balears', mallorca: 'Illes Balears', tenerife: 'Santa Cruz de Tenerife', araba: 'Álava', rioja: 'La Rioja' };
 
 export function findProvince(text: string): string | null {

@@ -330,7 +330,11 @@ export async function dispatch(req: Request, path: string[]): Promise<Response> 
     const out = await route.fn({ req, user: user as SessionUser, p, query: new URL(req.url).searchParams, body: body ?? {} });
     return out instanceof Response ? out : json(out);
   } catch (error) {
-    if (error instanceof HttpError) return json({ error: error.message }, error.status);
+    if (error instanceof HttpError) {
+      // Los fallos de servicios externos quedan en el registro para poder diagnosticarlos.
+      if (error.status >= 500) console.error('[api]', req.method, path.join('/'), error.status, error.message);
+      return json({ error: error.message }, error.status);
+    }
     console.error('[api] error no controlado', req.method, path.join('/'), error);
     return json({ error: 'Error interno del servidor.' }, 500);
   }

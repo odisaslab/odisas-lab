@@ -63,6 +63,7 @@ beforeAll(async () => {
         hits.ai.push({ system: b.system, user: JSON.stringify(b.messages), tools: !!b.tools });
         return send(200, 'application/json', JSON.stringify({ id: 'msg_1', type: 'message', role: 'assistant', model: b.model, content: aiReply(), stop_reason: 'end_turn', stop_sequence: null, usage: { input_tokens: 10, output_tokens: 10 } }));
       }
+      if (url.pathname === '/saturado') return send(504, 'text/plain', 'Gateway Timeout');
       if (url.pathname === '/crm') return hits.crm.push(JSON.parse(body)), send(200, 'application/json', '{"id":"CRM-77"}');
       if (url.pathname === '/nominatim/search') return send(200, 'application/json', JSON.stringify([{ osm_type: 'relation', osm_id: 342563, display_name: 'Sevilla, Andalucía, España' }]));
       if (url.pathname === '/overpass') {
@@ -118,7 +119,8 @@ describe('ODISAS RADAR · flujo completo', () => {
     const { importCandidates } = await import('@/server/companies');
     const found = await providerById('osm')!.search({ sector: 'mayorista', province: 'Sevilla', limit: 50 });
     expect(found).toHaveLength(5); // el elemento sin nombre se descarta
-    expect(hits.overpass[0]).toContain('area(3600342563)');
+    expect(hits.overpass[0]).toContain('area["ISO3166-2"~"^ES-(SE)$"]->.a;'); // la provincia no necesita geocodificador
+    expect(hits.overpass[0]).toContain('out tags center');
     expect(hits.overpass[0]).toContain('["shop"="wholesale"]');
     const first = await importCandidates(found, { userId: user.id });
     expect(first.added.map((c) => c.name).sort()).toEqual(['Almacenes Rivas', 'Cerrado a Robots', 'Suministros Peña', 'Web Caída SL']);
@@ -133,6 +135,27 @@ describe('ODISAS RADAR · flujo completo', () => {
     const third = await importCandidates([{ name: 'ALMACENES RIVAS, S.L.', phone: '955111222', source: 'Listado', reliability: 'estimado' }]);
     expect(third.added).toHaveLength(0);
     penaId = first.added.find((c) => c.name === 'Suministros Peña')!.id;
+  });
+
+  it('ciudades: usa Nominatim y, si no responde, busca el municipio por nombre; prueba espejos de Overpass', async () => {
+    const { providerById } = await import('@/server/providers');
+    await providerById('osm')!.search({ sector: 'mayorista', city: 'Dos Hermanas', province: 'Sevilla' });
+    expect(hits.overpass.at(-1)).toContain('area(3600342563)->.a;');
+    const nominatim = process.env.NOMINATIM_URL;
+    process.env.NOMINATIM_URL = `http://127.0.0.1:${port}/no-existe`;
+    await providerById('osm')!.search({ sector: 'mayorista', city: 'Dos Hermanas', province: 'Sevilla' });
+    expect(hits.overpass.at(-1)).toContain('area["ISO3166-2"~"^ES-(SE)$"]->.p;rel(area.p)["boundary"="administrative"]["admin_level"~"^(7|8)$"]["name"~"^Dos Hermanas$",i];map_to_area->.a;');
+    process.env.NOMINATIM_URL = nominatim;
+    // El primer servidor falla (504) y el segundo responde.
+    const overpassUrl = process.env.OVERPASS_URL;
+    process.env.OVERPASS_URL = `http://127.0.0.1:${port}/saturado,${overpassUrl}`;
+    expect(await providerById('osm')!.search({ sector: 'mayorista', province: 'Sevilla' })).toHaveLength(5);
+    process.env.OVERPASS_URL = `http://127.0.0.1:${port}/saturado`;
+    await expect(providerById('osm')!.search({ sector: 'mayorista', province: 'Sevilla' })).rejects.toThrow(/saturado/);
+    process.env.OVERPASS_URL = overpassUrl;
+    // Sin zona: toda España.
+    await providerById('osm')!.search({ sector: 'mayorista' });
+    expect(hits.overpass.at(-1)).toContain('area["ISO3166-1"="ES"][admin_level=2]->.a;');
   });
 
   it('investiga la web: datos verificados con su página de origen, y nada inventado', async () => {
