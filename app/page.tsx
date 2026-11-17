@@ -1,7 +1,5 @@
 import { About } from "@/components/home/About";
-import { AiSection } from "@/components/home/AiSection";
 import { AuditSection } from "@/components/home/AuditSection";
-import { Diagnostic } from "@/components/home/Diagnostic";
 import { Faq } from "@/components/home/Faq";
 import { FinalCta } from "@/components/home/FinalCta";
 import { Hero } from "@/components/home/Hero";
@@ -39,9 +37,7 @@ export default function HomePage() {
       <Problem />
       <Services />
       <Journey />
-      <Diagnostic />
       <AuditSection />
-      <AiSection />
       <Results />
       <Method />
       <About />

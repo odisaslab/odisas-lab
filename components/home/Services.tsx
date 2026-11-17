@@ -129,7 +129,7 @@ export function Services() {
                 key={service.id}
                 id={`servicio-${service.id}`}
                 data-service
-                className="hair-t py-14 first:border-t-0 first:pt-0 md:py-20 lg:min-h-[70vh]"
+                className="hair-t py-14 first:border-t-0 first:pt-0 md:py-20 lg:min-h-[48vh]"
               >
                 <p data-s-in className="mono accent text-[0.75rem] tracking-[0.18em] uppercase">
                   {String(index + 1).padStart(2, "0")} / {String(homeServices.length).padStart(2, "0")} · {service.name}
