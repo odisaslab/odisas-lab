@@ -1,4 +1,6 @@
 import {
+  Blocks,
+  Compass,
   Instagram,
   Megaphone,
   MonitorSmartphone,
@@ -17,6 +19,8 @@ const icons: Record<string, LucideIcon> = {
   RefreshCw,
   Instagram,
   Sparkles,
+  Blocks,
+  Compass,
 };
 
 interface ServiceIconProps {

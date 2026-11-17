@@ -319,7 +319,7 @@ export const services: Service[] = [
           "Los textos sí: forman parte del diseño. Para imágenes, lo ideal son fotos reales de tu negocio. Si no las hay, lo indicamos en el presupuesto y buscamos la mejor alternativa.",
       },
     ],
-    related: ["renovacion-web", "seo", "analisis-web-ia"],
+    related: ["renovacion-web", "seo", "aplicaciones-software"],
   },
   {
     slug: "renovacion-web",
@@ -561,7 +561,165 @@ export const services: Service[] = [
           "No. El análisis se entrega como servicio independiente y puedes implementarlo tú o con tu equipo. Si prefieres que lo hagamos nosotros, te presupuestamos aparte.",
       },
     ],
-    related: ["seo", "diseno-web", "renovacion-web"],
+    related: ["consultoria", "seo", "diseno-web"],
+  },
+  {
+    slug: "aplicaciones-software",
+    name: "Aplicaciones y software",
+    claim: "Herramientas a medida, no una plantilla genérica.",
+    summary:
+      "Desarrollamos aplicaciones y automatizaciones a medida cuando una plantilla genérica no encaja con cómo funciona tu negocio de verdad.",
+    includes: [
+      "Aplicaciones a medida",
+      "Automatización de procesos",
+      "Paneles de gestión interna",
+      "Integraciones entre herramientas",
+      "Herramientas con IA aplicada",
+      "Mantenimiento y evolución",
+    ],
+    icon: "Blocks",
+    metaTitle: "Desarrollo de software y aplicaciones a medida",
+    metaDescription:
+      "Aplicaciones, automatizaciones y paneles de gestión a medida para procesos que ya no caben en una plantilla genérica. Desarrollo propio, sin intermediarios.",
+    h1: "Software a medida cuando la plantilla ya no te sirve",
+    intro: [
+      "Hay procesos que cada negocio resuelve a su manera: cómo gestionas pedidos, cómo controlas el stock, cómo montas un informe cada semana. Cuando eso ya no cabe en una hoja de cálculo ni en un SaaS genérico, construimos la herramienta concreta que lo resuelve.",
+      "No es desarrollo por desarrollar: cada aplicación nace de un proceso real que hoy se hace a mano, por email o en una hoja descontrolada, y que cuesta tiempo o dinero seguir haciendo así.",
+    ],
+    signals: [
+      "Hay una tarea que se repite cada semana y siempre la hace una persona a mano",
+      "Usas una hoja de cálculo que ya se ha quedado pequeña para lo que necesitas",
+      "Pagas varias herramientas que no se hablan entre ellas y pasas datos a mano de una a otra",
+      "Tienes una idea de herramienta interna pero no sabes por dónde empezar",
+    ],
+    work: [
+      {
+        title: "Análisis del proceso",
+        description:
+          "Qué se hace hoy, quién lo hace, dónde se atasca y qué cambiaría si se automatizase.",
+      },
+      {
+        title: "Diseño de la herramienta",
+        description:
+          "Qué pantallas hacen falta y en qué orden, pensado para quien la va a usar cada día, no para quedar bonito en una demo.",
+      },
+      {
+        title: "Desarrollo",
+        description:
+          "Aplicación web o automatización construida con tecnología moderna, sin licencias que dependan de un tercero.",
+      },
+      {
+        title: "Automatizaciones e IA",
+        description:
+          "Donde encaja, conectamos pasos que hoy son manuales o añadimos IA para acelerar tareas concretas, no como etiqueta.",
+      },
+      {
+        title: "Entrega y datos",
+        description:
+          "Tu código y tus datos, igual que con una web: nada queda secuestrado en una cuenta nuestra.",
+      },
+      {
+        title: "Mantenimiento",
+        description:
+          "Una herramienta en uso necesita ajustes. Se acuerda desde el principio, no aparece después como sorpresa.",
+      },
+    ],
+    faqs: [
+      {
+        question: "¿Qué diferencia hay con comprar un software ya hecho?",
+        answer:
+          "Un software genérico resuelve el 80% para todo el mundo y te hace encajar tu proceso en el suyo. Si ese 80% te sirve, sale más barato y más rápido que un desarrollo propio, y te lo diremos antes de proponerte nada. Construimos a medida cuando ese encaje no existe.",
+      },
+      {
+        question: "¿Esto incluye inteligencia artificial?",
+        answer:
+          "Cuando aporta algo real: acelerar un análisis, generar un primer borrador, detectar un patrón. No la añadimos como reclamo si no cambia el resultado.",
+      },
+      {
+        question: "¿Quién se queda con el código y los datos?",
+        answer: "Tú. Son tuyos desde el primer día, igual que con una web.",
+      },
+    ],
+    related: ["analisis-web-ia", "diseno-web", "consultoria"],
+  },
+  {
+    slug: "consultoria",
+    name: "Consultoría y optimización",
+    claim: "Antes de decidir qué hacer, hay que saber qué está pasando.",
+    summary:
+      "Analizamos tu negocio y tus procesos digitales para decirte, con prioridad clara, qué conviene arreglar primero y por qué.",
+    includes: [
+      "Análisis del negocio",
+      "Detección de cuellos de botella",
+      "Auditoría de procesos digitales",
+      "Plan de mejora priorizado",
+      "Acompañamiento en la ejecución",
+      "Seguimiento de resultados",
+    ],
+    icon: "Compass",
+    metaTitle: "Consultoría digital y optimización de procesos",
+    metaDescription:
+      "Análisis de tu negocio y tus procesos digitales para detectar qué está frenando el crecimiento y qué conviene arreglar primero.",
+    h1: "Antes de invertir más, averigua qué te está frenando",
+    intro: [
+      "Es el primer paso que hacemos en cualquier proyecto, aquí como servicio independiente: mirar tu negocio, tu web y tus procesos digitales con calma y decirte, con datos delante, qué funciona, qué no y en qué orden conviene actuar.",
+      "No es un informe genérico de cien páginas. Es una lista corta de lo que de verdad importa, con el motivo de por qué importa y lo que se gana si se arregla.",
+    ],
+    signals: [
+      "Vas a invertir en marketing, web o una herramienta nueva y quieres saber si es lo prioritario",
+      "Tienes la sensación de que algo no funciona pero no sabes señalar el qué",
+      "Varias partes del negocio, como la web, las redes y las ventas, parecen no estar conectadas",
+      "Quieres una opinión externa antes de tomar una decisión que cuesta dinero",
+    ],
+    work: [
+      {
+        title: "Diagnóstico inicial",
+        description:
+          "Revisamos negocio, web, presencia digital y procesos con los datos reales que ya tienes, no con suposiciones.",
+      },
+      {
+        title: "Detección de cuellos de botella",
+        description:
+          "Dónde se pierde tiempo, dónde se pierden clientes y qué parte del negocio frena al resto.",
+      },
+      {
+        title: "Plan priorizado",
+        description:
+          "Qué hacer primero, qué puede esperar y qué no compensa todavía, ordenado por impacto y esfuerzo.",
+      },
+      {
+        title: "Explicación sin tecnicismos",
+        description: "Una reunión para repasarlo contigo, no un PDF que se queda sin leer.",
+      },
+      {
+        title: "Acompañamiento opcional",
+        description:
+          "Si quieres que lo ejecutemos nosotros, se presupuesta aparte. Si prefieres ejecutarlo tú o con tu equipo, el plan es igualmente tuyo.",
+      },
+      {
+        title: "Seguimiento",
+        description:
+          "Pasado un tiempo revisamos si lo prioritario sigue siendo lo mismo o si el negocio ya ha cambiado.",
+      },
+    ],
+    faqs: [
+      {
+        question: "¿Esto es lo mismo que el análisis web con IA?",
+        answer:
+          "Se solapan pero no son iguales: el análisis web con IA se centra en tu web (UX, SEO, velocidad, conversión). Esta consultoría mira más ancho: el negocio, los procesos y cómo encajan entre sí la web, el marketing y la operativa diaria.",
+      },
+      {
+        question: "¿Tengo que contratar la ejecución después?",
+        answer:
+          "No. El plan se entrega como documento independiente. Si quieres que lo ejecutemos nosotros, genial; si no, es igualmente tuyo.",
+      },
+      {
+        question: "¿Cuánto dura el proceso?",
+        answer:
+          "Depende de cuántas áreas del negocio entren en el análisis. Te decimos un plazo concreto después de ver el alcance, no antes.",
+      },
+    ],
+    related: ["analisis-web-ia", "aplicaciones-software", "seo"],
   },
 ];
 

@@ -5,7 +5,9 @@ export type ServiceSlug =
   | "diseno-web"
   | "renovacion-web"
   | "social-media"
-  | "analisis-web-ia";
+  | "analisis-web-ia"
+  | "aplicaciones-software"
+  | "consultoria";
 
 export interface Service {
   slug: ServiceSlug;
